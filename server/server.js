@@ -17,6 +17,16 @@ app.get('/health', health);
 
 // API routes
 app.use('/api/auth', require('./routes/auth'));
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Простая проверка учетных данных (в реальном приложении используйте базу данных и безопасное сравнение паролей)
+    if (username === 'user' && password === 'password') {
+        res.json({ success: true, message: 'Authentication successful' });
+    } else {
+        res.status(401).json({ success: false, message: 'Authentication failed' });
+    }
+});
 app.use('/api/users', require('./routes/users'));
 app.use('/api/coupons', require('./routes/coupons'));
 app.use('/api/investments', require('./routes/investments'));
