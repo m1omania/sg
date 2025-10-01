@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Регистрация нового пользователя
-router.post('/register', (req, res) => {
-  const { username, email, phone, password } = req.body;
+// Шаг 1: Отправка кода подтверждения
+router.post('/send-verification', (req, res) => {
+  const { email } = req.body;
   
-  // Валидация входных данных
-  if (!username || !email || !password) {
+  // Валидация email
+  if (!email) {
     return res.status(400).json({ 
-      error: 'Username, email and password are required' 
+      error: 'Email is required' 
     });
   }
   
@@ -25,21 +25,53 @@ router.post('/register', (req, res) => {
       });
     }
     
+    // В реальном приложении здесь должна быть отправка кода на email
+    // Для демонстрации просто возвращаем успех
+    
+    res.json({
+      message: 'Verification code sent successfully',
+      email: email
+    });
+  } catch (err) {
+    console.error('Send verification error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Шаг 2: Подтверждение email и регистрация
+router.post('/register', (req, res) => {
+  const { email, code } = req.body;
+  
+  // Валидация входных данных
+  if (!email || !code) {
+    return res.status(400).json({ 
+      error: 'Email and verification code are required' 
+    });
+  }
+  
+  // В реальном приложении здесь должна быть проверка кода
+  // Для демонстрации принимаем любой код, но в реальном приложении
+  // нужно проверять его в базе данных
+  
+  try {
     // Создаем нового пользователя
     const insertUser = db.prepare(`
       INSERT INTO users (username, email, phone, password_hash, email_verified, phone_verified)
       VALUES (?, ?, ?, ?, ?, ?)
     `);
     
+    // Генерируем имя пользователя из email
+    const username = email.split('@')[0];
+    
     // В реальном приложении здесь должен быть хэш пароля
-    const passwordHash = password; // Для демо целей
+    const passwordHash = 'demo_password_hash'; // Для демо целей
     
     const result = insertUser.run(
       username,
       email,
-      phone || null,
+      null, // phone
       passwordHash,
-      0, // email_verified (0 = false)
+      1, // email_verified (1 = true)
       0  // phone_verified (0 = false)
     );
     
@@ -49,7 +81,7 @@ router.post('/register', (req, res) => {
       VALUES (?, ?, ?)
     `);
     
-    insertWallet.run(result.lastInsertRowid, 0.00, 0.00);
+    insertWallet.run(result.lastInsertRowid, 0.00, 25.00); // 25$ бонус при регистрации
     
     // Создаем приветственный купон для нового пользователя
     const welcomeCoupon = db.prepare(`
@@ -66,67 +98,13 @@ router.post('/register', (req, res) => {
       welcomeCoupon.run(welcomeCouponData.id, result.lastInsertRowid, 'created');
     }
     
-    // В реальном приложении здесь должна быть отправка email/SMS для подтверждения
-    
     res.status(201).json({
       message: 'User registered successfully',
       userId: result.lastInsertRowid,
-      needsVerification: true
+      emailVerified: true
     });
   } catch (err) {
     console.error('Registration error:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Подтверждение email
-router.post('/verify-email', (req, res) => {
-  const { userId, code } = req.body;
-  
-  try {
-    // В реальном приложении здесь должна быть проверка кода
-    
-    const updateUser = db.prepare(`
-      UPDATE users 
-      SET email_verified = 1, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `);
-    
-    const result = updateUser.run(userId);
-    
-    if (result.changes === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    
-    res.json({ message: 'Email verified successfully' });
-  } catch (err) {
-    console.error('Email verification error:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Подтверждение телефона
-router.post('/verify-phone', (req, res) => {
-  const { userId, code } = req.body;
-  
-  try {
-    // В реальном приложении здесь должна быть проверка кода
-    
-    const updateUser = db.prepare(`
-      UPDATE users 
-      SET phone_verified = 1, updated_at = CURRENT_TIMESTAMP
-      WHERE id = ?
-    `);
-    
-    const result = updateUser.run(userId);
-    
-    if (result.changes === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    
-    res.json({ message: 'Phone verified successfully' });
-  } catch (err) {
-    console.error('Phone verification error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

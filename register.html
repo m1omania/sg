@@ -28,42 +28,37 @@
             </div>
 
             <div class="auth-container">
-                <form id="register-form" class="auth-form">
-                    <div class="form-group">
-                        <label class="form-label">Имя пользователя</label>
-                        <input type="text" class="form-control" id="username" required>
-                    </div>
+                <!-- Шаг 1: Ввод email -->
+                <form id="email-form" class="auth-form">
+                    <h2>Введите ваш email</h2>
+                    <p class="form-description">Мы отправим код подтверждения на этот адрес</p>
                     
                     <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" required>
                     </div>
                     
-                    <div class="form-group">
-                        <label class="form-label">Телефон (необязательно)</label>
-                        <input type="tel" class="form-control" id="phone">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Пароль</label>
-                        <input type="password" class="form-control" id="password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Подтверждение пароля</label>
-                        <input type="password" class="form-control" id="confirm-password" required>
-                    </div>
-                    
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="terms" required>
-                        <label class="form-check-label" for="terms">
-                            Я согласен с <a href="#">условиями использования</a> и <a href="#">политикой конфиденциальности</a>
-                        </label>
-                    </div>
-                    
-                    <button type="submit" class="btn btn--primary btn--block">Зарегистрироваться</button>
+                    <button type="submit" class="btn btn--primary btn--block">Отправить код</button>
                 </form>
-                
+
+                <!-- Шаг 2: Ввод кода подтверждения -->
+                <form id="code-form" class="auth-form hidden">
+                    <h2>Подтверждение email</h2>
+                    <p class="form-description">Введите код, который мы отправили на <span id="user-email"></span></p>
+                    <p class="form-description">Для демонстрации используйте код: <strong>123456</strong></p>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Код подтверждения</label>
+                        <input type="text" class="form-control" id="verification-code" required maxlength="6">
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--block">Подтвердить</button>
+                    
+                    <div class="form-footer">
+                        <p>Не получили код? <a href="#" id="resend-code">Отправить повторно</a></p>
+                    </div>
+                </form>
+
                 <div class="auth-footer">
                     <p>Уже есть аккаунт? <a href="/">Войти</a></p>
                 </div>
@@ -89,24 +84,53 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const registerForm = document.getElementById('register-form');
+            const emailForm = document.getElementById('email-form');
+            const codeForm = document.getElementById('code-form');
+            const userEmailSpan = document.getElementById('user-email');
+            const resendCodeLink = document.getElementById('resend-code');
             const successNotification = document.getElementById('success-notification');
             const errorNotification = document.getElementById('error-notification');
             
-            registerForm.addEventListener('submit', async function(e) {
+            let userEmail = '';
+            
+            // Обработчик отправки email
+            emailForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const username = document.getElementById('username').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
+                userEmail = document.getElementById('email').value;
                 
-                // Проверка совпадения паролей
-                if (password !== confirmPassword) {
-                    showError('Пароли не совпадают');
-                    return;
+                try {
+                    const response = await fetch('/api/auth/send-verification', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: userEmail })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Показываем второй шаг
+                        userEmailSpan.textContent = userEmail;
+                        emailForm.classList.add('hidden');
+                        codeForm.classList.remove('hidden');
+                        
+                        showSuccess('Код подтверждения отправлен на ' + userEmail);
+                    } else {
+                        showError(data.error || 'Ошибка отправки кода');
+                    }
+                } catch (error) {
+                    console.error('Send verification error:', error);
+                    showError('Ошибка сети. Попробуйте позже.');
                 }
+            });
+            
+            // Обработчик подтверждения кода
+            codeForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const code = document.getElementById('verification-code').value;
                 
                 try {
                     const response = await fetch('/api/auth/register', {
@@ -114,31 +138,51 @@
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            username,
-                            email,
-                            phone,
-                            password
+                        body: JSON.stringify({ 
+                            email: userEmail,
+                            code: code
                         })
                     });
                     
                     const data = await response.json();
                     
                     if (response.ok) {
-                        showSuccess('Регистрация успешна! Проверьте ваш email для подтверждения.');
+                        showSuccess('Email успешно подтвержден! Регистрация завершена.');
                         
-                        // Очищаем форму
-                        registerForm.reset();
-                        
-                        // Перенаправляем на страницу подтверждения через 3 секунды
+                        // Через 2 секунды перенаправляем на главную страницу
                         setTimeout(() => {
                             window.location.href = '/';
-                        }, 3000);
+                        }, 2000);
                     } else {
-                        showError(data.error || 'Ошибка регистрации');
+                        showError(data.error || 'Ошибка подтверждения кода');
                     }
                 } catch (error) {
                     console.error('Registration error:', error);
+                    showError('Ошибка сети. Попробуйте позже.');
+                }
+            });
+            
+            // Повторная отправка кода
+            resendCodeLink.addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                try {
+                    const response = await fetch('/api/auth/send-verification', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: userEmail })
+                    });
+                    
+                    if (response.ok) {
+                        showSuccess('Код подтверждения отправлен повторно');
+                    } else {
+                        const data = await response.json();
+                        showError(data.error || 'Ошибка повторной отправки кода');
+                    }
+                } catch (error) {
+                    console.error('Resend code error:', error);
                     showError('Ошибка сети. Попробуйте позже.');
                 }
             });
@@ -153,6 +197,7 @@
             function showSuccess(message) {
                 document.getElementById('notification-text').textContent = message;
                 successNotification.classList.remove('hidden');
+                successNotification.classList.remove('error');
                 
                 setTimeout(() => {
                     successNotification.classList.add('hidden');
@@ -162,6 +207,7 @@
             function showError(message) {
                 document.getElementById('error-text').textContent = message;
                 errorNotification.classList.remove('hidden');
+                errorNotification.classList.add('error');
                 
                 setTimeout(() => {
                     errorNotification.classList.add('hidden');

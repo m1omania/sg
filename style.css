@@ -1773,6 +1773,50 @@ select.form-control {
 
 /* Добавим новые стили в конец файла */
 
+/* Two-step Registration Form */
+.auth-form.hidden {
+  display: none;
+}
+
+.form-description {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.form-description strong {
+  color: var(--color-primary);
+}
+
+#user-email {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.form-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+#verification-code {
+  text-align: center;
+  letter-spacing: 0.5rem;
+  font-size: 1.5rem;
+}
+
+#verification-code::placeholder {
+  letter-spacing: normal;
+}
+
 /* Auth Pages */
 .auth-container {
   max-width: 400px;
@@ -2110,64 +2154,4 @@ select.form-control {
 
 .action-icon {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.action-title {
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-}
-
-/* Loading and No Results */
-.loading,
-.no-results {
-  text-align: center;
-  padding: 3rem;
-  color: var(--color-text-secondary);
-}
-
-.text-center {
-  text-align: center;
-}
-
-/* Notification Error */
-.notification.error {
-  border-left-color: var(--color-error);
-  background-color: rgba(var(--color-error-rgb), 0.1);
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .project-detail-content {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .payment-methods {
-    flex-direction: column;
-  }
-  
-  .project-stats {
-    grid-template-columns: 1fr;
-  }
-  
-  .project-detail-modal .project-stats {
-    grid-template-columns: 1fr;
-  }
-  
-  .action-buttons {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .stats-cards {
-    grid-template-columns: 1fr;
-  }
-  
-  .investments-table {
-    font-size: 0.875rem;
-  }
-  
+  margin-bottom: 
