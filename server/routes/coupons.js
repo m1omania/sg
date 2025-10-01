@@ -4,37 +4,35 @@ const db = require('../config/database');
 
 // Получить все активные купоны
 router.get('/active', (req, res) => {
-  const sql = `
-    SELECT * FROM coupons 
-    WHERE status IN ('active', 'expiring')
-    ORDER BY expiry_date ASC
-  `;
-  
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
+  try {
+    const stmt = db.prepare(`
+      SELECT * FROM coupons 
+      WHERE status IN ('active', 'expiring')
+      ORDER BY expiry_date ASC
+    `);
+    
+    const rows = stmt.all();
     res.json(rows);
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Получить историю купонов
 router.get('/history', (req, res) => {
-  const sql = `
-    SELECT ch.*, c.name, c.project, c.bonus, c.status as coupon_status
-    FROM coupon_history ch
-    JOIN coupons c ON ch.coupon_id = c.id
-    ORDER BY ch.created_at DESC
-  `;
-  
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
+  try {
+    const stmt = db.prepare(`
+      SELECT ch.*, c.name, c.project, c.bonus, c.status as coupon_status
+      FROM coupon_history ch
+      JOIN coupons c ON ch.coupon_id = c.id
+      ORDER BY ch.created_at DESC
+    `);
+    
+    const rows = stmt.all();
     res.json(rows);
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Использовать купон
@@ -43,50 +41,43 @@ router.post('/use', (req, res) => {
   
   // В реальном приложении здесь должна быть проверка пользователя
   
-  // Обновляем статус купона
-  const sql = `UPDATE coupons SET status = 'used' WHERE id = ?`;
-  
-  db.run(sql, [couponId], function(err) {
-    if (err) {
-      res.status(500).json({ error: err.message });
+  try {
+    // Обновляем статус купона
+    const updateStmt = db.prepare(`UPDATE coupons SET status = 'used' WHERE id = ?`);
+    const updateResult = updateStmt.run(couponId);
+    
+    if (updateResult.changes === 0) {
+      res.status(404).json({ error: 'Coupon not found' });
       return;
     }
     
     // Записываем в историю использования
-    const historySql = `
-      INSERT INTO coupon_history (coupon_id, user_id, action, transaction_id)
-      VALUES (?, ?, 'used', ?)
-    `;
-    
-    // Генерируем уникальный ID транзакции
     const transactionId = 'TXN-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
     
-    db.run(historySql, [couponId, userId || 1, transactionId], function(err) {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      
-      res.json({
-        message: 'Coupon used successfully',
-        transactionId: transactionId
-      });
+    const insertStmt = db.prepare(`
+      INSERT INTO coupon_history (coupon_id, user_id, action, transaction_id)
+      VALUES (?, ?, 'used', ?)
+    `);
+    
+    insertStmt.run(couponId, userId || 1, transactionId);
+    
+    res.json({
+      message: 'Coupon used successfully',
+      transactionId: transactionId
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Активировать промокод
 router.post('/activate', (req, res) => {
   const { code, userId } = req.body;
   
-  // Проверяем, существует ли купон с таким кодом
-  const selectSql = `SELECT * FROM coupons WHERE code = ? AND status = 'active'`;
-  
-  db.get(selectSql, [code], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
+  try {
+    // Проверяем, существует ли купон с таким кодом
+    const selectStmt = db.prepare(`SELECT * FROM coupons WHERE code = ? AND status = 'active'`);
+    const row = selectStmt.get(code);
     
     if (!row) {
       res.status(404).json({ error: 'Coupon not found or already used' });
@@ -96,23 +87,20 @@ router.post('/activate', (req, res) => {
     // В реальном приложении здесь должна быть проверка пользователя
     
     // Записываем в историю активации
-    const historySql = `
+    const insertStmt = db.prepare(`
       INSERT INTO coupon_history (coupon_id, user_id, action)
       VALUES (?, ?, 'activated')
-    `;
+    `);
     
-    db.run(historySql, [row.id, userId || 1], function(err) {
-      if (err) {
-        res.status(500).json({ error: err.message });
-        return;
-      }
-      
-      res.json({
-        message: 'Coupon activated successfully',
-        coupon: row
-      });
+    insertStmt.run(row.id, userId || 1);
+    
+    res.json({
+      message: 'Coupon activated successfully',
+      coupon: row
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
