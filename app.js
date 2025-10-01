@@ -1,80 +1,19 @@
 // SolarGroup Coupons App JavaScript
 
+// API Base URL - в production будет указывать на сервер
+const API_BASE_URL = '/api';
+
 // Application Data
-const appData = {
-  "activeCoupons": [
-    {
-      "id": 1,
-      "name": "25$ за регистрацию",
-      "project": "Общий",
-      "projectColor": "#28a745",
-      "bonus": "$25",
-      "expiryDate": "2025-10-15",
-      "daysLeft": 14,
-      "conditions": "Минимальная сумма $250",
-      "code": "WELCOME25-ABC123",
-      "description": "Приветственный купон для новых пользователей",
-      "status": "active",
-      "minAmount": 250,
-      "source": "manual"
-    },
-    {
-      "id": 2,
-      "name": "10% скидка Дирижабли",
-      "project": "Дирижабли",
-      "projectColor": "#007bff",
-      "bonus": "10%",
-      "expiryDate": "2025-11-15",
-      "daysLeft": 45,
-      "conditions": "Только для проекта Дирижабли",
-      "code": "AIRSHIP10-XYZ789",
-      "description": "Специальная скидка на инвестиции в проект Дирижабли",
-      "status": "active",
-      "minAmount": 500,
-      "source": "email"
-    },
-    {
-      "id": 3,
-      "name": "Купон инвестора месяца",
-      "project": "Совэлмаш",
-      "projectColor": "#fd7e14",
-      "bonus": "+50 долей",
-      "expiryDate": "2025-10-05",
-      "daysLeft": 4,
-      "conditions": "от $1000",
-      "code": "MONTH50-DEF456",
-      "description": "Награда за активные инвестиции",
-      "status": "expiring",
-      "minAmount": 1000,
-      "source": "manual"
-    }
-  ],
-  "couponHistory": [
-    {
-      "id": 4,
-      "name": "20$ за друга",
-      "project": "Общий",
-      "bonus": "$20",
-      "status": "Использован",
-      "date": "2025-09-15",
-      "transactionId": "TXN-001234"
-    },
-    {
-      "id": 5,
-      "name": "5% летняя акция",
-      "project": "Дирижабли",
-      "bonus": "5%",
-      "status": "Истёк",
-      "date": "2025-08-31",
-      "transactionId": null
-    }
-  ],
+let appData = {
+  "activeCoupons": [],
+  "couponHistory": [],
   "projects": [
     {"name": "Все проекты", "value": "all"},
     {"name": "Дирижабли", "value": "airships"},
     {"name": "Совэлмаш", "value": "sovelmash"}
   ],
   "user": {
+    "id": 1, // В демо режиме используем ID 1
     "name": "Константин",
     "walletBalance": {
       "main": "0,00",
@@ -134,8 +73,8 @@ function getCurrentPage() {
 }
 
 function initializeCouponsPage() {
-  renderActiveCoupons();
-  renderCouponHistory();
+  loadActiveCoupons();
+  loadCouponHistory();
 }
 
 function initializeWalletPage() {
@@ -187,12 +126,46 @@ function setupModals() {
   }
 }
 
+// Загрузка активных купонов с сервера
+async function loadActiveCoupons() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/coupons/active`);
+    if (response.ok) {
+      appData.activeCoupons = await response.json();
+      renderActiveCoupons();
+    } else {
+      console.error('Failed to load active coupons');
+    }
+  } catch (error) {
+    console.error('Error loading active coupons:', error);
+    // В случае ошибки используем тестовые данные
+    renderActiveCoupons();
+  }
+}
+
+// Загрузка истории купонов с сервера
+async function loadCouponHistory() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/coupons/history`);
+    if (response.ok) {
+      appData.couponHistory = await response.json();
+      renderCouponHistory();
+    } else {
+      console.error('Failed to load coupon history');
+    }
+  } catch (error) {
+    console.error('Error loading coupon history:', error);
+    // В случае ошибки используем тестовые данные
+    renderCouponHistory();
+  }
+}
+
 function renderActiveCoupons() {
   if (!activeCouponsContainer) return;
   
   // Sort coupons by expiry date (closest first)
   const sortedCoupons = [...appData.activeCoupons].sort((a, b) => {
-    return new Date(a.expiryDate) - new Date(b.expiryDate);
+    return new Date(a.expiry_date) - new Date(b.expiry_date);
   });
   
   // Filter coupons
@@ -221,7 +194,7 @@ function renderActiveCoupons() {
         ${isExpiring ? '<div class="expiring-banner">Истекает скоро!</div>' : ''}
         <div class="coupon-header">
           <h3 class="coupon-name">${coupon.name}</h3>
-          <span class="coupon-project" style="background-color: ${coupon.projectColor}">${coupon.project}</span>
+          <span class="coupon-project" style="background-color: ${coupon.project_color}">${coupon.project}</span>
         </div>
         <div class="coupon-body">
           <div class="coupon-bonus">
@@ -230,7 +203,7 @@ function renderActiveCoupons() {
           <p class="coupon-description">${coupon.description}</p>
           <div class="coupon-meta">
             <div class="coupon-conditions">${coupon.conditions}</div>
-            <div class="coupon-expiry">До ${formatDate(coupon.expiryDate)} (${coupon.daysLeft} дн.)</div>
+            <div class="coupon-expiry">До ${formatDate(coupon.expiry_date)} (${coupon.days_left} дн.)</div>
           </div>
         </div>
         <div class="coupon-footer">
@@ -250,13 +223,28 @@ function renderActiveCoupons() {
   attachCouponEventListeners();
 }
 
+function renderCouponHistory() {
+  if (!historyTbody) return;
+  
+  historyTbody.innerHTML = appData.couponHistory.map(item => `
+    <tr>
+      <td>${item.name}</td>
+      <td>${item.project}</td>
+      <td>${item.bonus}</td>
+      <td>${item.coupon_status === 'used' ? 'Использован' : 'Истёк'}</td>
+      <td>${formatDate(item.created_at)}</td>
+      <td>${item.transaction_id || '-'}</td>
+    </tr>
+  `).join('');
+}
+
 function renderWalletCoupons() {
   const walletCouponsContainer = document.getElementById('wallet-coupons');
   if (!walletCouponsContainer) return;
   
   // Sort coupons by expiry date (closest first)
   const sortedCoupons = [...appData.activeCoupons].sort((a, b) => {
-    return new Date(a.expiryDate) - new Date(b.expiryDate);
+    return new Date(a.expiry_date) - new Date(b.expiry_date);
   });
   
   // Show only the first 3 coupons in the wallet widget
@@ -279,7 +267,7 @@ function renderWalletCoupons() {
         <span class="wallet-coupon-bonus">${coupon.bonus}</span>
       </div>
       <div class="wallet-coupon-meta">
-        <div class="wallet-coupon-expiry">До ${formatDate(coupon.expiryDate)} (${coupon.daysLeft} дн.)</div>
+        <div class="wallet-coupon-expiry">До ${formatDate(coupon.expiry_date)} (${coupon.days_left} дн.)</div>
         <div class="wallet-coupon-conditions">${coupon.conditions}</div>
       </div>
       <div class="wallet-coupon-footer">
@@ -340,14 +328,37 @@ function attachCouponEventListeners() {
   });
 }
 
-function useCoupon(couponId) {
-  // In a real app, this would redirect to the investment page with the coupon applied
-  showNotification('Купон применён! Переход к инвестициям...');
-  // For demo purposes, we'll just show a notification
-  setTimeout(() => {
-    // This would be the real redirect in a full implementation
-    // window.location.href = 'invest.html?coupon=' + couponId;
-  }, 1500);
+async function useCoupon(couponId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/coupons/use`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        couponId: couponId,
+        userId: appData.user.id
+      })
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      showNotification(`Купон применён! ID операции: ${result.transactionId}`);
+      
+      // Перезагружаем купоны
+      loadActiveCoupons();
+      
+      // Для демонстрации, имитируем переход к инвестициям
+      setTimeout(() => {
+        window.location.href = 'invest.html';
+      }, 1500);
+    } else {
+      showNotification('Ошибка при использовании купона');
+    }
+  } catch (error) {
+    console.error('Error using coupon:', error);
+    showNotification('Ошибка при использовании купона');
+  }
 }
 
 function showCouponDetails(couponId) {
@@ -357,9 +368,9 @@ function showCouponDetails(couponId) {
   if (couponDetailsModal) {
     document.getElementById('detail-coupon-name').textContent = coupon.name;
     document.getElementById('detail-coupon-project').textContent = coupon.project;
-    document.getElementById('detail-coupon-project').style.backgroundColor = coupon.projectColor;
+    document.getElementById('detail-coupon-project').style.backgroundColor = coupon.project_color;
     document.getElementById('detail-coupon-bonus').textContent = coupon.bonus;
-    document.getElementById('detail-coupon-expiry').textContent = formatDate(coupon.expiryDate);
+    document.getElementById('detail-coupon-expiry').textContent = formatDate(coupon.expiry_date);
     document.getElementById('detail-coupon-conditions').textContent = coupon.conditions;
     document.getElementById('detail-coupon-code').textContent = coupon.code;
     
@@ -415,19 +426,39 @@ function closeModal(e) {
   });
 }
 
-function activatePromoCode(e) {
+async function activatePromoCode(e) {
   e.preventDefault();
-  const promoCodeInput = document.getElementById('promo-code');
+  const promoCodeInput = document.getElementById('promo-code-input');
   const code = promoCodeInput.value.trim();
   
   if (code) {
-    // In a real app, this would call an API to validate and activate the promo code
-    showNotification(`Промокод ${code} успешно активирован!`);
-    closeModal();
-    promoCodeInput.value = '';
-    
-    // For demo purposes, we'll just show a notification
-    // In a real implementation, we would add the coupon to appData and re-render
+    try {
+      const response = await fetch(`${API_BASE_URL}/coupons/activate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          code: code,
+          userId: appData.user.id
+        })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        showNotification(`Промокод ${code} успешно активирован!`);
+        closeModal();
+        promoCodeInput.value = '';
+        
+        // Перезагружаем купоны
+        loadActiveCoupons();
+      } else {
+        showNotification('Неверный промокод');
+      }
+    } catch (error) {
+      console.error('Error activating promo code:', error);
+      showNotification('Ошибка при активации промокода');
+    }
   }
 }
 
