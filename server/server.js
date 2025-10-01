@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const db = require('./config/database');
+const health = require('./health');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,6 +11,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../')));
+
+// Health check endpoint for Render
+app.get('/health', health);
 
 // API routes
 app.use('/api/users', require('./routes/users'));

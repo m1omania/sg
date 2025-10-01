@@ -1,0 +1,27 @@
+# Node.js dependencies
+node_modules/
+
+# Database files
+server/database.sqlite
+server/database.sqlite-journal
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

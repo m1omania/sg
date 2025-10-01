@@ -37,7 +37,8 @@
 │   ├── routes/         # Маршруты API
 │   ├── controllers/    # Контроллеры
 │   └── models/         # Модели данных
-└── render.yaml         # Конфигурация для Render
+├── render.yaml         # Конфигурация для Render
+└── .gitignore          # Файл игнорирования для Git
 ```
 
 ## Локальный запуск
@@ -61,12 +62,25 @@ http://localhost:3000
 ## Развертывание на Render
 
 1. Создайте аккаунт на [Render](https://render.com/)
-2. Подключите ваш репозиторий к Render
-3. Выберите тип приложения "Web Service"
+2. Создайте новый репозиторий на GitHub и загрузите туда проект
+3. Подключите ваш репозиторий к Render:
+   - Перейдите в Dashboard на Render
+   - Нажмите "New Web Service"
+   - Выберите ваш репозиторий GitHub
 4. Укажите следующие настройки:
+   - Name: solar-group-app (или любое другое)
+   - Environment: Node
    - Build Command: `cd server && npm install`
-   - Start Command: `cd server && npm start`
-5. Разверните приложение
+   - Start Command: `cd server && node server.js`
+   - Instance Type: Free (для тестирования)
+5. Добавьте переменную окружения:
+   - NODE_ENV = production
+6. Нажмите "Create Web Service"
+7. Дождитесь завершения развертывания
+
+Также можно использовать файл [render.yaml](file:///Users/andreyreutskiy/projects/sg/render.yaml) для автоматической конфигурации:
+1. Подключите репозиторий к Render
+2. Render автоматически обнаружит [render.yaml](file:///Users/andreyreutskiy/projects/sg/render.yaml) и применит настройки
 
 ## API Endpoints
 
@@ -116,3 +130,15 @@ npm run dev
 ```
 
 Это позволит автоматически перезапускать сервер при изменении файлов.
+
+## Устранение неполадок
+
+Если вы получаете ошибку "Repository not found", убедитесь, что:
+1. Вы создали репозиторий на GitHub
+2. Загрузили в него все файлы проекта
+3. Подключили правильный репозиторий к Render
+
+Если развертывание не удается, проверьте:
+1. Логи развертывания на Render
+2. Правильность команд сборки и запуска в настройках Render
+3. Наличие файла [render.yaml](file:///Users/andreyreutskiy/projects/sg/render.yaml) в корне репозитория
