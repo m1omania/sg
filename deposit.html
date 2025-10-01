@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пополнить счет - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-profile">
+                <span class="user-name">Константин</span>
+                <div class="user-avatar">К</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Проекты</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Пополнить счет</h1>
+            </div>
+
+            <div class="deposit-container">
+                <div class="balance-card">
+                    <h3>Текущий баланс</h3>
+                    <div class="balance-amount">$1,000.00</div>
+                    <div class="balance-bonus">Бонусный баланс: $25.00</div>
+                </div>
+
+                <form id="deposit-form" class="deposit-form">
+                    <div class="form-group">
+                        <label class="form-label">Сумма пополнения ($)</label>
+                        <input type="number" class="form-control" id="amount" min="1" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Способ оплаты</label>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <input type="radio" id="card" name="payment-method" value="card" checked>
+                                <label for="card">
+                                    <div class="payment-icon">💳</div>
+                                    <div class="payment-name">Банковская карта</div>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-method">
+                                <input type="radio" id="crypto" name="payment-method" value="crypto">
+                                <label for="crypto">
+                                    <div class="payment-icon">₿</div>
+                                    <div class="payment-name">Криптовалюта</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--block">Пополнить счет</button>
+                </form>
+                
+                <div class="deposit-info">
+                    <h3>Как это работает</h3>
+                    <ul>
+                        <li>Минимальная сумма пополнения: $1</li>
+                        <li>Пополнение происходит мгновенно</li>
+                        <li>Средства сразу доступны для инвестиций</li>
+                        <li>Комиссии за пополнение не взимаются</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Success Notification -->
+            <div class="notification hidden" id="success-notification">
+                <div class="notification-content">
+                    <span id="notification-text">Операция выполнена успешно!</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            </div>
+            
+            <!-- Error Notification -->
+            <div class="notification error hidden" id="error-notification">
+                <div class="notification-content">
+                    <span id="error-text">Произошла ошибка!</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const depositForm = document.getElementById('deposit-form');
+            const successNotification = document.getElementById('success-notification');
+            const errorNotification = document.getElementById('error-notification');
+            
+            // В реальном приложении здесь должен быть запрос к API для получения баланса
+            // Для демонстрации используем фиксированное значение
+            
+            depositForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const amount = document.getElementById('amount').value;
+                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                
+                // Валидация суммы
+                if (amount <= 0) {
+                    showError('Введите корректную сумму');
+                    return;
+                }
+                
+                try {
+                    // В реальном приложении здесь должен быть запрос к платежной системе
+                    // Для демонстрации симулируем успешное пополнение
+                    
+                    const response = await fetch('/api/transactions/deposit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            userId: 1, // В реальном приложении здесь должен быть ID текущего пользователя
+                            amount: amount,
+                            paymentMethod: paymentMethod
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        showSuccess(`Счет успешно пополнен на $${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
+                        
+                        // Обновляем отображение баланса
+                        document.querySelector('.balance-amount').textContent = `$${(1000 + parseFloat(amount)).toFixed(2)}`;
+                        
+                        // Очищаем форму
+                        depositForm.reset();
+                    } else {
+                        showError(data.error || 'Ошибка пополнения счета');
+                    }
+                } catch (error) {
+                    console.error('Deposit error:', error);
+                    showError('Ошибка сети. Попробуйте позже.');
+                }
+            });
+            
+            // Закрытие уведомлений
+            document.querySelectorAll('.notification-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.notification').classList.add('hidden');
+                });
+            });
+            
+            function showSuccess(message) {
+                document.getElementById('notification-text').textContent = message;
+                successNotification.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                }, 5000);
+            }
+            
+            function showError(message) {
+                document.getElementById('error-text').textContent = message;
+                errorNotification.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    errorNotification.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

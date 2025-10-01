@@ -12,8 +12,12 @@ try {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
       email TEXT UNIQUE NOT NULL,
+      phone TEXT,
       password_hash TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      email_verified BOOLEAN DEFAULT FALSE,
+      phone_verified BOOLEAN DEFAULT FALSE,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
@@ -56,11 +60,13 @@ try {
     CREATE TABLE IF NOT EXISTS investments (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
-      project TEXT NOT NULL,
+      project_id INTEGER,
+      project_name TEXT NOT NULL,
       amount REAL NOT NULL,
       coupon_id INTEGER,
       final_amount REAL NOT NULL,
       transaction_id TEXT UNIQUE,
+      status TEXT DEFAULT 'active', -- active, completed, cancelled
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id),
       FOREIGN KEY (coupon_id) REFERENCES coupons (id)
@@ -73,7 +79,54 @@ try {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER UNIQUE,
       main_balance REAL DEFAULT 0.0,
-      partner_balance REAL DEFAULT 0.0,
+      bonus_balance REAL DEFAULT 0.0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+  `);
+
+  // Таблица транзакций
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS transactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      type TEXT NOT NULL, -- deposit, withdrawal, investment, coupon
+      amount REAL NOT NULL,
+      currency TEXT DEFAULT 'USD',
+      status TEXT DEFAULT 'completed', -- pending, completed, failed, cancelled
+      payment_method TEXT, -- card, crypto, etc.
+      transaction_id TEXT UNIQUE,
+      description TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+  `);
+
+  // Таблица проектов
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS projects (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      description TEXT,
+      image_url TEXT,
+      min_investment REAL DEFAULT 0,
+      interest_rate REAL NOT NULL, -- процентная ставка
+      duration INTEGER, -- срок в месяцах
+      status TEXT DEFAULT 'active', -- active, completed, upcoming
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Таблица уведомлений
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS notifications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      title TEXT NOT NULL,
+      message TEXT NOT NULL,
+      type TEXT DEFAULT 'info', -- info, success, warning, error
+      is_read BOOLEAN DEFAULT FALSE,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     )
@@ -163,6 +216,64 @@ const initializeDatabase = () => {
       console.log('Default coupons added to database');
     }
 
+    // Проверим наличие тестовых проектов
+    const projectCount = db.prepare("SELECT COUNT(*) as count FROM projects").get();
+    
+    if (projectCount.count === 0) {
+      const defaultProjects = [
+        {
+          name: "Дирижабли",
+          description: "Инвестируйте в инновационные проекты воздушных дирижаблей. Современные технологии и экологичный транспорт будущего.",
+          image_url: "/images/airships.jpg",
+          min_investment: 500,
+          interest_rate: 12,
+          duration: 36,
+          status: "active"
+        },
+        {
+          name: "Совэлмаш",
+          description: "Инвестируйте в развитие современного машиностроительного завода. Перспективный проект с высокой отдачей.",
+          image_url: "/images/sovelmash.jpg",
+          min_investment: 1000,
+          interest_rate: 15,
+          duration: 60,
+          status: "active"
+        },
+        {
+          name: "Солнечные панели",
+          description: "Инвестируйте в развитие солнечной энергетики. Проект по установке солнечных панелей в жилых комплексах.",
+          image_url: "/images/solar.jpg",
+          min_investment: 250,
+          interest_rate: 10,
+          duration: 24,
+          status: "active"
+        }
+      ];
+
+      const insertProject = db.prepare(`
+        INSERT INTO projects 
+        (name, description, image_url, min_investment, interest_rate, duration, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `);
+
+      const insertProjects = db.transaction((projects) => {
+        for (const project of projects) {
+          insertProject.run(
+            project.name,
+            project.description,
+            project.image_url,
+            project.min_investment,
+            project.interest_rate,
+            project.duration,
+            project.status
+          );
+        }
+      });
+
+      insertProjects(defaultProjects);
+      console.log('Default projects added to database');
+    }
+
     // Проверим наличие тестового пользователя
     const userCount = db.prepare("SELECT COUNT(*) as count FROM users").get();
     
@@ -170,24 +281,36 @@ const initializeDatabase = () => {
       // В целях демонстрации добавим тестового пользователя
       // В реальном приложении никогда не храним пароли в открытом виде!
       const insertUser = db.prepare(`
-        INSERT INTO users (username, email, password_hash) 
-        VALUES (?, ?, ?)
+        INSERT INTO users (username, email, phone, password_hash, email_verified, phone_verified) 
+        VALUES (?, ?, ?, ?, ?, ?)
       `);
       
       const userInfo = insertUser.run(
         'Константин', 
         'konstantin@example.com', 
-        'demo_password_hash'
+        '+79991234567',
+        'demo_password_hash',
+        true,
+        true
       );
       
       // Создаем кошелек для пользователя
       const insertWallet = db.prepare(`
-        INSERT INTO wallets (user_id, main_balance, partner_balance) 
+        INSERT INTO wallets (user_id, main_balance, bonus_balance) 
         VALUES (?, ?, ?)
       `);
       
-      insertWallet.run(userInfo.lastInsertRowid, 0.00, 0.00);
+      insertWallet.run(userInfo.lastInsertRowid, 1000.00, 25.00);
       console.log('Demo user and wallet created');
+      
+      // Добавляем приветственный купон пользователю
+      const welcomeCoupon = db.prepare(`
+        INSERT INTO coupon_history (coupon_id, user_id, action)
+        VALUES (?, ?, 'created')
+      `);
+      
+      welcomeCoupon.run(1, userInfo.lastInsertRowid); // Купон с ID 1 - приветственный
+      console.log('Welcome coupon added to user');
     }
   } catch (err) {
     console.error('Error initializing database:', err.message);

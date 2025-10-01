@@ -16,10 +16,13 @@ app.use(express.static(path.join(__dirname, '../')));
 app.get('/health', health);
 
 // API routes
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/coupons', require('./routes/coupons'));
 app.use('/api/investments', require('./routes/investments'));
 app.use('/api/wallet', require('./routes/wallet'));
+app.use('/api/projects', require('./routes/projects'));
+app.use('/api/transactions', require('./routes/transactions'));
 
 // Serve frontend
 app.get('/', (req, res) => {
@@ -34,7 +37,26 @@ app.get('/invest', (req, res) => {
   res.sendFile(path.join(__dirname, '../invest.html'));
 });
 
-// Start the server
+// Новая страница регистрации
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, '../register.html'));
+});
+
+// Новая страница пополнения счета
+app.get('/deposit', (req, res) => {
+  res.sendFile(path.join(__dirname, '../deposit.html'));
+});
+
+// Новая страница проектов
+app.get('/projects', (req, res) => {
+  res.sendFile(path.join(__dirname, '../projects.html'));
+});
+
+// Новая страница моих инвестиций
+app.get('/my-investments', (req, res) => {
+  res.sendFile(path.join(__dirname, '../my-investments.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проекты - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-profile">
+                <span class="user-name">Константин</span>
+                <div class="user-avatar">К</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active">Проекты</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Инвестиционные проекты</h1>
+                <div class="page-header-actions">
+                    <div class="search-box">
+                        <input type="text" class="form-control" id="project-search" placeholder="Поиск проектов...">
+                        <button class="btn btn--icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label class="filter-label">Сортировка:</label>
+                    <select class="form-control filter-select" id="sort-order">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
+                        <option value="interest-high">Высокая доходность</option>
+                        <option value="interest-low">Низкая доходность</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Доходность:</label>
+                    <select class="form-control filter-select" id="interest-filter">
+                        <option value="all">Любая</option>
+                        <option value="high">Высокая (12%+)</option>
+                        <option value="medium">Средняя (8-12%)</option>
+                        <option value="low">Низкая (до 8%)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="projects-grid" id="projects-container">
+                <!-- Проекты будут загружены сюда -->
+                <div class="loading">Загрузка проектов...</div>
+            </div>
+
+            <!-- Project Detail Modal -->
+            <div class="modal hidden" id="project-detail-modal">
+                <div class="modal-content project-detail-modal">
+                    <div class="modal-header">
+                        <h3 id="modal-project-name">Название проекта</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="project-detail-content">
+                            <div class="project-image">
+                                <img id="modal-project-image" src="" alt="Изображение проекта">
+                            </div>
+                            <div class="project-info">
+                                <div class="project-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Доходность</span>
+                                        <span class="stat-value" id="modal-project-interest">12% годовых</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Срок</span>
+                                        <span class="stat-value" id="modal-project-duration">3 года</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Мин. сумма</span>
+                                        <span class="stat-value" id="modal-project-min-investment">$500</span>
+                                    </div>
+                                </div>
+                                <div class="project-description">
+                                    <h4>Описание проекта</h4>
+                                    <p id="modal-project-description">Описание проекта будет здесь</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn--primary" id="invest-now-btn">Инвестировать сейчас</button>
+                        <button class="btn btn--secondary modal-close">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Notification -->
+            <div class="notification hidden" id="success-notification">
+                <div class="notification-content">
+                    <span id="notification-text">Операция выполнена успешно!</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectsContainer = document.getElementById('projects-container');
+            const searchInput = document.getElementById('project-search');
+            const sortOrder = document.getElementById('sort-order');
+            const interestFilter = document.getElementById('interest-filter');
+            const projectDetailModal = document.getElementById('project-detail-modal');
+            const successNotification = document.getElementById('success-notification');
+            
+            // Загружаем проекты
+            loadProjects();
+            
+            // Обработчики событий
+            searchInput.addEventListener('input', loadProjects);
+            sortOrder.addEventListener('change', loadProjects);
+            interestFilter.addEventListener('change', loadProjects);
+            
+            // Закрытие модальных окон
+            document.querySelectorAll('.modal-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').classList.add('hidden');
+                });
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.add('hidden');
+                }
+            });
+            
+            // Кнопка "Инвестировать сейчас"
+            document.getElementById('invest-now-btn').addEventListener('click', function() {
+                // В реальном приложении здесь должен быть переход к форме инвестиций
+                window.location.href = 'invest.html';
+            });
+            
+            async function loadProjects() {
+                const searchQuery = searchInput.value;
+                const sort = sortOrder.value;
+                const interest = interestFilter.value;
+                
+                try {
+                    let url = '/api/projects';
+                    if (searchQuery) {
+                        url = `/api/projects/search/${encodeURIComponent(searchQuery)}`;
+                    }
+                    
+                    const response = await fetch(url);
+                    const projects = await response.json();
+                    
+                    if (response.ok) {
+                        renderProjects(projects, sort, interest);
+                    } else {
+                        showError('Ошибка загрузки проектов');
+                    }
+                } catch (error) {
+                    console.error('Error loading projects:', error);
+                    showError('Ошибка сети. Попробуйте позже.');
+                }
+            }
+            
+            function renderProjects(projects, sort, interest) {
+                // Применяем фильтры
+                let filteredProjects = [...projects];
+                
+                // Фильтр по доходности
+                if (interest !== 'all') {
+                    filteredProjects = filteredProjects.filter(project => {
+                        const rate = project.interest_rate;
+                        switch(interest) {
+                            case 'high':
+                                return rate >= 12;
+                            case 'medium':
+                                return rate >= 8 && rate < 12;
+                            case 'low':
+                                return rate < 8;
+                            default:
+                                return true;
+                        }
+                    });
+                }
+                
+                // Сортировка
+                filteredProjects.sort((a, b) => {
+                    switch(sort) {
+                        case 'newest':
+                            return new Date(b.created_at) - new Date(a.created_at);
+                        case 'oldest':
+                            return new Date(a.created_at) - new Date(b.created_at);
+                        case 'interest-high':
+                            return b.interest_rate - a.interest_rate;
+                        case 'interest-low':
+                            return a.interest_rate - b.interest_rate;
+                        default:
+                            return 0;
+                    }
+                });
+                
+                if (filteredProjects.length === 0) {
+                    projectsContainer.innerHTML = '<div class="no-results">Проекты не найдены</div>';
+                    return;
+                }
+                
+                projectsContainer.innerHTML = filteredProjects.map(project => `
+                    <div class="project-card" data-project-id="${project.id}">
+                        <div class="project-image">
+                            <img src="${project.image_url || '/images/placeholder.jpg'}" alt="${project.name}">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">${project.name}</h3>
+                            <p class="project-description">${project.description.substring(0, 100)}...</p>
+                            <div class="project-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Доходность</span>
+                                    <span class="stat-value">${project.interest_rate}%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Срок</span>
+                                    <span class="stat-value">${Math.floor(project.duration/12)} лет</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Мин. сумма</span>
+                                    <span class="stat-value">$${project.min_investment}</span>
+                                </div>
+                            </div>
+                            <div class="project-actions">
+                                <button class="btn btn--secondary btn--small details-btn" data-project-id="${project.id}">Подробнее</button>
+                                <button class="btn btn--primary btn--small invest-btn" data-project-id="${project.id}">Инвестировать</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Добавляем обработчики событий для кнопок
+                document.querySelectorAll('.details-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const projectId = this.dataset.projectId;
+                        showProjectDetails(projectId);
+                    });
+                });
+                
+                document.querySelectorAll('.invest-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const projectId = this.dataset.projectId;
+                        // В реальном приложении здесь должен быть переход к форме инвестиций
+                        window.location.href = `invest.html?project=${projectId}`;
+                    });
+                });
+            }
+            
+            async function showProjectDetails(projectId) {
+                try {
+                    const response = await fetch(`/api/projects/${projectId}`);
+                    const project = await response.json();
+                    
+                    if (response.ok) {
+                        document.getElementById('modal-project-name').textContent = project.name;
+                        document.getElementById('modal-project-image').src = project.image_url || '/images/placeholder.jpg';
+                        document.getElementById('modal-project-interest').textContent = `${project.interest_rate}% годовых`;
+                        document.getElementById('modal-project-duration').textContent = `${Math.floor(project.duration/12)} лет`;
+                        document.getElementById('modal-project-min-investment').textContent = `$${project.min_investment}`;
+                        document.getElementById('modal-project-description').textContent = project.description;
+                        
+                        projectDetailModal.classList.remove('hidden');
+                    } else {
+                        showError('Ошибка загрузки информации о проекте');
+                    }
+                } catch (error) {
+                    console.error('Error loading project details:', error);
+                    showError('Ошибка сети. Попробуйте позже.');
+                }
+            }
+            
+            function showSuccess(message) {
+                document.getElementById('notification-text').textContent = message;
+                successNotification.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                }, 3000);
+            }
+            
+            function showError(message) {
+                document.getElementById('notification-text').textContent = message;
+                successNotification.classList.remove('hidden');
+                successNotification.classList.add('error');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                    successNotification.classList.remove('error');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

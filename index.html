@@ -35,11 +35,12 @@
         <!-- Sidebar Navigation -->
         <nav class="sidebar">
             <ul class="nav-menu">
-                <li class="nav-item"><a href="invest.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active">Главная</a></li>
                 <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
                 <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Мои инвестиции</a></li>
-                <li class="nav-item"><a href="#" class="nav-link active">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Проекты</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Купоны и промокоды</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
@@ -52,6 +53,45 @@
             <div class="page-header">
                 <h1>Купоны и промокоды</h1>
                 <button class="btn btn--primary activate-promo-btn">Активировать промокод</button>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-card-title">Баланс кошелька</div>
+                    <div class="stat-card-value">$1,000.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Бонусный баланс</div>
+                    <div class="stat-card-value">$25.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Активные купоны</div>
+                    <div class="stat-card-value">3</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Быстрые действия</h2>
+                <div class="action-buttons">
+                    <a href="deposit.html" class="action-card">
+                        <div class="action-icon">💰</div>
+                        <div class="action-title">Пополнить счет</div>
+                    </a>
+                    <a href="invest.html" class="action-card">
+                        <div class="action-icon">📈</div>
+                        <div class="action-title">Инвестировать</div>
+                    </a>
+                    <a href="projects.html" class="action-card">
+                        <div class="action-icon">🏢</div>
+                        <div class="action-title">Проекты</div>
+                    </a>
+                    <a href="my-investments.html" class="action-card">
+                        <div class="action-icon">📊</div>
+                        <div class="action-title">Мои инвестиции</div>
+                    </a>
+                </div>
             </div>
 
             <!-- Tabs -->
@@ -68,6 +108,7 @@
                         <option value="all">Все проекты</option>
                         <option value="airships">Дирижабли</option>
                         <option value="sovelmash">Совэлмаш</option>
+                        <option value="solar">Солнечные панели</option>
                     </select>
                 </div>
             </div>
@@ -161,41 +202,6 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn--primary" id="activate-promo-btn">Активировать</button>
-                <button class="btn btn--secondary modal-close">Отмена</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Purchase Modal -->
-    <div class="modal hidden" id="purchase-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Покупка инвестиционного пакета</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="purchase-info">
-                    <div class="applied-coupon-banner">
-                        <span class="coupon-applied-text">Применён купон: <strong id="applied-coupon-name">-</strong></span>
-                    </div>
-                    <div class="price-calculation">
-                        <div class="price-row">
-                            <span>Базовая стоимость:</span>
-                            <span id="base-price">$500</span>
-                        </div>
-                        <div class="price-row discount">
-                            <span>Скидка по купону:</span>
-                            <span id="discount-amount">-$25</span>
-                        </div>
-                        <div class="price-row total">
-                            <span><strong>Итого к оплате:</strong></span>
-                            <span><strong id="final-price">$475</strong></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn--primary" id="confirm-purchase-btn">Подтвердить покупку</button>
                 <button class="btn btn--secondary modal-close">Отмена</button>
             </div>
         </div>

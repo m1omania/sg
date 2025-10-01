@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои инвестиции - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-profile">
+                <span class="user-name">Константин</span>
+                <div class="user-avatar">К</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Проекты</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Мои инвестиции</h1>
+                <button class="btn btn--primary" id="new-investment-btn">Новая инвестиция</button>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-card-title">Всего инвестировано</div>
+                    <div class="stat-card-value">$5,250.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Активные инвестиции</div>
+                    <div class="stat-card-value">$4,750.00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Доход</div>
+                    <div class="stat-card-value">$425.00</div>
+                </div>
+            </div>
+
+            <div class="filters-section">
+                <div class="filter-group">
+                    <label class="filter-label">Статус:</label>
+                    <select class="form-control filter-select" id="status-filter">
+                        <option value="all">Все</option>
+                        <option value="active">Активные</option>
+                        <option value="completed">Завершенные</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Проект:</label>
+                    <select class="form-control filter-select" id="project-filter">
+                        <option value="all">Все проекты</option>
+                        <option value="airships">Дирижабли</option>
+                        <option value="sovelmash">Совэлмаш</option>
+                        <option value="solar">Солнечные панели</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="investments-table-container">
+                <table class="investments-table">
+                    <thead>
+                        <tr>
+                            <th>Проект</th>
+                            <th>Сумма</th>
+                            <th>Дата</th>
+                            <th>Доходность</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investments-tbody">
+                        <!-- Инвестиции будут загружены сюда -->
+                        <tr>
+                            <td colspan="6" class="text-center">Загрузка инвестиций...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Investment Detail Modal -->
+            <div class="modal hidden" id="investment-detail-modal">
+                <div class="modal-content investment-detail-modal">
+                    <div class="modal-header">
+                        <h3>Детали инвестиции</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="investment-detail-content">
+                            <div class="detail-item">
+                                <span class="detail-label">Проект:</span>
+                                <span class="detail-value" id="detail-project-name">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Сумма инвестиции:</span>
+                                <span class="detail-value" id="detail-amount">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Дата:</span>
+                                <span class="detail-value" id="detail-date">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Доходность:</span>
+                                <span class="detail-value" id="detail-interest">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value" id="detail-status">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Транзакция:</span>
+                                <span class="detail-value" id="detail-transaction">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn--secondary modal-close">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Notification -->
+            <div class="notification hidden" id="success-notification">
+                <div class="notification-content">
+                    <span id="notification-text">Операция выполнена успешно!</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const investmentsTbody = document.getElementById('investments-tbody');
+            const statusFilter = document.getElementById('status-filter');
+            const projectFilter = document.getElementById('project-filter');
+            const newInvestmentBtn = document.getElementById('new-investment-btn');
+            const investmentDetailModal = document.getElementById('investment-detail-modal');
+            const successNotification = document.getElementById('success-notification');
+            
+            // Загружаем инвестиции
+            loadInvestments();
+            
+            // Обработчики событий
+            statusFilter.addEventListener('change', loadInvestments);
+            projectFilter.addEventListener('change', loadInvestments);
+            newInvestmentBtn.addEventListener('click', function() {
+                window.location.href = 'invest.html';
+            });
+            
+            // Закрытие модальных окон
+            document.querySelectorAll('.modal-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').classList.add('hidden');
+                });
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.add('hidden');
+                }
+            });
+            
+            async function loadInvestments() {
+                const status = statusFilter.value;
+                const project = projectFilter.value;
+                
+                try {
+                    // В реальном приложении здесь должен быть запрос к API
+                    // Для демонстрации используем тестовые данные
+                    
+                    const investments = [
+                        {
+                            id: 1,
+                            project_name: "Дирижабли",
+                            amount: 1000,
+                            final_amount: 1000,
+                            created_at: "2025-09-15",
+                            status: "active",
+                            transaction_id: "INV-1726408975-123"
+                        },
+                        {
+                            id: 2,
+                            project_name: "Совэлмаш",
+                            amount: 2500,
+                            final_amount: 2500,
+                            created_at: "2025-08-22",
+                            status: "active",
+                            transaction_id: "INV-1725029775-456"
+                        },
+                        {
+                            id: 3,
+                            project_name: "Солнечные панели",
+                            amount: 500,
+                            final_amount: 475,
+                            created_at: "2025-07-10",
+                            status: "completed",
+                            transaction_id: "INV-1720610575-789"
+                        },
+                        {
+                            id: 4,
+                            project_name: "Дирижабли",
+                            amount: 1250,
+                            final_amount: 1250,
+                            created_at: "2025-06-30",
+                            status: "active",
+                            transaction_id: "INV-1719727375-012"
+                        }
+                    ];
+                    
+                    renderInvestments(investments);
+                } catch (error) {
+                    console.error('Error loading investments:', error);
+                    investmentsTbody.innerHTML = '<tr><td colspan="6" class="text-center">Ошибка загрузки инвестиций</td></tr>';
+                }
+            }
+            
+            function renderInvestments(investments) {
+                if (investments.length === 0) {
+                    investmentsTbody.innerHTML = '<tr><td colspan="6" class="text-center">Инвестиции не найдены</td></tr>';
+                    return;
+                }
+                
+                investmentsTbody.innerHTML = investments.map(investment => `
+                    <tr>
+                        <td>
+                            <div class="project-info">
+                                <div class="project-name">${investment.project_name}</div>
+                            </div>
+                        </td>
+                        <td>$${investment.final_amount.toFixed(2)}</td>
+                        <td>${formatDate(investment.created_at)}</td>
+                        <td>${getInterestRate(investment.project_name)}</td>
+                        <td>
+                            <span class="status-badge status-${investment.status}">
+                                ${investment.status === 'active' ? 'Активна' : 'Завершена'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn--secondary btn--small details-btn" data-investment-id="${investment.id}">Подробнее</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Добавляем обработчики событий для кнопок
+                document.querySelectorAll('.details-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const investmentId = this.dataset.investmentId;
+                        showInvestmentDetails(investmentId);
+                    });
+                });
+            }
+            
+            function showInvestmentDetails(investmentId) {
+                // В реальном приложении здесь должен быть запрос к API
+                // Для демонстрации используем фиктивные данные
+                
+                const investment = {
+                    id: investmentId,
+                    project_name: "Дирижабли",
+                    amount: 1000,
+                    final_amount: 1000,
+                    created_at: "2025-09-15",
+                    status: "active",
+                    transaction_id: "INV-1726408975-123"
+                };
+                
+                document.getElementById('detail-project-name').textContent = investment.project_name;
+                document.getElementById('detail-amount').textContent = `$${investment.final_amount.toFixed(2)}`;
+                document.getElementById('detail-date').textContent = formatDate(investment.created_at);
+                document.getElementById('detail-interest').textContent = getInterestRate(investment.project_name);
+                document.getElementById('detail-status').textContent = investment.status === 'active' ? 'Активна' : 'Завершена';
+                document.getElementById('detail-transaction').textContent = investment.transaction_id;
+                
+                investmentDetailModal.classList.remove('hidden');
+            }
+            
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('ru-RU', options);
+            }
+            
+            function getInterestRate(projectName) {
+                const rates = {
+                    'Дирижабли': '12% годовых',
+                    'Совэлмаш': '15% годовых',
+                    'Солнечные панели': '10% годовых'
+                };
+                return rates[projectName] || 'N/A';
+            }
+            
+            function showSuccess(message) {
+                document.getElementById('notification-text').textContent = message;
+                successNotification.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
