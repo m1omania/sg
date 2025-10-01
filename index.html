@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Купоны и промокоды - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-profile">
+                <span class="user-name">Константин</span>
+                <div class="user-avatar">К</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="invest.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Купоны и промокоды</h1>
+                <button class="btn btn--primary activate-promo-btn">Активировать промокод</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="active">Активные купоны</button>
+                <button class="tab-btn" data-tab="history">История</button>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="filters-section">
+                <div class="search-filter">
+                    <input type="text" class="form-control search-input" placeholder="Поиск купонов...">
+                    <select class="form-control project-filter">
+                        <option value="all">Все проекты</option>
+                        <option value="airships">Дирижабли</option>
+                        <option value="sovelmash">Совэлмаш</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Active Coupons Tab -->
+            <div class="tab-content active" id="active-tab">
+                <div class="coupons-grid" id="active-coupons">
+                    <!-- Coupons will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history-tab">
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Проект</th>
+                                <th>Бонус</th>
+                                <th>Статус</th>
+                                <th>Дата</th>
+                                <th>ID операции</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <!-- History will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Coupon Details Modal -->
+    <div class="modal hidden" id="coupon-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-coupon-name">Детали купона</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="coupon-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Уникальный код:</span>
+                        <span class="detail-value" id="modal-coupon-code">-</span>
+                        <button class="btn btn--sm copy-code-btn">Копировать</button>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Проект:</span>
+                        <span class="detail-value" id="modal-coupon-project">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Бонус:</span>
+                        <span class="detail-value" id="modal-coupon-bonus">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Минимальная сумма:</span>
+                        <span class="detail-value" id="modal-coupon-min-amount">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Действует до:</span>
+                        <span class="detail-value" id="modal-coupon-expiry">-</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Описание:</span>
+                        <p class="detail-description" id="modal-coupon-description">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--primary use-coupon-btn">Использовать купон</button>
+                <button class="btn btn--secondary modal-close">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activate Promo Code Modal -->
+    <div class="modal hidden" id="activate-promo-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Активировать промокод</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Введите промокод:</label>
+                    <input type="text" class="form-control" id="promo-code-input" placeholder="ПРОМОКОД">
+                    <div class="error-message hidden" id="promo-error">Неверный промокод</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--primary" id="activate-promo-btn">Активировать</button>
+                <button class="btn btn--secondary modal-close">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div class="modal hidden" id="purchase-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Покупка инвестиционного пакета</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="purchase-info">
+                    <div class="applied-coupon-banner">
+                        <span class="coupon-applied-text">Применён купон: <strong id="applied-coupon-name">-</strong></span>
+                    </div>
+                    <div class="price-calculation">
+                        <div class="price-row">
+                            <span>Базовая стоимость:</span>
+                            <span id="base-price">$500</span>
+                        </div>
+                        <div class="price-row discount">
+                            <span>Скидка по купону:</span>
+                            <span id="discount-amount">-$25</span>
+                        </div>
+                        <div class="price-row total">
+                            <span><strong>Итого к оплате:</strong></span>
+                            <span><strong id="final-price">$475</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--primary" id="confirm-purchase-btn">Подтвердить покупку</button>
+                <button class="btn btn--secondary modal-close">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div class="notification hidden" id="success-notification">
+        <div class="notification-content">
+            <span id="notification-text">Операция выполнена успешно!</span>
+            <button class="notification-close">&times;</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
