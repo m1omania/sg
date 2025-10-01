@@ -179,7 +179,7 @@
                         
                         // Через 2 секунды перенаправляем на главную страницу
                         setTimeout(() => {
-                            window.location.href = '/';
+                            window.location.href = '/index.html';
                         }, 2000);
                     } else {
                         showError(data.error || 'Ошибка подтверждения кода');
@@ -222,30 +222,7 @@
                 });
             });
             
-            function showSuccess(message) {
-                document.getElementById('notification-text').textContent = message;
-                successNotification.classList.remove('hidden');
-                successNotification.classList.remove('error');
-                
-                setTimeout(() => {
-                    successNotification.classList.add('hidden');
-                }, 5000);
-            }
-            
-            function showError(message) {
-                document.getElementById('error-text').textContent = message;
-                errorNotification.classList.remove('hidden');
-                errorNotification.classList.add('error');
-                
-                setTimeout(() => {
-                    errorNotification.classList.add('hidden');
-                }, 5000);
-            }
-        });
-    </script>
-    <script>
-        // User dropdown menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
+            // User dropdown menu functionality
             const userDropdown = document.getElementById('userDropdown');
             const logoutBtn = document.getElementById('logoutBtn');
             
@@ -269,10 +246,30 @@
             logoutBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 // В реальном приложении здесь должна быть логика выхода
-                alert('Выход из системы');
-                // Например, перенаправление на страницу входа:
-                // window.location.href = '/login';
+                // Например, удаление токена аутентификации
+                // и перенаправление на главную страницу для незарегистрированных пользователей
+                window.location.href = '/';
             });
+            
+            function showSuccess(message) {
+                document.getElementById('notification-text').textContent = message;
+                successNotification.classList.remove('hidden');
+                successNotification.classList.remove('error');
+                
+                setTimeout(() => {
+                    successNotification.classList.add('hidden');
+                }, 5000);
+            }
+            
+            function showError(message) {
+                document.getElementById('error-text').textContent = message;
+                errorNotification.classList.remove('hidden');
+                errorNotification.classList.add('error');
+                
+                setTimeout(() => {
+                    errorNotification.classList.add('hidden');
+                }, 5000);
+            }
         });
     </script>
 </body>

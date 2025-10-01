@@ -45,7 +45,30 @@ const successNotification = document.getElementById('success-notification');
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
   initializeApp();
+  
+  // Check if user is on login or registration page
+  const currentPage = getCurrentPage();
+  if (currentPage === 'login.html' || currentPage === 'register.html') {
+    // Check for successful login/registration
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success')) {
+      redirectToDashboard();
+    }
+  }
 });
+
+/**
+ * Redirects user to dashboard with smooth transition
+ */
+function redirectToDashboard() {
+  // Add loading state
+  document.body.classList.add('loading');
+  
+  // Show a brief loading indicator before redirect
+  setTimeout(() => {
+    window.location.href = '/index.html';
+  }, 1500);
+}
 
 function initializeApp() {
   // Initialize based on current page

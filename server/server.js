@@ -36,7 +36,7 @@ app.use('/api/transactions', require('./routes/transactions'));
 
 // Serve frontend
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+  res.sendFile(path.join(__dirname, '../landing.html'));
 });
 
 app.get('/wallet', (req, res) => {
