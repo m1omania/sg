@@ -83,7 +83,7 @@
                             <span class="amount" id="main-balance-amount">0,00 $</span>
                         </div>
                         <div class="balance-actions">
-                            <button class="btn btn--primary" id="deposit-main-btn">Пополнить</button>
+                            <a class="btn btn--primary" href="deposit.html">Пополнить</a>
                             <button class="btn btn--secondary" id="withdraw-main-btn" disabled>Вывести</button>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                             <span class="amount" id="partner-balance-amount">0,00 $</span>
                         </div>
                         <div class="balance-actions">
-                            <button class="btn btn--primary" id="deposit-partner-btn" disabled>Пополнить</button>
+                            <a class="btn btn--primary" href="deposit.html">Пополнить</a>
                             <button class="btn btn--secondary" id="withdraw-partner-btn" disabled>Вывести</button>
                         </div>
                     </div>
@@ -239,36 +239,6 @@
                     }
                 } catch(e) { console.error(e); }
             }
-
-            async function depositMain() {
-                const amountStr = prompt('Введите сумму пополнения, USD');
-                if (!amountStr) return;
-                const amount = parseFloat(amountStr);
-                if (isNaN(amount) || amount <= 0) {
-                    alert('Некорректная сумма');
-                    return;
-                }
-                try {
-                    const res = await fetch('/api/transactions/deposit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userId, amount, paymentMethod: 'card' })
-                    });
-                    const data = await res.json();
-                    if (!res.ok) {
-                        alert(data.error || 'Ошибка пополнения');
-                        return;
-                    }
-                    await loadWallet();
-                    await loadTransactions();
-                    alert('Пополнение выполнено');
-                } catch(e) {
-                    console.error(e);
-                    alert('Ошибка сети');
-                }
-            }
-
-            if (depositMainBtn) depositMainBtn.addEventListener('click', depositMain);
 
             loadWallet();
             loadTransactions();
