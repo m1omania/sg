@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Купоны и промокоды - SOLARGROUP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-profile">
+                    <div class="user-avatar">К</div>
+                    <span class="user-name">Константин</span>
+                    <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">👤</span>
+                        Профиль
+                    </a>
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">⚙️</span>
+                        Настройки
+                    </a>
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">📄</span>
+                        Документы
+                    </a>
+                    <div class="dropdown-menu-divider"></div>
+                    <a href="#" class="dropdown-menu-item" id="logoutBtn">
+                        <span class="dropdown-menu-item-icon">🚪</span>
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Проекты</a></li>
+                <li class="nav-item"><a href="coupons.html" class="nav-link active">Купоны и промокоды</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Купоны и промокоды</h1>
+                <button class="btn btn--primary activate-promo-btn">
+                    <span>➕</span> Активировать промокод
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="active">Активные купоны</button>
+                <button class="tab-btn" data-tab="history">История</button>
+            </div>
+
+            <!-- Active Coupons Tab -->
+            <div id="active-tab" class="tab-content active">
+                <!-- Filters -->
+                <div class="filters-section">
+                    <div class="search-filter">
+                        <input 
+                            type="text" 
+                            class="form-control search-input" 
+                            placeholder="🔍 Поиск по названию или коду..."
+                        />
+                        <select class="form-control project-filter">
+                            <option value="all">Все проекты</option>
+                            <option value="airships">Дирижабли</option>
+                            <option value="sovelmash">Совэлмаш</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Coupons Grid -->
+                <div class="coupons-grid" id="active-coupons">
+                    <!-- Купоны будут загружены через JavaScript -->
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="history-tab" class="tab-content">
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Проект</th>
+                                <th>Бонус</th>
+                                <th>Статус</th>
+                                <th>Дата активации</th>
+                                <th>Транзакция</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <!-- История будет загружена через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Coupon Details -->
+    <div id="coupon-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Детали купона</h3>
+                <button class="modal-close close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="coupon-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Название:</span>
+                        <span class="detail-value" id="detail-coupon-name"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Проект:</span>
+                        <span class="detail-value">
+                            <span id="detail-coupon-project" class="project-badge"></span>
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Бонус:</span>
+                        <span class="detail-value" id="detail-coupon-bonus"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Действителен до:</span>
+                        <span class="detail-value" id="detail-coupon-expiry"></span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Условия использования:</span>
+                        <p class="detail-description" id="detail-coupon-conditions"></p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Код купона:</span>
+                        <span class="detail-value" id="detail-coupon-code"></span>
+                        <button class="btn btn--secondary btn--sm copy-code-btn">Копировать</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary close-modal">Закрыть</button>
+                <button class="btn btn--primary use-coupon-btn">Использовать купон</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Activate Promo Code -->
+    <div id="activate-promo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Активировать промокод</h3>
+                <button class="modal-close close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="promo-activation-form">
+                    <div class="form-group">
+                        <label class="form-label">Введите промокод</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="promo-code-input" 
+                            placeholder="Например: WELCOME2024"
+                            required
+                        />
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full-width">
+                        Активировать
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="success-notification" class="notification notification-success">
+        <div class="notification-content">
+            <span class="notification-icon">✓</span>
+            <span class="notification-message">Операция выполнена успешно!</span>
+        </div>
+        <button class="notification-close">&times;</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

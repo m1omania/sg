@@ -75,14 +75,15 @@ function initializeApp() {
   const currentPage = getCurrentPage();
   
   switch(currentPage) {
-    case 'index.html':
+    case 'coupons.html':
       initializeCouponsPage();
       break;
     case 'wallet.html':
       initializeWalletPage();
       break;
     default:
-      initializeCouponsPage();
+      // For other pages, don't initialize coupons
+      break;
   }
   
   // Common initialization

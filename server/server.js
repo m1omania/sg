@@ -33,6 +33,10 @@ app.get('/index.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+app.get('/coupons', (req, res) => {
+  res.sendFile(path.join(__dirname, '../coupons.html'));
+});
+
 app.get('/wallet', (req, res) => {
   res.sendFile(path.join(__dirname, '../wallet.html'));
 });
@@ -59,6 +63,11 @@ app.get('/projects', (req, res) => {
 // Новая страница моих инвестиций
 app.get('/my-investments', (req, res) => {
   res.sendFile(path.join(__dirname, '../my-investments.html'));
+});
+
+// Страница купонов и промокодов
+app.get('/coupons.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../coupons.html'));
 });
 
 app.listen(PORT, () => {
