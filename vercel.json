@@ -6,16 +6,16 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "../app.js",
-          "../deposit.html",
-          "../index.html",
-          "../invest.html",
-          "../landing.html",
-          "../my-investments.html",
-          "../projects.html",
-          "../register.html",
-          "../style.css",
-          "../wallet.html"
+          "app.js",
+          "deposit.html",
+          "index.html",
+          "invest.html",
+          "landing.html",
+          "my-investments.html",
+          "projects.html",
+          "register.html",
+          "style.css",
+          "wallet.html"
         ]
       }
     }
