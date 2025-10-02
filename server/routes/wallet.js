@@ -12,14 +12,25 @@ router.get('/:userId', (req, res) => {
       WHERE user_id = ?
     `);
     
-    const row = stmt.get(userId);
+    let row = stmt.get(userId);
     
+    // Автосоздание кошелька, если отсутствует
     if (!row) {
-      res.status(404).json({ error: 'Wallet not found' });
-      return;
+      const createStmt = db.prepare(`
+        INSERT INTO wallets (user_id, main_balance, bonus_balance)
+        VALUES (?, 0, 0)
+      `);
+      createStmt.run(userId);
+      row = stmt.get(userId);
     }
     
-    res.json(row);
+    // Совместимость полей
+    const response = {
+      ...row,
+      partner_balance: row.partner_balance !== undefined ? row.partner_balance : (row.bonus_balance || 0)
+    };
+    
+    res.json(response);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

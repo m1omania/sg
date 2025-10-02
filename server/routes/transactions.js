@@ -17,6 +17,14 @@ router.post('/deposit', (req, res) => {
   }
   
   try {
+    // Убедимся, что кошелек существует
+    const ensureWallet = db.prepare(`
+      INSERT INTO wallets (user_id, main_balance, bonus_balance)
+      SELECT ?, 0, 0
+      WHERE NOT EXISTS (SELECT 1 FROM wallets WHERE user_id = ?)
+    `);
+    ensureWallet.run(userId, userId);
+
     // Генерируем уникальный ID транзакции
     const transactionId = 'DEP-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
     
