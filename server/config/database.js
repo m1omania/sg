@@ -2,7 +2,7 @@ const Database = require('better-sqlite3');
 const path = require('path');
 
 // Создаем базу данных SQLite
-const db = new Database(path.join(__dirname, '../database.sqlite'));
+const db = new Database(path.join('/tmp', 'database.sqlite'));
 
 // Создаем таблицы при первом запуске
 try {
