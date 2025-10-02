@@ -31,6 +31,17 @@ router.post('/create', (req, res) => {
     // Генерируем уникальный ID транзакции
     const transactionId = 'INV-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
     
+    // Проверяем баланс кошелька пользователя
+    const walletStmt = db.prepare(`SELECT main_balance FROM wallets WHERE user_id = ?`);
+    const wallet = walletStmt.get(userId || 1);
+    if (!wallet) {
+      return res.status(404).json({ error: 'Wallet not found' });
+    }
+
+    if (wallet.main_balance < finalAmount) {
+      return res.status(400).json({ error: 'Недостаточно средств на счёте' });
+    }
+
     // Сохраняем инвестицию
     const projectName = projectId === 'airships' ? 'Дирижабли' : 
                       projectId === 'sovelmash' ? 'Совэлмаш' : 'Общий';
@@ -50,6 +61,31 @@ router.post('/create', (req, res) => {
       transactionId
     );
     
+    // Списываем средства с кошелька
+    const deductStmt = db.prepare(`
+      UPDATE wallets 
+      SET main_balance = main_balance - ?, updated_at = CURRENT_TIMESTAMP
+      WHERE user_id = ?
+    `);
+    deductStmt.run(finalAmount, userId || 1);
+
+    // Записываем транзакцию на инвестицию
+    const txStmt = db.prepare(`
+      INSERT INTO transactions 
+      (user_id, type, amount, currency, status, payment_method, transaction_id, description)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    txStmt.run(
+      userId || 1,
+      'investment',
+      -finalAmount,
+      'USD',
+      'completed',
+      null,
+      transactionId,
+      `Инвестиция в проект "${projectName}"`
+    );
+
     // Если использовали купон, обновляем его статус
     if (coupon) {
       const updateCouponStmt = db.prepare(`UPDATE coupons SET status = 'used' WHERE id = ?`);

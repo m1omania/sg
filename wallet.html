@@ -80,11 +80,11 @@
                             <h3>Основной счёт</h3>
                         </div>
                         <div class="balance-amount">
-                            <span class="amount">0,00 $</span>
+                            <span class="amount" id="main-balance-amount">0,00 $</span>
                         </div>
                         <div class="balance-actions">
-                            <button class="btn btn--primary">Пополнить</button>
-                            <button class="btn btn--secondary">Вывести</button>
+                            <button class="btn btn--primary" id="deposit-main-btn">Пополнить</button>
+                            <button class="btn btn--secondary" id="withdraw-main-btn" disabled>Вывести</button>
                         </div>
                     </div>
 
@@ -93,11 +93,11 @@
                             <h3>Партнёрский счёт</h3>
                         </div>
                         <div class="balance-amount">
-                            <span class="amount">0,00 $</span>
+                            <span class="amount" id="partner-balance-amount">0,00 $</span>
                         </div>
                         <div class="balance-actions">
-                            <button class="btn btn--primary">Пополнить</button>
-                            <button class="btn btn--secondary">Вывести</button>
+                            <button class="btn btn--primary" id="deposit-partner-btn" disabled>Пополнить</button>
+                            <button class="btn btn--secondary" id="withdraw-partner-btn" disabled>Вывести</button>
                         </div>
                     </div>
                 </div>
@@ -132,29 +132,7 @@
                                 <th>Статус</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Пополнение</td>
-                                <td>01.10.2025</td>
-                                <td>+1 000 $</td>
-                                <td>Пополнение с банковской карты</td>
-                                <td><span class="status-badge status-success">Выполнено</span></td>
-                            </tr>
-                            <tr>
-                                <td>Инвестиция</td>
-                                <td>28.09.2025</td>
-                                <td>-500 $</td>
-                                <td>Инвестиция в проект "Дирижабли"</td>
-                                <td><span class="status-badge status-success">Выполнено</span></td>
-                            </tr>
-                            <tr>
-                                <td>Вывод</td>
-                                <td>25.09.2025</td>
-                                <td>-200 $</td>
-                                <td>Вывод на банковскую карту</td>
-                                <td><span class="status-badge status-pending">В обработке</span></td>
-                            </tr>
-                        </tbody>
+                        <tbody id="transactions-tbody"></tbody>
                     </table>
                 </div>
             </div>
@@ -225,41 +203,76 @@
     <script>
         // Wallet-specific JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-            // Activate promo button functionality
-            const activatePromoBtn = document.querySelector('.activate-promo-btn');
-            const activatePromoModal = document.getElementById('activate-promo-modal');
-            const closeModalButtons = document.querySelectorAll('.close-modal');
-            
-            if (activatePromoBtn) {
-                activatePromoBtn.addEventListener('click', function() {
-                    activatePromoModal.style.display = 'block';
-                });
+            const userId = 1; // demo user
+            const mainBalanceEl = document.getElementById('main-balance-amount');
+            const partnerBalanceEl = document.getElementById('partner-balance-amount');
+            const txBody = document.getElementById('transactions-tbody');
+            const depositMainBtn = document.getElementById('deposit-main-btn');
+
+            async function loadWallet() {
+                try {
+                    const res = await fetch(`/api/wallet/${userId}`);
+                    if (res.ok) {
+                        const w = await res.json();
+                        if (mainBalanceEl) mainBalanceEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
+                        if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.bonus_balance || 0).toFixed(2)} $`;
+                    }
+                } catch(e) { console.error(e); }
             }
-            
-            // Close modal functionality
-            closeModalButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    this.closest('.modal').style.display = 'none';
-                });
-            });
-            
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target.classList.contains('modal')) {
-                    event.target.style.display = 'none';
+
+            async function loadTransactions() {
+                try {
+                    const res = await fetch(`/api/transactions/${userId}`);
+                    if (res.ok) {
+                        const txs = await res.json();
+                        if (txBody) {
+                            txBody.innerHTML = txs.map(t => `
+                                <tr>
+                                  <td>${t.type === 'deposit' ? 'Пополнение' : t.type === 'investment' ? 'Инвестиция' : t.type}</td>
+                                  <td>${new Date(t.created_at).toLocaleDateString('ru-RU')}</td>
+                                  <td>${t.amount > 0 ? '+' : ''}${Number(t.amount).toFixed(2)} $</td>
+                                  <td>${t.description || ''}</td>
+                                  <td><span class="status-badge ${t.status === 'completed' ? 'status-success' : 'status-pending'}">${t.status === 'completed' ? 'Выполнено' : 'В обработке'}</span></td>
+                                </tr>
+                            `).join('');
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            }
+
+            async function depositMain() {
+                const amountStr = prompt('Введите сумму пополнения, USD');
+                if (!amountStr) return;
+                const amount = parseFloat(amountStr);
+                if (isNaN(amount) || amount <= 0) {
+                    alert('Некорректная сумма');
+                    return;
                 }
-            });
-            
-            // Initialize coupons display
-            initializeWalletCoupons();
+                try {
+                    const res = await fetch('/api/transactions/deposit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, amount, paymentMethod: 'card' })
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                        alert(data.error || 'Ошибка пополнения');
+                        return;
+                    }
+                    await loadWallet();
+                    await loadTransactions();
+                    alert('Пополнение выполнено');
+                } catch(e) {
+                    console.error(e);
+                    alert('Ошибка сети');
+                }
+            }
+
+            if (depositMainBtn) depositMainBtn.addEventListener('click', depositMain);
+
+            loadWallet();
+            loadTransactions();
         });
-        
-        function initializeWalletCoupons() {
-            // This would integrate with the existing coupon system
-            // For now, we'll just show the "no coupons" message
-            // In a full implementation, this would populate the coupons container
-            console.log("Initializing wallet coupons...");
-        }
     </script>
 </body>
 </html>
