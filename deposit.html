@@ -75,8 +75,8 @@
             <div class="deposit-container">
                 <div class="balance-card">
                     <h3>Текущий баланс</h3>
-                    <div class="balance-amount">$1,000.00</div>
-                    <div class="balance-bonus">Бонусный баланс: $25.00</div>
+                    <div class="balance-amount">0.00 $</div>
+                    <div class="balance-bonus">Бонусный баланс: 0.00 $</div>
                 </div>
 
                 <form id="deposit-form" class="deposit-form">
@@ -145,8 +145,20 @@
             const successNotification = document.getElementById('success-notification');
             const errorNotification = document.getElementById('error-notification');
             
-            // В реальном приложении здесь должен быть запрос к API для получения баланса
-            // Для демонстрации используем фиксированное значение
+            const balanceAmountEl = document.querySelector('.balance-amount');
+            const balanceBonusEl = document.querySelector('.balance-bonus');
+
+            async function loadBalances() {
+                try {
+                    const res = await fetch('/api/wallet/1');
+                    if (!res.ok) return;
+                    const w = await res.json();
+                    if (balanceAmountEl) balanceAmountEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
+                    if (balanceBonusEl) balanceBonusEl.textContent = `Бонусный баланс: ${Number(w.partner_balance || 0).toFixed(2)} $`;
+                } catch (e) { console.error(e); }
+            }
+
+            await loadBalances();
             
             depositForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -180,9 +192,8 @@
                     
                     if (response.ok) {
                         showSuccess(`Счет успешно пополнен на ${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
-                        
-                        // Обновляем отображение баланса
-                        document.querySelector('.balance-amount').textContent = `${(1000 + parseFloat(amount)).toFixed(2)}`;
+                        // Обновляем отображение баланса из API
+                        await loadBalances();
                         
                         // Очищаем форму
                         depositForm.reset();
