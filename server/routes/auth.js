@@ -61,7 +61,7 @@ router.post('/register', (req, res) => {
     `);
     
     // Генерируем имя пользователя из email
-    const username = email.split('@')[0];
+    const username = email.split('@')[0] + '_' + Date.now();
     
     // В реальном приложении здесь должен быть хэш пароля
     const passwordHash = 'demo_password_hash'; // Для демо целей
