@@ -90,6 +90,7 @@ function initializeApp() {
   setupEventListeners();
   setupModals();
   setupUserMenu();
+  highlightActiveNav();
 }
 
 function getCurrentPage() {
@@ -128,6 +129,20 @@ function setupEventListeners() {
   if (activatePromoBtn) {
     activatePromoBtn.addEventListener('click', openActivatePromoModal);
   }
+}
+
+// Выделение активного пункта меню на основе текущего пути
+function highlightActiveNav() {
+  const current = getCurrentPage();
+  document.querySelectorAll('.nav-link').forEach(link => {
+    try {
+      const url = new URL(link.getAttribute('href'), window.location.origin);
+      const page = url.pathname.split('/').pop();
+      link.classList.toggle('active', page === current);
+    } catch (_) {
+      // ignore malformed links
+    }
+  });
 }
 
 function setupModals() {
