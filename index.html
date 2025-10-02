@@ -397,9 +397,7 @@
         currencyButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const currency = button.dataset.currency;
-                const symbols = { USD: '
-</html>
-, EUR: '€', GBP: '£' };
+                        const symbols = { USD: '
 
                 mainBalanceEl.textContent = `${balances.main[currency].toFixed(2)} ${symbols[currency]}`;
                 partnerBalanceEl.textContent = `${balances.partner[currency].toFixed(2)} ${symbols[currency]}`;
