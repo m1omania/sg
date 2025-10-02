@@ -326,7 +326,7 @@
                 if (response.ok) {
                     const wallet = await response.json();
                     document.getElementById('main-balance').textContent = `Баланс ${Number(wallet.main_balance).toFixed(2)} $`;
-                    document.getElementById('partner-balance').textContent = `Баланс ${Number(wallet.bonus_balance || 0).toFixed(2)} $`;
+                    document.getElementById('partner-balance').textContent = `Баланс ${Number(wallet.partner_balance || 0).toFixed(2)} $`;
                     
                     checkSufficientFunds(wallet);
                 }
@@ -338,7 +338,7 @@
         function checkSufficientFunds(wallet) {
             const totalAmount = parseFloat(document.getElementById('summary-total').textContent);
             const mainBalance = wallet.main_balance;
-            const partnerBalance = wallet.bonus_balance || 0;
+            const partnerBalance = wallet.partner_balance || 0;
             
             const selectedAccount = document.querySelector('input[name="account"]:checked').value;
             const availableBalance = selectedAccount === 'main' ? mainBalance : partnerBalance;
