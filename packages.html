@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пакеты проекта - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <span class="logo">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-profile">
+                    <div class="user-avatar">К</div>
+                    <span class="user-name">Константин</span>
+                    <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">👤</span>
+                        Профиль
+                    </a>
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">⚙️</span>
+                        Настройки
+                    </a>
+                    <a href="#" class="dropdown-menu-item">
+                        <span class="dropdown-menu-item-icon">📄</span>
+                        Документы
+                    </a>
+                    <div class="dropdown-menu-divider"></div>
+                    <a href="#" class="dropdown-menu-item" id="logoutBtn">
+                        <span class="dropdown-menu-item-icon">🚪</span>
+                        Выйти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="coupons.html" class="nav-link">Купоны и промокоды</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1 id="project-title">Совэлмаш</h1>
+                    <div class="project-stage-badge" id="project-stage">20 этап</div>
+                </div>
+                <div class="page-header-tabs">
+                    <button class="tab-btn active" data-tab="standard">Стандартные пакеты</button>
+                    <button class="tab-btn" data-tab="children">Пакеты для детей</button>
+                </div>
+            </div>
+
+            <div class="project-description">
+                <p id="project-description">В этом разделе вы можете подобрать инвестиционный пакет подходящего вам номинала и приобрести его одним платежом или оформить в рассрочку по доступному для вас этапу финансирования.</p>
+                <a href="#" class="project-dynamics-link" id="dynamics-link">Динамика этапов</a>
+            </div>
+
+            <!-- Standard Packages Tab -->
+            <div class="tab-content active" id="standard-tab">
+                <div class="packages-grid" id="packages-container">
+                    <!-- Packages will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Children Packages Tab -->
+            <div class="tab-content" id="children-tab">
+                <div class="packages-grid" id="children-packages-container">
+                    <!-- Children packages will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Success Notification -->
+            <div class="notification hidden" id="success-notification">
+                <div class="notification-content">
+                    <span id="notification-text">Операция выполнена успешно!</span>
+                    <button class="notification-close">&times;</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('project') || 'sovelmash';
+            
+            // Initialize page based on project
+            initializePackagesPage(projectId);
+            
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+            
+            function switchTab(tabId) {
+                tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+                tabContents.forEach(content => content.classList.toggle('active', content.id === `${tabId}-tab`));
+            }
+        });
+
+        function initializePackagesPage(projectId) {
+            const projectData = {
+                sovelmash: {
+                    title: 'Совэлмаш',
+                    stage: '20 этап',
+                    description: 'В этом разделе вы можете подобрать инвестиционный пакет подходящего вам номинала и приобрести его одним платежом или оформить в рассрочку по доступному для вас этапу финансирования.'
+                },
+                airships: {
+                    title: 'Дирижабли нового поколения',
+                    stage: '1 этап',
+                    description: 'Инвестируйте в инновационные проекты воздушных дирижаблей. Современные технологии и экологичный транспорт будущего.'
+                }
+            };
+
+            const project = projectData[projectId] || projectData.sovelmash;
+            
+            document.getElementById('project-title').textContent = project.title;
+            document.getElementById('project-stage').textContent = project.stage;
+            document.getElementById('project-description').textContent = project.description;
+            
+            loadPackages(projectId);
+        }
+
+        async function loadPackages(projectId) {
+            // Sample packages data - in real app this would come from API
+            const packagesData = {
+                sovelmash: {
+                    standard: [
+                        {
+                            id: 'sov-500',
+                            amount: 500,
+                            stage: 20,
+                            shares: 15000,
+                            bonusShares: 0,
+                            pricePerShare: 0.03333,
+                            discount: 30,
+                            installment: '10 мес.',
+                            nominal: '15 000 $',
+                            payment: '50 $'
+                        },
+                        {
+                            id: 'sov-500-bonus',
+                            amount: 500,
+                            stage: 20,
+                            shares: 15500,
+                            bonusShares: 500,
+                            pricePerShare: 0.03226,
+                            discount: 31,
+                            installment: 'Нет',
+                            nominal: '15 500 $',
+                            payment: '500 $'
+                        },
+                        {
+                            id: 'sov-750',
+                            amount: 750,
+                            stage: 20,
+                            shares: 24000,
+                            bonusShares: 0,
+                            pricePerShare: 0.03125,
+                            discount: 32,
+                            installment: '10 мес.',
+                            nominal: '24 000 $',
+                            payment: '75 $'
+                        },
+                        {
+                            id: 'sov-750-bonus',
+                            amount: 750,
+                            stage: 20,
+                            shares: 24750,
+                            bonusShares: 750,
+                            pricePerShare: 0.03030,
+                            discount: 33,
+                            installment: 'Нет',
+                            nominal: '24 750 $',
+                            payment: '750 $'
+                        }
+                    ],
+                    children: [
+                        {
+                            id: 'sov-child-250',
+                            amount: 250,
+                            stage: 20,
+                            shares: 8000,
+                            bonusShares: 500,
+                            pricePerShare: 0.03125,
+                            discount: 32,
+                            installment: '6 мес.',
+                            nominal: '8 500 $',
+                            payment: '42 $'
+                        }
+                    ]
+                },
+                airships: {
+                    standard: [
+                        {
+                            id: 'air-500',
+                            amount: 500,
+                            stage: 1,
+                            shares: 10000,
+                            bonusShares: 0,
+                            pricePerShare: 0.05,
+                            discount: 20,
+                            installment: '12 мес.',
+                            nominal: '10 000 $',
+                            payment: '42 $'
+                        }
+                    ],
+                    children: []
+                }
+            };
+
+            const packages = packagesData[projectId] || packagesData.sovelmash;
+            
+            renderPackages(packages.standard, 'packages-container');
+            renderPackages(packages.children, 'children-packages-container');
+        }
+
+        function renderPackages(packages, containerId) {
+            const container = document.getElementById(containerId);
+            
+            if (packages.length === 0) {
+                container.innerHTML = '<div class="no-packages">Пакеты не найдены</div>';
+                return;
+            }
+
+            container.innerHTML = packages.map(pkg => `
+                <div class="package-card">
+                    <div class="package-header">
+                        <h3 class="package-title">Пакет ${pkg.amount} $</h3>
+                        <div class="package-stage">${pkg.stage} этап</div>
+                    </div>
+                    
+                    <div class="package-table">
+                        <div class="table-header">
+                            <div class="th">Количество долей</div>
+                            <div class="th">Бонусные доли</div>
+                            <div class="th">Цена за долю</div>
+                            <div class="th">Дисконт</div>
+                            <div class="th">Рассрочка</div>
+                            <div class="th">Номинал</div>
+                            <div class="th">Платёж</div>
+                        </div>
+                        
+                        <div class="table-row">
+                            <div class="td">${pkg.shares.toLocaleString()}</div>
+                            <div class="td">
+                                ${pkg.bonusShares > 0 ? `
+                                    <div class="bonus-shares">
+                                        <span class="bonus-icon">🎁</span>
+                                        +${pkg.bonusShares}
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="td">~${pkg.pricePerShare} $</div>
+                            <div class="td">-${pkg.discount}</div>
+                            <div class="td">${pkg.installment}</div>
+                            <div class="td">${pkg.nominal}</div>
+                            <div class="td">${pkg.payment}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="package-footer">
+                        <button class="btn btn--primary package-buy-btn" data-package-id="${pkg.id}">
+                            Оформить
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners for buy buttons
+            container.querySelectorAll('.package-buy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const packageId = this.dataset.packageId;
+                    window.location.href = `checkout.html?package=${packageId}`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>

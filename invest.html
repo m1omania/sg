@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="project-footer">
-                        <button class="btn btn--primary invest-btn" data-project="airships">Инвестировать</button>
+                        <button class="btn btn--primary invest-btn" data-project="airships">Смотреть пакеты</button>
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div class="project-footer">
-                        <button class="btn btn--primary invest-btn" data-project="sovelmash">Инвестировать</button>
+                        <button class="btn btn--primary invest-btn" data-project="sovelmash">Смотреть пакеты</button>
                     </div>
                 </div>
             </div>
@@ -209,7 +209,10 @@
         function setupEventListeners() {
             // Investment buttons
             document.querySelectorAll('.invest-btn').forEach(button => {
-                button.addEventListener('click', openInvestmentModal);
+                button.addEventListener('click', function() {
+                    const project = this.dataset.project;
+                    window.location.href = `packages.html?project=${project}`;
+                });
             });
 
             // Close modals
