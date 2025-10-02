@@ -163,26 +163,26 @@
             depositForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const amount = document.getElementById('amount').value;
+                const amountInput = document.getElementById('amount');
+                let amountStr = amountInput.value.trim();
+                amountStr = amountStr.replace(',', '.');
+                const amount = parseFloat(amountStr);
                 const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
                 
                 // Валидация суммы
-                if (amount <= 0) {
+                if (isNaN(amount) || amount <= 0) {
                     showError('Введите корректную сумму');
                     return;
                 }
                 
                 try {
-                    // В реальном приложении здесь должен быть запрос к платежной системе
-                    // Для демонстрации симулируем успешное пополнение
-                    
                     const response = await fetch('/api/transactions/deposit', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            userId: 1, // В реальном приложении здесь должен быть ID текущего пользователя
+                            userId: 1,
                             amount: amount,
                             paymentMethod: paymentMethod
                         })
