@@ -308,14 +308,13 @@
                 const couponText = selectedOption.textContent;
                 const bonusMatch = couponText.match(/\((.+)\)/);
                 if (bonusMatch) {
-                    const bonus = bonusMatch[1];
+                    const bonus = bonusMatch[1].trim();
                     if (bonus.includes('%')) {
-                        const percent = parseInt(bonus);
+                        const percent = parseFloat(bonus.replace('%', ''));
                         discount = amount * (percent / 100);
-                    } else if (bonus.includes('
-</html>)) {
-                        discount = parseFloat(bonus.replace('
-</html>, '')) || 0;
+                    } else {
+                        const value = parseFloat(bonus.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
+                        discount = value;
                     }
                 }
             }
