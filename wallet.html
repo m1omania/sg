@@ -215,7 +215,7 @@
                     if (res.ok) {
                         const w = await res.json();
                         if (mainBalanceEl) mainBalanceEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
-                        if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.bonus_balance || 0).toFixed(2)} $`;
+                        if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.partner_balance || 0).toFixed(2)} $`;
                     }
                 } catch(e) { console.error(e); }
             }

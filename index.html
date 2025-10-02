@@ -379,14 +379,28 @@
         streamEndDate.setHours(streamEndDate.getHours() + 2);
         startCountdown('timer-stream', streamEndDate.getTime());
 
-        // --- Переключение валют ---
-        const currencyButtons = document.querySelectorAll('.currency-switcher button');
+        // --- Балансы из API ---
         const mainBalanceEl = document.getElementById('main-balance');
         const partnerBalanceEl = document.getElementById('partner-balance');
 
+        async function loadDashboardBalances() {
+            try {
+                const res = await fetch('/api/wallet/1');
+                if (!res.ok) return;
+                const w = await res.json();
+                if (mainBalanceEl) mainBalanceEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
+                if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.partner_balance || 0).toFixed(2)} $`;
+            } catch (e) { console.error(e); }
+        }
+
+        loadDashboardBalances();
+
+        // --- Переключение валют ---
+        const currencyButtons = document.querySelectorAll('.currency-switcher button');
+
         const balances = {
-            main: { USD: 1000.00, EUR: 930.00, GBP: 820.00 },
-            partner: { USD: 25.00, EUR: 23.25, GBP: 20.50 }
+            main: { USD: 0, EUR: 0, GBP: 0 },
+            partner: { USD: 0, EUR: 0, GBP: 0 }
         };
 
         currencyButtons.forEach(button => {
@@ -394,8 +408,12 @@
                 const currency = button.dataset.currency;
                 const symbols = { USD: '$', EUR: '€', GBP: '£' };
 
-                mainBalanceEl.textContent = `${balances.main[currency].toFixed(2)} ${symbols[currency]}`;
-                partnerBalanceEl.textContent = `${balances.partner[currency].toFixed(2)} ${symbols[currency]}`;
+                // Если потребуется конвертация, можно добавить курс. Сейчас просто меняем символ валюты.
+                const mainValue = mainBalanceEl.textContent.split(' ')[0];
+                const partnerValue = partnerBalanceEl.textContent.split(' ')[0];
+
+                mainBalanceEl.textContent = `${mainValue} ${symbols[currency]}`;
+                partnerBalanceEl.textContent = `${partnerValue} ${symbols[currency]}`;
 
                 currencyButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
