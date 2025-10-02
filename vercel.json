@@ -15,7 +15,9 @@
           "projects.html",
           "register.html",
           "style.css",
-          "wallet.html"
+          "wallet.html",
+          "packages.html",
+          "checkout.html"
         ]
       }
     }

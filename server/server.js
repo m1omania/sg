@@ -94,6 +94,16 @@ app.get('/coupons.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../coupons.html'));
 });
 
+// Страница пакетов
+app.get('/packages', (req, res) => {
+  res.sendFile(path.join(__dirname, '../packages.html'));
+});
+
+// Страница оформления пакета
+app.get('/checkout', (req, res) => {
+  res.sendFile(path.join(__dirname, '../checkout.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
