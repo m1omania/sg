@@ -194,13 +194,16 @@ async function loadActiveCoupons() {
     const response = await fetch(`${API_BASE_URL}/coupons/active`);
     if (response.ok) {
       appData.activeCoupons = await response.json();
+      normalizeCoupons();
       renderActiveCoupons();
     } else {
       console.error('Failed to load active coupons');
+      useDemoCoupons();
+      renderActiveCoupons();
     }
   } catch (error) {
     console.error('Error loading active coupons:', error);
-    // В случае ошибки используем тестовые данные
+    useDemoCoupons();
     renderActiveCoupons();
   }
 }
@@ -211,15 +214,85 @@ async function loadCouponHistory() {
     const response = await fetch(`${API_BASE_URL}/coupons/history`);
     if (response.ok) {
       appData.couponHistory = await response.json();
+      normalizeHistory();
       renderCouponHistory();
     } else {
       console.error('Failed to load coupon history');
+      useDemoHistory();
+      renderCouponHistory();
     }
   } catch (error) {
     console.error('Error loading coupon history:', error);
-    // В случае ошибки используем тестовые данные
+    useDemoHistory();
     renderCouponHistory();
   }
+}
+
+// Нормализация данных купонов к единой схеме полей
+function normalizeCoupons() {
+  appData.activeCoupons = (appData.activeCoupons || []).map(c => ({
+    id: c.id,
+    name: c.name,
+    project: c.project,
+    project_color: c.project_color || c.projectColor,
+    bonus: c.bonus,
+    expiry_date: c.expiry_date || c.expiryDate,
+    days_left: c.days_left || c.daysLeft,
+    conditions: c.conditions,
+    code: c.code,
+    description: c.description,
+    status: c.status,
+    min_amount: c.min_amount || c.minAmount,
+    source: c.source
+  }));
+}
+
+// Нормализация истории купонов к единой схеме
+function normalizeHistory() {
+  appData.couponHistory = (appData.couponHistory || []).map(h => ({
+    id: h.id,
+    name: h.name,
+    project: h.project,
+    bonus: h.bonus,
+    coupon_status: h.coupon_status || h.status,
+    created_at: h.created_at || h.date,
+    transaction_id: h.transaction_id || h.transactionId || null
+  }));
+}
+
+// Демо-данные на случай отсутствия бэкенда
+function useDemoCoupons() {
+  appData.activeCoupons = [
+    {
+      id: 1,
+      name: '25$ за регистрацию',
+      project: 'Общий',
+      project_color: '#28a745',
+      bonus: '$25',
+      expiry_date: '2025-10-15',
+      days_left: 14,
+      conditions: 'Минимальная сумма $250',
+      code: 'WELCOME25-ABC123',
+      description: 'Приветственный купон для новых пользователей',
+      status: 'active',
+      min_amount: 250,
+      source: 'manual'
+    }
+  ];
+}
+
+function useDemoHistory() {
+  appData.couponHistory = [
+    {
+      id: 4,
+      name: '20$ за друга',
+      project: 'Общий',
+      bonus: '$20',
+      coupon_status: 'used',
+      created_at: '2025-09-15',
+      transaction_id: 'TXN-001234'
+    }
+  ];
 }
 
 function renderActiveCoupons() {
@@ -463,10 +536,8 @@ function copyToClipboard(text) {
 
 function showNotification(message) {
   if (successNotification) {
-    const messageElement = successNotification.querySelector('.notification-message');
-    if (messageElement) {
-      messageElement.textContent = message;
-    }
+    const messageElement = successNotification.querySelector('.notification-message') || document.getElementById('notification-text');
+    if (messageElement) { messageElement.textContent = message; }
     successNotification.style.display = 'block';
     
     setTimeout(() => {
