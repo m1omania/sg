@@ -3,242 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Купоны и промокоды - SolarGroup</title>
+    <title>Личный кабинет - SOLARGROUP</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Дополнительные стили для новой структуры, чтобы она не выглядела поломанной */
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        .dashboard-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        .welcome-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .banners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .banner-item {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        .banner-item .timer { font-weight: bold; color: #c0392b; }
+        .banner-item a { text-decoration: none; color: #2980b9; font-weight: 500; }
+
+        .registration-status .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 8px;
+            margin: 8px 0;
+        }
+        .registration-status .progress {
+            width: 50%; /* 2/4 шага */
+            height: 100%;
+            background-color: #27ae60;
+        }
+
+        .accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        .account-card .balance { font-size: 28px; font-weight: 500; margin: 8px 0; }
+        .currency-switcher button { margin-right: 5px; }
+
+        .investment-summary, .partner-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .video-presenter {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .faq-list ul { list-style: none; padding: 0; }
+        .faq-list li { margin-bottom: 10px; }
+
+        .partner-table, .news-feed { margin-top: 16px; }
+        .partner-table table { width: 100%; border-collapse: collapse; }
+        .partner-table th, .partner-table td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .chat-support-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header__logo">
-            <span class="logo">SolarGroup</span>
-        </div>
-        <div class="header__controls">
-            <div class="language-switcher">
-                <button class="lang-btn active" data-lang="ru">RU</button>
-                <button class="lang-btn" data-lang="en">EN</button>
+    <div class="dashboard-container">
+        <!-- 1. Приветствие и мотивационные баннеры -->
+        <section class="dashboard-card welcome-banners">
+            <div class="welcome-header">
+                <h1>Добро пожаловать, Константин!</h1>
             </div>
-            <button class="notification-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                </svg>
-                <span class="notification-count">2</span>
-            </button>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-profile">
-                    <div class="user-avatar">К</div>
-                    <span class="user-name">Константин</span>
-                    <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
+            <div class="banners-grid">
+                <div class="banner-item">
+                    <p><span class="timer" id="timer-hunting">0ч 0м 0с</span> — Хантинг — это охота на звёзд! <a href="#">Подробнее</a></p>
                 </div>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-menu-item">
-                        <span class="dropdown-menu-item-icon">👤</span>
-                        Профиль
-                    </a>
-                    <a href="#" class="dropdown-menu-item">
-                        <span class="dropdown-menu-item-icon">⚙️</span>
-                        Настройки
-                    </a>
-                    <a href="#" class="dropdown-menu-item">
-                        <span class="dropdown-menu-item-icon">📄</span>
-                        Документы
-                    </a>
-                    <div class="dropdown-menu-divider"></div>
-                    <a href="#" class="dropdown-menu-item" id="logoutBtn">
-                        <span class="dropdown-menu-item-icon">🚪</span>
-                        Выйти
-                    </a>
+                <div class="banner-item">
+                    <p><span class="timer" id="timer-race">33д 11ч 34м</span> — Большая гонка 2.0 <a href="#">Подробнее</a></p>
+                </div>
+                <div class="banner-item">
+                    <p>Инвестируйте в Дирижабли нового поколения <a href="#">Подробнее</a></p>
+                </div>
+                <div class="banner-item">
+                    <p>Книга инвесторов — впишите своё имя на особую страницу истории проекта <a href="#">Подробнее</a></p>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <div class="app-layout">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#" class="nav-link active">Главная</a></li>
-                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
-                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
-                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
-                <li class="nav-item"><a href="projects.html" class="nav-link">Проекты</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Купоны и промокоды</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Партнёрская программа</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Промоакции</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Мероприятия</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Поддержка</a></li>
+        <!-- 2. Статус регистрации и шаги -->
+        <section class="dashboard-card registration-status">
+            <h2>2/4 шагов. Аккаунт создан.</h2>
+            <div class="progress-bar"><div class="progress"></div></div>
+            <p>Завершите регистрацию. Пополните основной счёт. Начинайте инвестировать. <a href="#">Перейти к шагам</a></p>
+        </section>
+
+        <!-- 3. Счета пользователя -->
+        <section class="dashboard-card user-accounts">
+            <div class="accounts-grid">
+                <div class="account-card">
+                    <h3>Основной счёт</h3>
+                    <div class="balance" id="main-balance">1,000.00 $</div>
+                    <div class="currency-switcher">
+                        <button data-currency="USD" class="active">$</button>
+                        <button data-currency="EUR">€</button>
+                        <button data-currency="GBP">£</button>
+                    </div>
+                </div>
+                <div class="account-card">
+                    <h3>Партнёрский счёт</h3>
+                    <div class="balance" id="partner-balance">25.00 $</div>
+                    <p>Статус: <strong>Партнёр</strong></p>
+                </div>
+            </div>
+            <a href="deposit.html" class="btn btn--primary" style="margin-top: 16px; display: inline-block;">Пополнить счёт</a>
+        </section>
+
+        <!-- 4. Инвестиционный блок -->
+        <section class="dashboard-card investment-block">
+            <h2>Ваши инвестиции в цифрах</h2>
+            <div class="investment-summary">
+                <div>
+                    <h4>$5,250</h4>
+                    <p>в проекте «Совэлмаш»</p>
+                </div>
+                <div>
+                    <h4>$1,000</h4>
+                    <p>в проекте «Дирижабли»</p>
+                </div>
+            </div>
+            <a href="invest.html" class="btn btn--primary">Сделайте первую инвестицию</a>
+            <div class="video-presenter" style="margin-top: 24px;">
+                <h3>Презентация проекта «Двигатели Дуюнова»</h3>
+                <button onclick="alert('Воспроизведение видео...')">Смотреть</button>
+                <p><a href="#" download>Скачать презентацию PDF</a></p>
+            </div>
+        </section>
+
+        <!-- 5. Блок “Для новичков” -->
+        <section class="dashboard-card faq-list">
+            <h2>Для новичков</h2>
+            <ul>
+                <li><a href="#">Что такое проект «Двигатели Дуюнова»</a></li>
+                <li><a href="#">Преимущества технологии «Славянка»</a></li>
+                <li><a href="#">Что сделано в проекте на поступившие инвестиции</a></li>
+                <li><a href="#">Как будет зарабатывать «Совэлмаш»</a></li>
+                <li><a href="#">Что приобретают инвесторы проекта</a></li>
+                <li><a href="#">Как будут зарабатывать инвесторы проекта</a></li>
             </ul>
-        </nav>
+        </section>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="page-header">
-                <h1>Купоны и промокоды</h1>
-                <button class="btn btn--primary activate-promo-btn">Активировать промокод</button>
-            </div>
-
-            <!-- Dashboard Stats -->
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <div class="stat-card-title">Баланс кошелька</div>
-                    <div class="stat-card-value">$1,000.00</div>
+        <!-- 6. Блок “Партнёрам” -->
+        <section class="dashboard-card partner-block">
+            <h2>Партнёрам</h2>
+            <div class="partner-stats">
+                <div>
+                    <p>Статус: <strong>Партнёр</strong></p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-card-title">Бонусный баланс</div>
-                    <div class="stat-card-value">$25.00</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-title">Активные купоны</div>
-                    <div class="stat-card-value">3</div>
+                <div>
+                    <p>Новых регистраций за сегодня: <strong>3 (уровень 1) / 15 (всего)</strong></p>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h2>Быстрые действия</h2>
-                <div class="action-buttons">
-                    <a href="deposit.html" class="action-card">
-                        <div class="action-icon">💰</div>
-                        <div class="action-title">Пополнить счет</div>
-                    </a>
-                    <a href="invest.html" class="action-card">
-                        <div class="action-icon">📈</div>
-                        <div class="action-title">Инвестировать</div>
-                    </a>
-                    <a href="projects.html" class="action-card">
-                        <div class="action-icon">🏢</div>
-                        <div class="action-title">Проекты</div>
-                    </a>
-                    <a href="my-investments.html" class="action-card">
-                        <div class="action-icon">📊</div>
-                        <div class="action-title">Мои инвестиции</div>
-                    </a>
-                </div>
+            <div class="partner-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Линия</th>
+                            <th>Платеж</th>
+                            <th>%</th>
+                            <th>Начислено</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>01.10.2025</td>
+                            <td>1</td>
+                            <td>$100</td>
+                            <td>15%</td>
+                            <td>$15.00</td>
+                        </tr>
+                        <tr>
+                            <td>01.10.2025</td>
+                            <td>2</td>
+                            <td>$50</td>
+                            <td>4%</td>
+                            <td>$2.00</td>
+                        </tr>
+                        <!-- <tr><td colspan="5">Пока здесь пусто</td></tr> -->
+                    </tbody>
+                </table>
             </div>
+        </section>
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="active">Активные купоны</button>
-                <button class="tab-btn" data-tab="history">История</button>
+        <!-- 7. Лента новостей и актуальных событий -->
+        <section class="dashboard-card news-feed">
+            <h2>Новости и события</h2>
+            <div class="banner-item">
+                <p><strong>ПРЯМОЙ ЭФИР | <span id="timer-stream"></span></strong> — Дирижабли нового поколения: новости, планы, ответы на вопросы</p>
             </div>
+            <div class="news-item">
+                <p><strong>Главное за сентябрь:</strong> итоги месяца в проекте «Двигатели Дуюнова» <a href="#">Читать</a></p>
+            </div>
+            <div class="news-item">
+                <p><strong>Промо для партнёров</strong> — привлекай лидеров и получай бонусы <a href="#">Узнать условия</a></p>
+            </div>
+            <a href="#" class="btn btn--secondary" style="margin-top: 16px; display: inline-block;">Присоединяйтесь к команде SOLARGROUP</a>
+        </section>
 
-            <!-- Filters and Search -->
-            <div class="filters-section">
-                <div class="search-filter">
-                    <input type="text" class="form-control search-input" placeholder="Поиск купонов...">
-                    <select class="form-control project-filter">
-                        <option value="all">Все проекты</option>
-                        <option value="airships">Дирижабли</option>
-                        <option value="sovelmash">Совэлмаш</option>
-                        <option value="solar">Солнечные панели</option>
-                    </select>
-                </div>
+        <!-- 8. Документы, политики и поддержка -->
+        <footer class="dashboard-card site-footer">
+            <div class="footer-links">
+                <a href="#">Предупреждение о рисках</a>
+                <a href="#">Политика конфиденциальности</a>
+                <a href="#">Персональные данные (ФЗ-152/242)</a>
+                <a href="#">Правила пользования</a>
+                <a href="#">Оферта</a>
+                <a href="#">AML политика</a>
+                <a href="#">Контакты</a>
             </div>
-
-            <!-- Active Coupons Tab -->
-            <div class="tab-content active" id="active-tab">
-                <div class="coupons-grid" id="active-coupons">
-                    <!-- Coupons will be populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- History Tab -->
-            <div class="tab-content" id="history-tab">
-                <div class="history-table-container">
-                    <table class="history-table">
-                        <thead>
-                            <tr>
-                                <th>Название</th>
-                                <th>Проект</th>
-                                <th>Бонус</th>
-                                <th>Статус</th>
-                                <th>Дата</th>
-                                <th>ID операции</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-tbody">
-                            <!-- History will be populated by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
+        </footer>
     </div>
 
-    <!-- Coupon Details Modal -->
-    <div class="modal hidden" id="coupon-details-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-coupon-name">Детали купона</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="coupon-details">
-                    <div class="detail-item">
-                        <span class="detail-label">Уникальный код:</span>
-                        <span class="detail-value" id="modal-coupon-code">-</span>
-                        <button class="btn btn--sm copy-code-btn">Копировать</button>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Проект:</span>
-                        <span class="detail-value" id="modal-coupon-project">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Бонус:</span>
-                        <span class="detail-value" id="modal-coupon-bonus">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Минимальная сумма:</span>
-                        <span class="detail-value" id="modal-coupon-min-amount">-</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Действует до:</span>
-                        <span class="detail-value" id="modal-coupon-expiry">-</span>
-                    </div>
-                    <div class="detail-item full-width">
-                        <span class="detail-label">Описание:</span>
-                        <p class="detail-description" id="modal-coupon-description">-</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn--primary use-coupon-btn">Использовать купон</button>
-                <button class="btn btn--secondary modal-close">Закрыть</button>
-            </div>
-        </div>
+    <div class="chat-support-btn" onclick="alert('Чат поддержки открыт')">
+        Здравствуйте, мы онлайн.
     </div>
 
-    <!-- Activate Promo Code Modal -->
-    <div class="modal hidden" id="activate-promo-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Активировать промокод</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Введите промокод:</label>
-                    <input type="text" class="form-control" id="promo-code-input" placeholder="ПРОМОКОД">
-                    <div class="error-message hidden" id="promo-error">Неверный промокод</div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn--primary" id="activate-promo-btn">Активировать</button>
-                <button class="btn btn--secondary modal-close">Отмена</button>
-            </div>
-        </div>
-    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Функция для управления таймерами ---
+        function startCountdown(elementId, targetDate) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
 
-    <!-- Success Notification -->
-    <div class="notification hidden" id="success-notification">
-        <div class="notification-content">
-            <span id="notification-text">Операция выполнена успешно!</span>
-            <button class="notification-close">&times;</button>
-        </div>
-    </div>
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
 
-    <script src="app.js"></script>
+                if (distance < 0) {
+                    clearInterval(interval);
+                    element.innerHTML = "Акция завершена";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                let output = '';
+                if (days > 0) output += days + 'д ';
+                output += hours + 'ч ' + minutes + 'м ' + seconds + 'с';
+                
+                element.innerHTML = output;
+            }, 1000);
+        }
+
+        // --- Инициализация таймеров ---
+        // Таймер "Хантинг" - ставим на 0 для демонстрации
+        const huntingTimer = document.getElementById('timer-hunting');
+        if(huntingTimer) huntingTimer.innerHTML = "0ч 0м 0с";
+
+        // Таймер "Большая гонка" - 33 дня от текущей даты
+        const raceEndDate = new Date();
+        raceEndDate.setDate(raceEndDate.getDate() + 33);
+        raceEndDate.setHours(raceEndDate.getHours() + 11);
+        startCountdown('timer-race', raceEndDate.getTime());
+
+        // Таймер "Прямой эфир" - 2 часа от текущей даты
+        const streamEndDate = new Date();
+        streamEndDate.setHours(streamEndDate.getHours() + 2);
+        startCountdown('timer-stream', streamEndDate.getTime());
+
+        // --- Переключение валют ---
+        const currencyButtons = document.querySelectorAll('.currency-switcher button');
+        const mainBalanceEl = document.getElementById('main-balance');
+        const partnerBalanceEl = document.getElementById('partner-balance');
+
+        const balances = {
+            main: { USD: 1000.00, EUR: 930.00, GBP: 820.00 },
+            partner: { USD: 25.00, EUR: 23.25, GBP: 20.50 }
+        };
+
+        currencyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const currency = button.dataset.currency;
+                const symbols = { USD: '$', EUR: '€', GBP: '£' };
+
+                mainBalanceEl.textContent = `${balances.main[currency].toFixed(2)} ${symbols[currency]}`;
+                partnerBalanceEl.textContent = `${balances.partner[currency].toFixed(2)} ${symbols[currency]}`;
+
+                currencyButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    });
+    </script>
 </body>
 </html>
