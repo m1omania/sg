@@ -167,6 +167,7 @@
         </main>
     </div>
 
+    <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const projectsContainer = document.getElementById('projects-container');
@@ -289,7 +290,7 @@
                                 </div>
                                 <div class="stat">
                                     <span class="stat-label">Мин. сумма</span>
-                                    <span class="stat-value">$${project.min_investment}</span>
+                                    <span class="stat-value">${project.min_investment}</span>
                                 </div>
                             </div>
                             <div class="project-actions">
@@ -327,7 +328,7 @@
                         document.getElementById('modal-project-image').src = project.image_url || '/images/placeholder.jpg';
                         document.getElementById('modal-project-interest').textContent = `${project.interest_rate}% годовых`;
                         document.getElementById('modal-project-duration').textContent = `${Math.floor(project.duration/12)} лет`;
-                        document.getElementById('modal-project-min-investment').textContent = `$${project.min_investment}`;
+                        document.getElementById('modal-project-min-investment').textContent = `${project.min_investment}`;
                         document.getElementById('modal-project-description').textContent = project.description;
                         
                         projectDetailModal.classList.remove('hidden');
@@ -359,38 +360,6 @@
                     successNotification.classList.remove('error');
                 }, 3000);
             }
-        });
-    </script>
-    <script>
-        // User dropdown menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const userDropdown = document.getElementById('userDropdown');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            // Toggle dropdown menu
-            userDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('active');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                userDropdown.classList.remove('active');
-            });
-            
-            // Prevent closing when clicking inside dropdown
-            userDropdown.querySelector('.dropdown-menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Logout functionality
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // В реальном приложении здесь должна быть логика выхода
-                // Например, удаление токена аутентификации
-                // и перенаправление на главную страницу для незарегистрированных пользователей
-                window.location.href = '/';
-            });
         });
     </script>
 </body>

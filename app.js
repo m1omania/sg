@@ -88,6 +88,7 @@ function initializeApp() {
   // Common initialization
   setupEventListeners();
   setupModals();
+  setupUserMenu();
 }
 
 function getCurrentPage() {
@@ -147,6 +148,39 @@ function setupModals() {
   if (promoForm) {
     promoForm.addEventListener('submit', activatePromoCode);
   }
+}
+
+function setupUserMenu() {
+    const userDropdown = document.getElementById('userDropdown');
+    if (!userDropdown) return; // Exit if menu not on page
+
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    userDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+        userDropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function() {
+        if (userDropdown.classList.contains('active')) {
+            userDropdown.classList.remove('active');
+        }
+    });
+
+    const dropdownMenu = userDropdown.querySelector('.dropdown-menu');
+    if (dropdownMenu) {
+        dropdownMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Future logic like clearing tokens can go here
+            window.location.href = '/';
+        });
+    }
 }
 
 // Загрузка активных купонов с сервера

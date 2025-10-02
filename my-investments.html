@@ -187,6 +187,7 @@
         </main>
     </div>
 
+    <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const investmentsTbody = document.getElementById('investments-tbody');
@@ -286,7 +287,7 @@
                                 <div class="project-name">${investment.project_name}</div>
                             </div>
                         </td>
-                        <td>$${investment.final_amount.toFixed(2)}</td>
+                        <td>${investment.final_amount.toFixed(2)}</td>
                         <td>${formatDate(investment.created_at)}</td>
                         <td>${getInterestRate(investment.project_name)}</td>
                         <td>
@@ -324,7 +325,7 @@
                 };
                 
                 document.getElementById('detail-project-name').textContent = investment.project_name;
-                document.getElementById('detail-amount').textContent = `$${investment.final_amount.toFixed(2)}`;
+                document.getElementById('detail-amount').textContent = `${investment.final_amount.toFixed(2)}`;
                 document.getElementById('detail-date').textContent = formatDate(investment.created_at);
                 document.getElementById('detail-interest').textContent = getInterestRate(investment.project_name);
                 document.getElementById('detail-status').textContent = investment.status === 'active' ? 'Активна' : 'Завершена';
@@ -355,38 +356,6 @@
                     successNotification.classList.add('hidden');
                 }, 3000);
             }
-        });
-    </script>
-    <script>
-        // User dropdown menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const userDropdown = document.getElementById('userDropdown');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            // Toggle dropdown menu
-            userDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('active');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                userDropdown.classList.remove('active');
-            });
-            
-            // Prevent closing when clicking inside dropdown
-            userDropdown.querySelector('.dropdown-menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Logout functionality
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // В реальном приложении здесь должна быть логика выхода
-                // Например, удаление токена аутентификации
-                // и перенаправление на главную страницу для незарегистрированных пользователей
-                window.location.href = '/';
-            });
         });
     </script>
 </body>

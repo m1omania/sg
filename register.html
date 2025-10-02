@@ -110,6 +110,7 @@
         </main>
     </div>
 
+    <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const emailForm = document.getElementById('email-form');
@@ -222,34 +223,6 @@
                 });
             });
             
-            // User dropdown menu functionality
-            const userDropdown = document.getElementById('userDropdown');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            // Toggle dropdown menu
-            userDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('active');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                userDropdown.classList.remove('active');
-            });
-            
-            // Prevent closing when clicking inside dropdown
-            userDropdown.querySelector('.dropdown-menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Logout functionality
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // В реальном приложении здесь должна быть логика выхода
-                // Например, удаление токена аутентификации
-                // и перенаправление на главную страницу для незарегистрированных пользователей
-                window.location.href = '/';
-            });
             
             function showSuccess(message) {
                 document.getElementById('notification-text').textContent = message;

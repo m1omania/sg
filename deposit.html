@@ -144,6 +144,7 @@
         </main>
     </div>
 
+    <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const depositForm = document.getElementById('deposit-form');
@@ -184,10 +185,10 @@
                     const data = await response.json();
                     
                     if (response.ok) {
-                        showSuccess(`Счет успешно пополнен на $${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
+                        showSuccess(`Счет успешно пополнен на ${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
                         
                         // Обновляем отображение баланса
-                        document.querySelector('.balance-amount').textContent = `$${(1000 + parseFloat(amount)).toFixed(2)}`;
+                        document.querySelector('.balance-amount').textContent = `${(1000 + parseFloat(amount)).toFixed(2)}`;
                         
                         // Очищаем форму
                         depositForm.reset();
@@ -224,38 +225,6 @@
                     errorNotification.classList.add('hidden');
                 }, 5000);
             }
-        });
-    </script>
-    <script>
-        // User dropdown menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const userDropdown = document.getElementById('userDropdown');
-            const logoutBtn = document.getElementById('logoutBtn');
-            
-            // Toggle dropdown menu
-            userDropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-                userDropdown.classList.toggle('active');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                userDropdown.classList.remove('active');
-            });
-            
-            // Prevent closing when clicking inside dropdown
-            userDropdown.querySelector('.dropdown-menu').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Logout functionality
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // В реальном приложении здесь должна быть логика выхода
-                // Например, удаление токена аутентификации
-                // и перенаправление на главную страницу для незарегистрированных пользователей
-                window.location.href = '/';
-            });
         });
     </script>
 </body>
