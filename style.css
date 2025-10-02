@@ -1843,6 +1843,30 @@ select.form-control {
   100% { transform: rotate(360deg); }
 }
 
+/* Figma-like theme approximations (overrides) */
+:root {
+  /* Primary brand blue */
+  --color-primary: #0d6efd;
+  --color-primary-hover: #0b5ed7;
+  --color-primary-active: #0a58ca;
+
+  /* Refined radii */
+  --radius-sm: 8px;
+  --radius-base: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+
+  /* Stronger, softer shadows */
+  --shadow-sm: 0 2px 6px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 6px 14px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 10px 24px rgba(16, 24, 40, 0.12);
+
+  /* Slightly crisper borders */
+  --color-border: rgba(16, 24, 40, 0.12);
+  --color-card-border: rgba(16, 24, 40, 0.12);
+  --color-card-border-inner: rgba(16, 24, 40, 0.08);
+}
+
 /* Добавим в конец файла */
 
 /* Landing Page Styles */
