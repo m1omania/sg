@@ -2956,3 +2956,12 @@ select.form-control {
 .account-summary__amount { font-size: 32px; font-weight: var(--font-weight-semibold); margin: 12px 0 16px; }
 .account-summary__controls { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
 .account-summary__actions { display: flex; gap: var(--space-8); }
+
+.account-summary--partner {
+  border-color: rgba(var(--color-success-rgb), 0.3);
+  background: linear-gradient(0deg, rgba(var(--color-success-rgb), 0.04), rgba(var(--color-success-rgb), 0.04)), var(--color-surface);
+}
+.account-summary__badge--success {
+  background: var(--color-success);
+  color: var(--color-btn-primary-text);
+}
