@@ -290,8 +290,8 @@ const initializeDatabase = () => {
         'konstantin@example.com', 
         '+79991234567',
         'demo_password_hash',
-        true,
-        true
+        1,
+        1
       );
       
       // Создаем кошелек для пользователя
