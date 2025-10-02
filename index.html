@@ -201,13 +201,28 @@
         <!-- 3. Счета пользователя -->
         <section class="dashboard-card user-accounts">
             <div class="accounts-grid">
-                <div class="account-card">
-                    <h3>Основной счёт</h3>
-                    <div class="balance" id="main-balance">0.00 $</div>
-                    <div class="currency-switcher">
-                        <button data-currency="USD" class="active">$</button>
-                        <button data-currency="EUR">€</button>
-                        <button data-currency="GBP">£</button>
+                <div class="account-card account-summary">
+                    <div class="account-summary__header">
+                        <div class="account-summary__title-wrap">
+                            <div class="account-summary__icon">💼</div>
+                            <div>
+                                <h3 class="account-summary__title">Основной счёт</h3>
+                                <div class="account-summary__subtitle">Доступные средства</div>
+                            </div>
+                        </div>
+                        <span class="account-summary__badge">USD</span>
+                    </div>
+                    <div class="account-summary__amount" id="main-balance">0.00 $</div>
+                    <div class="account-summary__controls">
+                        <div class="currency-switcher">
+                            <button data-currency="USD" class="active">$</button>
+                            <button data-currency="EUR">€</button>
+                            <button data-currency="GBP">£</button>
+                        </div>
+                        <div class="account-summary__actions">
+                            <a href="deposit.html" class="btn btn--primary">Пополнить</a>
+                            <button class="btn btn--secondary" disabled>Вывести</button>
+                        </div>
                     </div>
                 </div>
                 <div class="account-card">

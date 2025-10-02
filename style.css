@@ -2926,3 +2926,33 @@ select.form-control {
 .action-icon {
   font-size: 2.5rem;
   margin-bottom: 
+}
+
+/* Account Summary (Homepage) */
+.account-summary {
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-20);
+}
+.account-summary__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.account-summary__title-wrap { display: flex; align-items: center; gap: var(--space-12); }
+.account-summary__icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: var(--color-bg-3);
+  font-size: 18px;
+}
+.account-summary__title { margin: 0; font-size: var(--font-size-lg); }
+.account-summary__subtitle { color: var(--color-text-secondary); font-size: var(--font-size-xs); }
+.account-summary__badge {
+  background: var(--color-bg-2);
+  color: var(--color-text-secondary);
+  padding: 4px 10px; border-radius: 999px; font-size: var(--font-size-xs);
+}
+.account-summary__amount { font-size: 32px; font-weight: var(--font-weight-semibold); margin: 12px 0 16px; }
+.account-summary__controls { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); }
+.account-summary__actions { display: flex; gap: var(--space-8); }
