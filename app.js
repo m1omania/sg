@@ -177,6 +177,7 @@ function setupUserMenu() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Logout button clicked. Redirecting to / ...');
             // Future logic like clearing tokens can go here
             window.location.href = '/';
         });
