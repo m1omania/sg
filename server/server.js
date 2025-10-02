@@ -24,12 +24,36 @@ app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/transactions', require('./routes/transactions'));
 
-// Serve frontend
+// Simple auth check by cookie presence (auth or authToken)
+function isAuthenticated(req) {
+  const cookieHeader = req.headers.cookie || '';
+  if (!cookieHeader) return false;
+  const cookies = Object.fromEntries(
+    cookieHeader
+      .split(';')
+      .map(c => c.trim())
+      .filter(Boolean)
+      .map(kv => {
+        const i = kv.indexOf('=');
+        if (i === -1) return [kv, ''];
+        return [kv.slice(0, i), decodeURIComponent(kv.slice(i + 1))];
+      })
+  );
+  return Boolean(cookies.auth || cookies.authToken);
+}
+
+// Serve frontend with auth gating
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../landing.html'));
+  if (isAuthenticated(req)) {
+    return res.sendFile(path.join(__dirname, '../index.html'));
+  }
+  return res.sendFile(path.join(__dirname, '../landing.html'));
 });
 
 app.get('/index.html', (req, res) => {
+  if (!isAuthenticated(req)) {
+    return res.redirect('/landing.html');
+  }
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 

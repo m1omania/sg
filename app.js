@@ -55,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
       redirectToDashboard();
     }
   }
+
+  // Client-side root gating fallback: if on root without file name
+  if (window.location.pathname === '/' || window.location.pathname === '') {
+    // Decide by presence of simple auth token in localStorage/sessionStorage
+    const hasAuth = Boolean(localStorage.getItem('authToken') || sessionStorage.getItem('authToken'));
+    window.location.replace(hasAuth ? '/index.html' : '/landing.html');
+  }
 });
 
 /**
