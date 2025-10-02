@@ -98,6 +98,7 @@ function initializeApp() {
   setupModals();
   setupUserMenu();
   highlightActiveNav();
+  loadGlobalWalletBalances();
 }
 
 function getCurrentPage() {
@@ -639,4 +640,30 @@ function handleSearch(e) {
 function handleFilter(e) {
   currentFilter = e.target.value;
   renderActiveCoupons();
+}
+
+// --- Shared Wallet Balance Logic (runs on every page) ---
+async function loadGlobalWalletBalances() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/wallet/1`);
+    if (!res.ok) return;
+    const wallet = await res.json();
+
+    // Common element IDs across pages
+    const mainBalanceEls = [
+      document.getElementById('main-balance-amount'), // wallet page
+      document.getElementById('main-balance'),        // dashboard/index or checkout sidebar
+    ].filter(Boolean);
+
+    const partnerBalanceEls = [
+      document.getElementById('partner-balance-amount'), // wallet page
+      document.getElementById('partner-balance'),        // dashboard/index or checkout sidebar
+    ].filter(Boolean);
+
+    mainBalanceEls.forEach(el => { el.textContent = `${Number(wallet.main_balance).toFixed(2)} $`; });
+    partnerBalanceEls.forEach(el => { el.textContent = `${Number(wallet.partner_balance || 0).toFixed(2)} $`; });
+  } catch (e) {
+    // Silent fail for pages without wallet access
+    console.error('Failed to load global wallet balances', e);
+  }
 }
