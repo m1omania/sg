@@ -177,9 +177,12 @@ function setupUserMenu() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Logout button clicked. Redirecting to / ...');
+            console.log('Logout button clicked. Redirecting to landing.html ...');
             // Future logic like clearing tokens can go here
-            window.location.href = '/';
+            // Clear any session data if needed
+            sessionStorage.clear();
+            localStorage.removeItem('authToken');
+            window.location.href = '/landing.html';
         });
     }
 }
