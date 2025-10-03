@@ -314,7 +314,13 @@
             }
             
             // Load coupons data
-            fetch('/api/coupons/active/1')
+            fetch('/api/coupons/active/1', {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            })
                 .then(res => res.json())
                 .then(coupons => {
                     console.log('Coupons loaded:', coupons.length);
