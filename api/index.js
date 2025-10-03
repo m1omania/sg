@@ -366,6 +366,59 @@ app.post('/api/transactions/deposit', (req, res) => {
   res.json(response);
 });
 
+// Investment endpoint
+app.post('/api/transactions/invest', (req, res) => {
+  const { userId, packageId, amount, account, paymentType } = req.body;
+
+  console.log('Investment request:', { userId, packageId, amount, account, paymentType });
+
+  if (!userId || !packageId || !amount || !account) {
+    console.log('Missing required fields for investment');
+    return res.status(400).json({ error: 'User ID, package ID, amount and account are required' });
+  }
+
+  if (isNaN(amount) || amount <= 0) {
+    console.log('Invalid amount for investment:', amount);
+    return res.status(400).json({ error: 'Amount must be a positive number' });
+  }
+
+  // Update user balance (deduct investment amount)
+  const userIdNum = parseInt(userId);
+  const investmentAmount = parseFloat(amount);
+
+  console.log(`POST /api/transactions/invest - User ${userIdNum}, Amount: ${investmentAmount}`);
+  console.log('Balance before investment:', userBalances[userIdNum]);
+
+  if (!userBalances[userIdNum]) {
+    userBalances[userIdNum] = { main_balance: 0.00, partner_balance: 0.00 };
+  }
+
+  // Deduct from appropriate account
+  if (account === 'main') {
+    userBalances[userIdNum].main_balance -= investmentAmount;
+  } else if (account === 'partner') {
+    userBalances[userIdNum].partner_balance -= investmentAmount;
+  }
+
+  console.log('Balance after investment:', userBalances[userIdNum]);
+  console.log('All userBalances after investment:', userBalances);
+
+  // For demo purposes, always return success
+  const response = {
+    success: true,
+    message: 'Investment successful',
+    transactionId: 'INV_' + Date.now(),
+    packageId: packageId,
+    amount: investmentAmount,
+    account: account,
+    status: 'completed',
+    date: new Date().toISOString()
+  };
+
+  console.log('Investment response:', response);
+  res.json(response);
+});
+
 app.get('/api/transactions/:userId', (req, res) => {
   const { userId } = req.params;
   

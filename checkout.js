@@ -66,6 +66,9 @@ function initializeCheckoutPage(packageId) {
     
     // Setup form handlers
     setupCheckoutForm(package);
+    
+    // Setup checkout button
+    setupCheckoutButton(package);
 }
 
 async function loadCheckoutBalances() {
@@ -95,8 +98,134 @@ async function loadCheckoutBalances() {
         }
         
         console.log('Checkout balances updated');
+        
+        // Update checkout button based on new balance
+        const urlParams = new URLSearchParams(window.location.search);
+        const packageId = urlParams.get('package') || 'sov-500';
+        const packages = {
+            'sov-500': { total: 50.00 },
+            'sov-1000': { total: 100.00 },
+            'airship-250': { total: 25.00 }
+        };
+        const package = packages[packageId] || packages['sov-500'];
+        updateCheckoutButton(package);
     } catch (e) {
         console.error('Error loading checkout balances:', e);
+    }
+}
+
+function setupCheckoutButton(package) {
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (!checkoutBtn) return;
+    
+    // Update button text and behavior based on balance
+    updateCheckoutButton(package);
+    
+    checkoutBtn.addEventListener('click', async function() {
+        const selectedAccount = document.querySelector('input[name="account"]:checked');
+        const paymentType = document.querySelector('input[name="payment-type"]:checked')?.value;
+        
+        if (!selectedAccount) {
+            showError('Выберите счет для оплаты');
+            return;
+        }
+        
+        console.log('Checkout button clicked:', {
+            account: selectedAccount.value,
+            paymentType: paymentType,
+            package: package
+        });
+        
+        // Check if user has sufficient funds
+        const userBalance = parseFloat(document.querySelector('.main-balance-amount').textContent.replace('Баланс ', '').replace(' $', '').replace(',', '.'));
+        const requiredAmount = package.total;
+        
+        if (userBalance < requiredAmount) {
+            showError('Недостаточно средств для оплаты пакета');
+            return;
+        }
+        
+        // Show loading state
+        const originalText = checkoutBtn.textContent;
+        checkoutBtn.textContent = 'Обработка...';
+        checkoutBtn.disabled = true;
+        
+        try {
+            // Simulate investment processing
+            const response = await fetch('/api/transactions/invest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: 1,
+                    packageId: package.name,
+                    amount: package.total,
+                    account: selectedAccount.value,
+                    paymentType: paymentType || 'single'
+                })
+            });
+            
+            const result = await response.json();
+            console.log('Investment result:', result);
+            
+            if (response.ok) {
+                showSuccess('Пакет успешно оформлен! Переходим к инвестициям...');
+                
+                // Wait a bit for user to see success message
+                setTimeout(() => {
+                    window.location.href = 'my-investments.html';
+                }, 2000);
+            } else {
+                showError(result.error || 'Ошибка оформления пакета');
+            }
+        } catch (error) {
+            console.error('Investment error:', error);
+            showError('Ошибка сети. Попробуйте позже.');
+        } finally {
+            // Restore button state
+            checkoutBtn.textContent = originalText;
+            checkoutBtn.disabled = false;
+        }
+    });
+}
+
+function updateCheckoutButton(package) {
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const insufficientFundsWarning = document.getElementById('insufficient-funds');
+    
+    if (!checkoutBtn) return;
+    
+    // Check user balance
+    const mainBalanceEl = document.querySelector('.main-balance-amount');
+    const partnerBalanceEl = document.querySelector('.partner-balance-amount');
+    
+    if (mainBalanceEl && partnerBalanceEl) {
+        const mainBalance = parseFloat(mainBalanceEl.textContent.replace('Баланс ', '').replace(' $', '').replace(',', '.'));
+        const partnerBalance = parseFloat(partnerBalanceEl.textContent.replace('Баланс ', '').replace(' $', '').replace(',', '.'));
+        const totalBalance = mainBalance + partnerBalance;
+        const requiredAmount = package.total;
+        
+        if (totalBalance >= requiredAmount) {
+            checkoutBtn.textContent = 'Оформить пакет';
+            checkoutBtn.classList.remove('btn--secondary');
+            checkoutBtn.classList.add('btn--primary');
+            if (insufficientFundsWarning) {
+                insufficientFundsWarning.style.display = 'none';
+            }
+        } else {
+            checkoutBtn.textContent = 'Пополнить счёт';
+            checkoutBtn.classList.remove('btn--primary');
+            checkoutBtn.classList.add('btn--secondary');
+            if (insufficientFundsWarning) {
+                insufficientFundsWarning.style.display = 'flex';
+            }
+            
+            // Change click behavior to redirect to deposit
+            checkoutBtn.onclick = () => {
+                window.location.href = 'deposit.html';
+            };
+        }
     }
 }
 
@@ -157,7 +286,10 @@ function setupCheckoutForm(package) {
 function showSuccess(message) {
     const notification = document.getElementById('success-notification');
     if (notification) {
-        notification.querySelector('.notification-message').textContent = message;
+        const notificationText = notification.querySelector('#notification-text');
+        if (notificationText) {
+            notificationText.textContent = message;
+        }
         notification.classList.remove('hidden');
         setTimeout(() => {
             notification.classList.add('hidden');
@@ -166,12 +298,32 @@ function showSuccess(message) {
 }
 
 function showError(message) {
-    const notification = document.getElementById('error-notification');
-    if (notification) {
-        notification.querySelector('.notification-message').textContent = message;
-        notification.classList.remove('hidden');
-        setTimeout(() => {
+    // Create error notification if it doesn't exist
+    let notification = document.getElementById('error-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'error-notification';
+        notification.className = 'notification hidden';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span id="error-notification-text">${message}</span>
+                <button class="notification-close">&times;</button>
+            </div>
+        `;
+        document.querySelector('.main-content').appendChild(notification);
+        
+        // Add close functionality
+        notification.querySelector('.notification-close').addEventListener('click', function() {
             notification.classList.add('hidden');
-        }, 5000);
+        });
     }
+    
+    const notificationText = notification.querySelector('#error-notification-text');
+    if (notificationText) {
+        notificationText.textContent = message;
+    }
+    notification.classList.remove('hidden');
+    setTimeout(() => {
+        notification.classList.add('hidden');
+    }, 5000);
 }
