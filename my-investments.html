@@ -10,14 +10,16 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -27,12 +29,14 @@
             </button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-profile">
-                    <div class="user-avatar">К</div>
+                    <div class="user-avatar">К            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <span class="user-name">Константин</span>
                     <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-menu-item">
                         <span class="dropdown-menu-item-icon">👤</span>
@@ -46,13 +50,17 @@
                         <span class="dropdown-menu-item-icon">📄</span>
                         Документы
                     </a>
-                    <div class="dropdown-menu-divider"></div>
+                    <div class="dropdown-menu-divider">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <a href="#" class="dropdown-menu-item" id="logoutBtn">
                         <span class="dropdown-menu-item-icon">🚪</span>
                         Выйти
                     </a>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
 
@@ -73,22 +81,33 @@
             <div class="page-header">
                 <h1>Мои инвестиции</h1>
                 <button class="btn btn--primary" id="new-investment-btn">Новая инвестиция</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="stats-cards">
                 <div class="stat-card">
-                    <div class="stat-card-title">Всего инвестировано</div>
-                    <div class="stat-card-value">$5,250.00</div>
-                </div>
+                    <div class="stat-card-title">Всего инвестировано            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="stat-card-value">$5,250.00            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="stat-card">
-                    <div class="stat-card-title">Активные инвестиции</div>
-                    <div class="stat-card-value">$4,750.00</div>
-                </div>
+                    <div class="stat-card-title">Активные инвестиции            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="stat-card-value">$4,750.00            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="stat-card">
-                    <div class="stat-card-title">Доход</div>
-                    <div class="stat-card-value">$425.00</div>
-                </div>
-            </div>
+                    <div class="stat-card-title">Доход            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="stat-card-value">$425.00            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="filters-section">
                 <div class="filter-group">
@@ -98,7 +117,8 @@
                         <option value="active">Активные</option>
                         <option value="completed">Завершенные</option>
                     </select>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 
                 <div class="filter-group">
                     <label class="filter-label">Проект:</label>
@@ -108,8 +128,10 @@
                         <option value="sovelmash">Совэлмаш</option>
                         <option value="solar">Солнечные панели</option>
                     </select>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="investments-table-container">
                 <table class="investments-table">
@@ -130,7 +152,8 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Investment Detail Modal -->
             <div class="modal hidden" id="investment-detail-modal">
@@ -138,50 +161,65 @@
                     <div class="modal-header">
                         <h3>Детали инвестиции</h3>
                         <button class="modal-close">&times;</button>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="modal-body">
                         <div class="investment-detail-content">
                             <div class="detail-item">
                                 <span class="detail-label">Проект:</span>
                                 <span class="detail-value" id="detail-project-name">-</span>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="detail-item">
                                 <span class="detail-label">Сумма инвестиции:</span>
                                 <span class="detail-value" id="detail-amount">-</span>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="detail-item">
                                 <span class="detail-label">Дата:</span>
                                 <span class="detail-value" id="detail-date">-</span>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="detail-item">
                                 <span class="detail-label">Доходность:</span>
                                 <span class="detail-value" id="detail-interest">-</span>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="detail-item">
                                 <span class="detail-label">Статус:</span>
                                 <span class="detail-value" id="detail-status">-</span>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="detail-item">
                                 <span class="detail-label">Транзакция:</span>
                                 <span class="detail-value" id="detail-transaction">-</span>
-                            </div>
-                        </div>
-                    </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="modal-footer">
                         <button class="btn btn--secondary modal-close">Закрыть</button>
-                    </div>
-                </div>
-            </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Success Notification -->
             <div class="notification hidden" id="success-notification">
                 <div class="notification-content">
                     <span id="notification-text">Операция выполнена успешно!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
     <script src="my-investments.js"></script>

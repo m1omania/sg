@@ -10,14 +10,16 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -27,12 +29,14 @@
             </button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-profile">
-                    <div class="user-avatar">К</div>
+                    <div class="user-avatar">К            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <span class="user-name">Константин</span>
                     <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-menu-item">
                         <span class="dropdown-menu-item-icon">👤</span>
@@ -46,13 +50,17 @@
                         <span class="dropdown-menu-item-icon">📄</span>
                         Документы
                     </a>
-                    <div class="dropdown-menu-divider"></div>
+                    <div class="dropdown-menu-divider">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <a href="#" class="dropdown-menu-item" id="logoutBtn">
                         <span class="dropdown-menu-item-icon">🚪</span>
                         Выйти
                     </a>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
 
@@ -81,9 +89,12 @@
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
                         </button>
-                    </div>
-                </div>
-            </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="filters-section">
                 <div class="filter-group">
@@ -94,7 +105,8 @@
                         <option value="interest-high">Высокая доходность</option>
                         <option value="interest-low">Низкая доходность</option>
                     </select>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 
                 <div class="filter-group">
                     <label class="filter-label">Доходность:</label>
@@ -104,13 +116,17 @@
                         <option value="medium">Средняя (8-12%)</option>
                         <option value="low">Низкая (до 8%)</option>
                     </select>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="projects-grid" id="projects-container">
                 <!-- Проекты будут загружены сюда -->
-                <div class="loading">Загрузка проектов...</div>
-            </div>
+                <div class="loading">Загрузка проектов...            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Project Detail Modal -->
             <div class="modal hidden" id="project-detail-modal">
@@ -118,50 +134,66 @@
                     <div class="modal-header">
                         <h3 id="modal-project-name">Название проекта</h3>
                         <button class="modal-close">&times;</button>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="modal-body">
                         <div class="project-detail-content">
                             <div class="project-image">
                                 <img id="modal-project-image" src="" alt="Изображение проекта">
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="project-info">
                                 <div class="project-stats">
                                     <div class="stat">
                                         <span class="stat-label">Доходность</span>
                                         <span class="stat-value" id="modal-project-interest">12% годовых</span>
-                                    </div>
+                                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                     <div class="stat">
                                         <span class="stat-label">Срок</span>
                                         <span class="stat-value" id="modal-project-duration">3 года</span>
-                                    </div>
+                                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                     <div class="stat">
                                         <span class="stat-label">Мин. сумма</span>
                                         <span class="stat-value" id="modal-project-min-investment">$500</span>
-                                    </div>
-                                </div>
+                                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                 <div class="project-description">
                                     <h4>Описание проекта</h4>
                                     <p id="modal-project-description">Описание проекта будет здесь</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="modal-footer">
                         <button class="btn btn--primary" id="invest-now-btn">Инвестировать сейчас</button>
                         <button class="btn btn--secondary modal-close">Закрыть</button>
-                    </div>
-                </div>
-            </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Success Notification -->
             <div class="notification hidden" id="success-notification">
                 <div class="notification-content">
                     <span id="notification-text">Операция выполнена успешно!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
     <script>
@@ -263,7 +295,8 @@
                 });
                 
                 if (filteredProjects.length === 0) {
-                    projectsContainer.innerHTML = '<div class="no-results">Проекты не найдены</div>';
+                    projectsContainer.innerHTML = '<div class="no-results">Проекты не найдены            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>';
                     return;
                 }
                 
@@ -271,7 +304,8 @@
                     <div class="project-card" data-project-id="${project.id}">
                         <div class="project-image">
                             <img src="${project.image_url || '/images/placeholder.jpg'}" alt="${project.name}">
-                        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="project-content">
                             <h3 class="project-title">${project.name}</h3>
                             <p class="project-description">${project.description.substring(0, 100)}...</p>
@@ -279,22 +313,29 @@
                                 <div class="stat">
                                     <span class="stat-label">Доходность</span>
                                     <span class="stat-value">${project.interest_rate}%</span>
-                                </div>
+                                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                 <div class="stat">
                                     <span class="stat-label">Срок</span>
                                     <span class="stat-value">${Math.floor(project.duration/12)} лет</span>
-                                </div>
+                                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                 <div class="stat">
                                     <span class="stat-label">Мин. сумма</span>
                                     <span class="stat-value">${project.min_investment}</span>
-                                </div>
-                            </div>
+                                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div class="project-actions">
                                 <button class="btn btn--secondary btn--small details-btn" data-project-id="${project.id}">Подробнее</button>
                                 <button class="btn btn--primary btn--small invest-btn" data-project-id="${project.id}">Инвестировать</button>
-                            </div>
-                        </div>
-                    </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 `).join('');
                 
                 // Добавляем обработчики событий для кнопок

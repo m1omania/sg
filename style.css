@@ -1124,6 +1124,12 @@ select.form-control {
   display: none;
 }
 
+.logo-fallback {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
 @media (max-width: 768px) {
   .logo-desktop {
     display: none;

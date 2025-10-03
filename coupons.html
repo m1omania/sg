@@ -10,14 +10,16 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -27,12 +29,14 @@
             </button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-profile">
-                    <div class="user-avatar">К</div>
+                    <div class="user-avatar">К            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <span class="user-name">Константин</span>
                     <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-menu-item">
                         <span class="dropdown-menu-item-icon">👤</span>
@@ -46,13 +50,17 @@
                         <span class="dropdown-menu-item-icon">📄</span>
                         Документы
                     </a>
-                    <div class="dropdown-menu-divider"></div>
+                    <div class="dropdown-menu-divider">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <a href="#" class="dropdown-menu-item" id="logoutBtn">
                         <span class="dropdown-menu-item-icon">🚪</span>
                         Выйти
                     </a>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
 
@@ -76,13 +84,15 @@
                 <button class="btn btn--primary activate-promo-btn">
                     <span>➕</span> Активировать промокод
                 </button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Tabs -->
             <div class="tabs">
                 <button class="tab-btn active" data-tab="active">Активные купоны</button>
                 <button class="tab-btn" data-tab="history">История</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Active Coupons Tab -->
             <div id="active-tab" class="tab-content active">
@@ -99,14 +109,18 @@
                             <option value="airships">Дирижабли</option>
                             <option value="sovelmash">Совэлмаш</option>
                         </select>
-                    </div>
-                </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
                 <!-- Coupons Grid -->
                 <div class="coupons-grid" id="active-coupons">
                     <!-- Купоны будут загружены через JavaScript -->
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- History Tab -->
             <div id="history-tab" class="tab-content">
@@ -126,10 +140,13 @@
                             <!-- История будет загружена через JavaScript -->
                         </tbody>
                     </table>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <!-- Modal: Coupon Details -->
     <div id="coupon-details-modal" class="modal">
@@ -137,44 +154,56 @@
             <div class="modal-header">
                 <h3>Детали купона</h3>
                 <button class="modal-close close-modal">&times;</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="modal-body">
                 <div class="coupon-details">
                     <div class="detail-item">
                         <span class="detail-label">Название:</span>
                         <span class="detail-value" id="detail-coupon-name"></span>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="detail-item">
                         <span class="detail-label">Проект:</span>
                         <span class="detail-value">
                             <span id="detail-coupon-project" class="project-badge"></span>
                         </span>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="detail-item">
                         <span class="detail-label">Бонус:</span>
                         <span class="detail-value" id="detail-coupon-bonus"></span>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="detail-item">
                         <span class="detail-label">Действителен до:</span>
                         <span class="detail-value" id="detail-coupon-expiry"></span>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="detail-item full-width">
                         <span class="detail-label">Условия использования:</span>
                         <p class="detail-description" id="detail-coupon-conditions"></p>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="detail-item">
                         <span class="detail-label">Код купона:</span>
                         <span class="detail-value" id="detail-coupon-code"></span>
                         <button class="btn btn--secondary btn--sm copy-code-btn">Копировать</button>
-                    </div>
-                </div>
-            </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="modal-footer">
                 <button class="btn btn--secondary close-modal">Закрыть</button>
                 <button class="btn btn--primary use-coupon-btn">Использовать купон</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
-    </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <!-- Modal: Activate Promo Code -->
     <div id="activate-promo-modal" class="modal">
@@ -182,7 +211,8 @@
             <div class="modal-header">
                 <h3>Активировать промокод</h3>
                 <button class="modal-close close-modal">&times;</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="modal-body">
                 <form class="promo-activation-form">
                     <div class="form-group">
@@ -194,23 +224,29 @@
                             placeholder="Например: WELCOME2024"
                             required
                         />
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <button type="submit" class="btn btn--primary btn--full-width">
                         Активировать
                     </button>
                 </form>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
-    </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <!-- Success Notification -->
     <div id="success-notification" class="notification notification-success">
         <div class="notification-content">
             <span class="notification-icon">✓</span>
             <span class="notification-message">Операция выполнена успешно!</span>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <button class="notification-close">&times;</button>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
 </body>

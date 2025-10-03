@@ -228,12 +228,15 @@
         <div class="header">
             <h1>🔍 System Monitoring</h1>
             <p>Real-time system health and performance metrics</p>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
 
         <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Data</button>
 
-        <div id="loading" class="loading">Loading monitoring data...</div>
-        <div id="error" class="error" style="display: none;"></div>
+        <div id="loading" class="loading">Loading monitoring data...            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+        <div id="error" class="error" style="display: none;">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
         <div id="dashboard" class="dashboard" style="display: none;">
             <!-- System Overview -->
@@ -242,20 +245,25 @@
                 <div class="metric">
                     <span class="metric-label">Status</span>
                     <span class="metric-value" id="system-status">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Uptime</span>
                     <span class="metric-value" id="uptime">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Version</span>
                     <span class="metric-value" id="version">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Environment</span>
                     <span class="metric-value" id="environment">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Request Metrics -->
             <div class="card">
@@ -263,20 +271,25 @@
                 <div class="metric">
                     <span class="metric-label">Total Requests</span>
                     <span class="metric-value" id="total-requests">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Successful</span>
                     <span class="metric-value" id="successful-requests">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Errors</span>
                     <span class="metric-value" id="error-requests">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Success Rate</span>
                     <span class="metric-value" id="success-rate">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Performance Metrics -->
             <div class="card">
@@ -284,20 +297,25 @@
                 <div class="metric">
                     <span class="metric-label">Avg Response Time</span>
                     <span class="metric-value" id="avg-response-time">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Min Response Time</span>
                     <span class="metric-value" id="min-response-time">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Max Response Time</span>
                     <span class="metric-value" id="max-response-time">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">95th Percentile</span>
                     <span class="metric-value" id="p95-response-time">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Memory Usage -->
             <div class="card">
@@ -305,20 +323,25 @@
                 <div class="metric">
                     <span class="metric-label">Heap Used</span>
                     <span class="metric-value" id="heap-used">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Heap Total</span>
                     <span class="metric-value" id="heap-total">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">RSS</span>
                     <span class="metric-value" id="rss">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">External</span>
                     <span class="metric-value" id="external">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Database Metrics -->
             <div class="card">
@@ -326,20 +349,25 @@
                 <div class="metric">
                     <span class="metric-label">Status</span>
                     <span class="metric-value" id="db-status">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Response Time</span>
                     <span class="metric-value" id="db-response-time">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Total Queries</span>
                     <span class="metric-value" id="db-queries">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Slow Queries</span>
                     <span class="metric-value" id="db-slow-queries">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- System Info -->
             <div class="card">
@@ -347,29 +375,38 @@
                 <div class="metric">
                     <span class="metric-label">Platform</span>
                     <span class="metric-value" id="platform">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Architecture</span>
                     <span class="metric-value" id="arch">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">Node Version</span>
                     <span class="metric-value" id="node-version">-</span>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="metric">
                     <span class="metric-label">CPU Cores</span>
                     <span class="metric-value" id="cpu-cores">-</span>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
 
         <div id="alerts" class="alerts" style="display: none;">
             <h3>🚨 Active Alerts</h3>
             <div id="alerts-list">
                 <!-- Alerts will be populated here -->
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
-    </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script>
         let refreshInterval;
@@ -454,9 +491,12 @@
                         <div class="alert-header">
                             <span class="alert-type">${alert.type}</span>
                             <span class="alert-time">${new Date(alert.timestamp).toLocaleString()}</span>
-                        </div>
-                        <div class="alert-message">${alert.message}</div>
-                    </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <div class="alert-message">${alert.message}            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 `).join('');
             }
         }

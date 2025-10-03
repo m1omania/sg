@@ -10,14 +10,16 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -27,12 +29,14 @@
             </button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-profile">
-                    <div class="user-avatar">К</div>
+                    <div class="user-avatar">К            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <span class="user-name">Константин</span>
                     <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-menu-item">
                         <span class="dropdown-menu-item-icon">👤</span>
@@ -46,13 +50,17 @@
                         <span class="dropdown-menu-item-icon">📄</span>
                         Документы
                     </a>
-                    <div class="dropdown-menu-divider"></div>
+                    <div class="dropdown-menu-divider">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <a href="#" class="dropdown-menu-item" id="logoutBtn">
                         <span class="dropdown-menu-item-icon">🚪</span>
                         Выйти
                     </a>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
 
@@ -72,20 +80,25 @@
         <main class="main-content">
             <div class="page-header">
                 <h1>Пополнить счет</h1>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="deposit-container">
                 <div class="balance-card">
                     <h3>Текущий баланс</h3>
-                    <div class="balance-amount">0.00 $</div>
-                    <div class="balance-bonus">Бонусный баланс: 0.00 $</div>
-                </div>
+                    <div class="balance-amount">0.00 $            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="balance-bonus">Бонусный баланс: 0.00 $            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
                 <form id="deposit-form" class="deposit-form">
                     <div class="form-group">
                         <label class="form-label">Сумма пополнения ($)</label>
                         <input type="number" class="form-control" id="amount" min="1" step="0.01" required>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     
                     <div class="form-group">
                         <label class="form-label">Способ оплаты</label>
@@ -93,20 +106,28 @@
                             <div class="payment-method">
                                 <input type="radio" id="card" name="payment-method" value="card" checked>
                                 <label for="card">
-                                    <div class="payment-icon">💳</div>
-                                    <div class="payment-name">Банковская карта</div>
+                                    <div class="payment-icon">💳            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <div class="payment-name">Банковская карта            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                 </label>
-                            </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             
                             <div class="payment-method">
                                 <input type="radio" id="crypto" name="payment-method" value="crypto">
                                 <label for="crypto">
-                                    <div class="payment-icon">₿</div>
-                                    <div class="payment-name">Криптовалюта</div>
+                                    <div class="payment-icon">₿            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <div class="payment-name">Криптовалюта            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                                 </label>
-                            </div>
-                        </div>
-                    </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     
                     <button type="submit" class="btn btn--primary btn--block">Пополнить счет</button>
                 </form>
@@ -119,26 +140,33 @@
                         <li>Средства сразу доступны для инвестиций</li>
                         <li>Комиссии за пополнение не взимаются</li>
                     </ul>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Success Notification -->
             <div class="notification hidden" id="success-notification">
                 <div class="notification-content">
                     <span id="notification-text">Операция выполнена успешно!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             
             <!-- Error Notification -->
             <div class="notification error hidden" id="error-notification">
                 <div class="notification-content">
                     <span id="error-text">Произошла ошибка!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
     <script src="deposit.js"></script>

@@ -10,14 +10,17 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
 
@@ -26,7 +29,8 @@
         <main class="main-content">
             <div class="page-header">
                 <h1>Регистрация</h1>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <div class="auth-container">
                 <!-- Шаг 1: Ввод email -->
@@ -37,7 +41,8 @@
                     <div class="form-group">
                         <label class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" required>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     
                     <button type="submit" class="btn btn--primary btn--block">Отправить код</button>
                 </form>
@@ -51,37 +56,46 @@
                     <div class="form-group">
                         <label class="form-label">Код подтверждения</label>
                         <input type="text" class="form-control" id="verification-code" required maxlength="6">
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     
                     <button type="submit" class="btn btn--primary btn--block">Подтвердить</button>
                     
                     <div class="form-footer">
                         <p>Не получили код? <a href="#" id="resend-code">Отправить повторно</a></p>
-                    </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 </form>
 
                 <div class="auth-footer">
                     <p>Уже есть аккаунт? <a href="/">Войти</a></p>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
             <!-- Success Notification -->
             <div class="notification hidden" id="success-notification">
                 <div class="notification-content">
                     <span id="notification-text">Операция выполнена успешно!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             
             <!-- Error Notification -->
             <div class="notification error hidden" id="error-notification">
                 <div class="notification-content">
                     <span id="error-text">Произошла ошибка!</span>
                     <button class="notification-close">&times;</button>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
     <script src="register.js"></script>

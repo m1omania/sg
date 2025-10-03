@@ -204,14 +204,17 @@
     <!-- Header -->
     <header class="header">
         <div class="header__logo">
-            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop">
-            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display='none'; this.previousElementSibling.style.display='block';">
+            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
         <div class="header__controls">
             <div class="language-switcher">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="en">EN</button>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -221,12 +224,14 @@
             </button>
             <div class="user-dropdown" id="userDropdown">
                 <div class="user-profile">
-                    <div class="user-avatar">К</div>
+                    <div class="user-avatar">К            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <span class="user-name">Константин</span>
                     <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="dropdown-menu">
                     <a href="#" class="dropdown-menu-item">
                         <span class="dropdown-menu-item-icon">👤</span>
@@ -240,13 +245,17 @@
                         <span class="dropdown-menu-item-icon">📄</span>
                         Документы
                     </a>
-                    <div class="dropdown-menu-divider"></div>
+                    <div class="dropdown-menu-divider">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <a href="#" class="dropdown-menu-item" id="logoutBtn">
                         <span class="dropdown-menu-item-icon">🚪</span>
                         Выйти
                     </a>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
     </header>
     <div class="app-layout">
@@ -268,7 +277,8 @@
         <section class="dashboard-card welcome-banners">
             <div class="welcome-header">
                 <h1>Добро пожаловать, Константин!</h1>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="banner-slider">
                 <div class="slider-container">
                     <div class="slider-track" id="slider-track">
@@ -277,28 +287,37 @@
                                 <span class="timer" id="timer-hunting">0ч 0м 0с</span>
                                 <span class="banner-text">— Хантинг — это охота на звёзд!</span>
                                 <a href="#" class="banner-link">Подробнее</a>
-                            </div>
-                        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="banner-slide">
                             <div class="banner-content">
                                 <span class="timer" id="timer-race">33д 11ч 34м</span>
                                 <span class="banner-text">— Большая гонка 2.0</span>
                                 <a href="#" class="banner-link">Подробнее</a>
-                            </div>
-                        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="banner-slide">
                             <div class="banner-content">
                                 <span class="banner-text">Инвестируйте в Дирижабли нового поколения</span>
                                 <a href="#" class="banner-link">Подробнее</a>
-                            </div>
-                        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="banner-slide">
                             <div class="banner-content">
                                 <span class="banner-text">Книга инвесторов — впишите своё имя на особую страницу истории проекта</span>
                                 <a href="#" class="banner-link">Подробнее</a>
-                            </div>
-                        </div>
-                    </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="slider-controls">
                         <button class="slider-btn prev" id="prev-btn">‹</button>
                         <div class="slider-dots" id="slider-dots">
@@ -306,17 +325,23 @@
                             <span class="dot" data-slide="1"></span>
                             <span class="dot" data-slide="2"></span>
                             <span class="dot" data-slide="3"></span>
-                        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <button class="slider-btn next" id="next-btn">›</button>
-                    </div>
-                </div>
-            </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </section>
 
         <!-- 2. Статус регистрации и шаги -->
         <section class="dashboard-card registration-status">
             <h2>2/4 шагов. Аккаунт создан.</h2>
-            <div class="progress-bar"><div class="progress"></div></div>
+            <div class="progress-bar"><div class="progress">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <p>Завершите регистрацию. Пополните основной счёт. Начинайте инвестировать. <a href="#">Перейти к шагам</a></p>
         </section>
 
@@ -326,48 +351,69 @@
                 <div class="account-card account-summary">
                     <div class="account-summary__header">
                         <div class="account-summary__title-wrap">
-                            <div class="account-summary__icon">💼</div>
+                            <div class="account-summary__icon">💼            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div>
                                 <h3 class="account-summary__title">Основной счёт</h3>
-                                <div class="account-summary__subtitle">Доступные средства</div>
-                            </div>
-                        </div>
+                                <div class="account-summary__subtitle">Доступные средства            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <span class="account-summary__badge">USD</span>
-                    </div>
-                    <div class="account-summary__amount" id="main-balance">0.00 $</div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="account-summary__amount" id="main-balance">0.00 $            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="account-summary__controls">
                         <div class="currency-switcher">
                             <button data-currency="USD" class="active">$</button>
                             <button data-currency="EUR">€</button>
                             <button data-currency="GBP">£</button>
-                        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="account-summary__actions">
                             <a href="deposit.html" class="btn btn--primary">Пополнить</a>
                             <button class="btn btn--secondary" disabled>Вывести</button>
-                        </div>
-                    </div>
-                </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div class="account-card account-summary account-summary--partner">
                     <div class="account-summary__header">
                         <div class="account-summary__title-wrap">
-                            <div class="account-summary__icon">🤝</div>
+                            <div class="account-summary__icon">🤝            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                             <div>
                                 <h3 class="account-summary__title">Партнёрский счёт</h3>
-                                <div class="account-summary__subtitle">Начисления партнёрской программы</div>
-                            </div>
-                        </div>
+                                <div class="account-summary__subtitle">Начисления партнёрской программы            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <span class="account-summary__badge account-summary__badge--success">+5%</span>
-                    </div>
-                    <div class="account-summary__amount" id="partner-balance">0.00 $</div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                    <div class="account-summary__amount" id="partner-balance">0.00 $            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                     <div class="account-summary__controls">
-                        <div></div>
+                        <div>            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                         <div class="account-summary__actions">
                             <a href="deposit.html" class="btn btn--primary" disabled>Пополнить</a>
                             <button class="btn btn--secondary" disabled>Вывести</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <a href="deposit.html" class="btn btn--primary" style="margin-top: 16px; display: inline-block;">Пополнить счёт</a>
         </section>
 
@@ -378,19 +424,23 @@
                 <div>
                     <h4>$5,250</h4>
                     <p>в проекте «Совэлмаш»</p>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div>
                     <h4>$1,000</h4>
                     <p>в проекте «Дирижабли»</p>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <a href="invest.html" class="btn btn--primary">Сделайте первую инвестицию</a>
             <a href="invest.html" class="btn btn--secondary" style="margin-left: 8px;">Смотреть проекты</a>
             <div class="video-presenter" style="margin-top: 24px;">
                 <h3>Презентация проекта «Двигатели Дуюнова»</h3>
                 <button onclick="alert('Воспроизведение видео...')">Смотреть</button>
                 <p><a href="#" download>Скачать презентацию PDF</a></p>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </section>
 
         <!-- 5. Блок “Для новичков” -->
@@ -412,11 +462,14 @@
             <div class="partner-stats">
                 <div>
                     <p>Статус: <strong>Партнёр</strong></p>
-                </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
                 <div>
                     <p>Новых регистраций за сегодня: <strong>3 (уровень 1) / 15 (всего)</strong></p>
-                </div>
-            </div>
+                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="partner-table">
                 <table>
                     <thead>
@@ -446,7 +499,8 @@
                         <!-- <tr><td colspan="5">Пока здесь пусто</td></tr> -->
                     </tbody>
                 </table>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </section>
 
         <!-- 7. Лента новостей и актуальных событий -->
@@ -454,13 +508,16 @@
             <h2>Новости и события</h2>
             <div class="banner-item">
                 <p><strong>ПРЯМОЙ ЭФИР | <span id="timer-stream"></span></strong> — Дирижабли нового поколения: новости, планы, ответы на вопросы</p>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="news-item">
                 <p><strong>Главное за сентябрь:</strong> итоги месяца в проекте «Двигатели Дуюнова» <a href="#">Читать</a></p>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <div class="news-item">
                 <p><strong>Промо для партнёров</strong> — привлекай лидеров и получай бонусы <a href="#">Узнать условия</a></p>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
             <a href="#" class="btn btn--secondary" style="margin-top: 16px; display: inline-block;">Присоединяйтесь к команде SOLARGROUP</a>
         </section>
 
@@ -474,15 +531,19 @@
                 <a href="#">Оферта</a>
                 <a href="#">AML политика</a>
                 <a href="#">Контакты</a>
-            </div>
+                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </footer>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
         </main>
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <div class="chat-support-btn" onclick="alert('Чат поддержки открыт')">
         Здравствуйте, мы онлайн.
-    </div>
+                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
 
     <script src="app.js"></script>
     <script src="dashboard.js"></script>
