@@ -162,6 +162,21 @@ app.post('/api/auth/send-code', (req, res) => {
   });
 });
 
+// Alternative endpoint name that frontend might be using
+app.post('/api/auth/send-verification', (req, res) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+  
+  // For demo purposes, always return success
+  res.json({ 
+    message: 'Verification code sent successfully',
+    demoCode: '123456' // Demo code for testing
+  });
+});
+
 app.post('/api/auth/verify-code', (req, res) => {
   const { email, code } = req.body;
   
@@ -227,6 +242,47 @@ app.post('/api/auth/login', (req, res) => {
     },
     token: 'demo-token-' + Date.now()
   });
+});
+
+// Wallet endpoints
+app.get('/api/wallet/:userId', (req, res) => {
+  const { userId } = req.params;
+  
+  res.json({
+    id: parseInt(userId),
+    mainBalance: 0.00,
+    partnerBalance: 0.00,
+    currency: 'USD',
+    lastUpdated: new Date().toISOString()
+  });
+});
+
+app.post('/api/wallet/:userId/deposit', (req, res) => {
+  const { userId } = req.params;
+  const { amount, type } = req.body;
+  
+  res.json({
+    message: 'Deposit successful',
+    transactionId: 'tx_' + Date.now(),
+    amount: amount,
+    type: type,
+    newBalance: amount
+  });
+});
+
+app.get('/api/wallet/:userId/transactions', (req, res) => {
+  const { userId } = req.params;
+  
+  res.json([
+    {
+      id: 1,
+      type: 'deposit',
+      amount: 100.00,
+      currency: 'USD',
+      status: 'completed',
+      date: new Date().toISOString()
+    }
+  ]);
 });
 
 // Serve landing.html for root path (default for unauthenticated users)
