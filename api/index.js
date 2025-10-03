@@ -261,47 +261,16 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
-// Simple file-based storage for demo purposes (since Vercel serverless functions don't persist memory)
-const fs = require('fs');
-const path = require('path');
-
-const balancesFile = path.join(__dirname, 'balances.json');
-
-// Load balances from file or create default
-let userBalances = {};
-try {
-  if (fs.existsSync(balancesFile)) {
-    const data = fs.readFileSync(balancesFile, 'utf8');
-    userBalances = JSON.parse(data);
-    console.log('Loaded balances from file:', userBalances);
-  } else {
-    userBalances = {
-      1: {
-        main_balance: 0.00,
-        partner_balance: 0.00
-      }
-    };
-    console.log('Created default balances:', userBalances);
+// Simple in-memory storage for demo purposes
+// Note: In Vercel serverless, this will reset on each cold start
+let userBalances = {
+  1: {
+    main_balance: 0.00,
+    partner_balance: 0.00
   }
-} catch (error) {
-  console.error('Error loading balances:', error);
-  userBalances = {
-    1: {
-      main_balance: 0.00,
-      partner_balance: 0.00
-    }
-  };
-}
+};
 
-// Function to save balances to file
-function saveBalances() {
-  try {
-    fs.writeFileSync(balancesFile, JSON.stringify(userBalances, null, 2));
-    console.log('Balances saved to file:', userBalances);
-  } catch (error) {
-    console.error('Error saving balances:', error);
-  }
-}
+console.log('Initial userBalances:', userBalances);
 
 // Wallet endpoints
 app.get('/api/wallet/:userId', (req, res) => {
@@ -381,9 +350,6 @@ app.post('/api/transactions/deposit', (req, res) => {
   
   console.log('Balance after update:', userBalances[userIdNum]);
   console.log('All userBalances after update:', userBalances);
-  
-  // Save balances to file
-  saveBalances();
   
   // For demo purposes, always return success
   const response = {
