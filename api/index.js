@@ -249,14 +249,25 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
+// Simple in-memory storage for demo purposes
+let userBalances = {
+  1: {
+    main_balance: 0.00,
+    partner_balance: 0.00
+  }
+};
+
 // Wallet endpoints
 app.get('/api/wallet/:userId', (req, res) => {
   const { userId } = req.params;
+  const userIdNum = parseInt(userId);
+  
+  const balance = userBalances[userIdNum] || { main_balance: 0.00, partner_balance: 0.00 };
   
   res.json({
-    id: parseInt(userId),
-    main_balance: 0.00,
-    partner_balance: 0.00,
+    id: userIdNum,
+    main_balance: balance.main_balance,
+    partner_balance: balance.partner_balance,
     currency: 'USD',
     lastUpdated: new Date().toISOString()
   });
@@ -306,12 +317,24 @@ app.post('/api/transactions/deposit', (req, res) => {
     return res.status(400).json({ error: 'Amount must be a positive number' });
   }
   
+  // Update user balance
+  const userIdNum = parseInt(userId);
+  const depositAmount = parseFloat(amount);
+  
+  if (!userBalances[userIdNum]) {
+    userBalances[userIdNum] = { main_balance: 0.00, partner_balance: 0.00 };
+  }
+  
+  userBalances[userIdNum].main_balance += depositAmount;
+  
+  console.log('Updated balance for user', userIdNum, ':', userBalances[userIdNum]);
+  
   // For demo purposes, always return success
   const response = {
     success: true,
     message: 'Deposit successful',
     transactionId: 'tx_' + Date.now(),
-    amount: parseFloat(amount),
+    amount: depositAmount,
     paymentMethod: paymentMethod,
     status: 'completed',
     date: new Date().toISOString()
