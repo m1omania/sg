@@ -122,6 +122,12 @@ function setupCheckoutButton(package) {
     updateCheckoutButton(package);
     
     checkoutBtn.addEventListener('click', async function() {
+        // Check if button is in "insufficient funds" mode
+        if (checkoutBtn.getAttribute('data-insufficient-funds') === 'true') {
+            window.location.href = 'deposit.html';
+            return;
+        }
+        
         const selectedAccount = document.querySelector('input[name="account"]:checked');
         const paymentType = document.querySelector('input[name="payment-type"]:checked')?.value;
         
@@ -210,6 +216,7 @@ function updateCheckoutButton(package) {
             checkoutBtn.textContent = 'Оформить пакет';
             checkoutBtn.classList.remove('btn--secondary');
             checkoutBtn.classList.add('btn--primary');
+            checkoutBtn.removeAttribute('data-insufficient-funds');
             if (insufficientFundsWarning) {
                 insufficientFundsWarning.style.display = 'none';
             }
@@ -221,10 +228,8 @@ function updateCheckoutButton(package) {
                 insufficientFundsWarning.style.display = 'flex';
             }
             
-            // Change click behavior to redirect to deposit
-            checkoutBtn.onclick = () => {
-                window.location.href = 'deposit.html';
-            };
+            // Add data attribute to indicate insufficient funds
+            checkoutBtn.setAttribute('data-insufficient-funds', 'true');
         }
     }
 }
