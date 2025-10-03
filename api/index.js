@@ -381,6 +381,34 @@ app.get('/api/transactions/:userId', (req, res) => {
   ]);
 });
 
+// Coupons endpoints
+app.get('/api/coupons/active/:userId', (req, res) => {
+  const { userId } = req.params;
+  
+  // For demo purposes, return empty array
+  res.json([]);
+});
+
+app.post('/api/coupons/activate', (req, res) => {
+  const { userId, code } = req.body;
+  
+  if (!userId || !code) {
+    return res.status(400).json({ error: 'User ID and code are required' });
+  }
+  
+  // For demo purposes, always return success
+  res.json({
+    success: true,
+    message: 'Coupon activated successfully',
+    coupon: {
+      id: 1,
+      code: code,
+      discount: 25.00,
+      type: 'bonus'
+    }
+  });
+});
+
 // Serve landing.html for root path (default for unauthenticated users)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../landing.html'));
