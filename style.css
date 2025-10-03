@@ -1195,6 +1195,10 @@ select.form-control {
   color: var(--color-primary);
 }
 
+.language-toggle:hover .dropdown-arrow {
+  color: var(--color-teal-500);
+}
+
 .language-toggle.active {
   background: var(--color-primary);
   border-color: var(--color-primary);
@@ -1224,6 +1228,7 @@ select.form-control {
 
 .language-toggle.active .dropdown-arrow {
   transform: rotate(180deg);
+  color: white;
 }
 
 .language-dropdown {
