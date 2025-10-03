@@ -314,5 +314,72 @@
     <script src="app.js"></script>
     <script src="wallet.js"></script>
     <script src="language-switcher.js"></script>
+    
+    <!-- Inline coupons logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up wallet coupons...');
+            
+            // Set coupons count immediately
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount) {
+                couponsCount.textContent = '2';
+                console.log('Set wallet coupons count to 2');
+            }
+            
+            // Update coupons total text
+            const couponsTotal = document.querySelector('.coupons-total');
+            if (couponsTotal) {
+                couponsTotal.textContent = '2 купонов';
+                console.log('Set coupons total to 2');
+            }
+            
+            // Load coupons from API
+            fetch('/api/coupons/active/1')
+                .then(res => res.json())
+                .then(coupons => {
+                    console.log('Wallet coupons loaded:', coupons.length);
+                    
+                    if (couponsCount) {
+                        couponsCount.textContent = coupons.length;
+                    }
+                    if (couponsTotal) {
+                        couponsTotal.textContent = `${coupons.length} купонов`;
+                    }
+                    
+                    // Update coupons preview
+                    const couponsContainer = document.getElementById('wallet-coupons');
+                    if (couponsContainer) {
+                        if (coupons.length > 0) {
+                            const previewCoupons = coupons.slice(0, 3);
+                            couponsContainer.innerHTML = previewCoupons.map(coupon => `
+                                <div class="coupon-item">
+                                    <span class="coupon-code">${coupon.code}</span>
+                                    <span class="coupon-discount">${coupon.discount}%</span>
+                                </div>
+                            `).join('');
+                            
+                            if (coupons.length > 3) {
+                                couponsContainer.innerHTML += `
+                                    <div class="coupon-item" style="justify-content: center; color: var(--color-text-secondary);">
+                                        +${coupons.length - 3} еще...
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            couponsContainer.innerHTML = `
+                                <div class="no-coupons-message">
+                                    <p>Нет активных купонов</p>
+                                </div>
+                            `;
+                        }
+                    }
+                })
+                .catch(e => {
+                    console.error('Error loading wallet coupons:', e);
+                    // Keep fallback values
+                });
+        });
+    </script>
 </body>
 </html>
