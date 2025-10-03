@@ -3331,6 +3331,103 @@ select.form-control {
   box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
 }
 
+/* Coupons Page Styles */
+.coupons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-24);
+  margin-top: var(--space-24);
+}
+
+.coupon-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-24);
+  transition: all 0.2s ease;
+}
+
+.coupon-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-16);
+}
+
+.coupon-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.coupon-code {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.coupon-body {
+  margin-bottom: var(--space-20);
+}
+
+.coupon-description {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-12);
+  line-height: 1.5;
+}
+
+.coupon-details {
+  display: flex;
+  gap: var(--space-16);
+}
+
+.coupon-discount {
+  background: var(--color-success-light);
+  color: var(--color-success);
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.coupon-project {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.coupon-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.no-coupons {
+  text-align: center;
+  padding: var(--space-48) var(--space-24);
+  color: var(--color-text-secondary);
+}
+
+.no-coupons__icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-16);
+}
+
+.no-coupons h3 {
+  margin-bottom: var(--space-8);
+  color: var(--color-text-primary);
+}
+
+.no-coupons p {
+  margin: 0;
+}
+
 .account-summary__badge--success {
   background: var(--color-success);
   color: var(--color-btn-primary-text);
