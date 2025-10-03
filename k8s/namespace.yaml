@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: solar-group
+  labels:
+    name: solar-group
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/part-of: solar-group-platform

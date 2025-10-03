@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: solar-group-monitor
+  namespace: solar-group
+  labels:
+    app: solar-group-app
+    component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: solar-group-app
+  endpoints:
+  - port: metrics
+    path: /api/monitoring/metrics
+    interval: 30s
+    scrapeTimeout: 10s

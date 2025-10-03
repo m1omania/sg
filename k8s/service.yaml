@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: solar-group-service
+  namespace: solar-group
+  labels:
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/part-of: solar-group-platform
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: metrics
+  selector:
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/component: app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solar-group-headless
+  namespace: solar-group
+  labels:
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/part-of: solar-group-platform
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/component: app

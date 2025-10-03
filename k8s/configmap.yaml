@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: solar-group-config
+  namespace: solar-group
+  labels:
+    app.kubernetes.io/name: solar-group
+    app.kubernetes.io/part-of: solar-group-platform
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  LOG_LEVEL: "info"
+  DATABASE_PATH: "/app/data/database.sqlite"
+  MAX_BODY_SIZE: "10mb"
+  API_RATE_LIMIT_WINDOW_MS: "60000"
+  API_RATE_LIMIT_MAX_REQUESTS: "100"
+  AUTH_RATE_LIMIT_WINDOW_MS: "60000"
+  AUTH_RATE_LIMIT_MAX_REQUESTS: "10"
+  REGISTRATION_RATE_LIMIT_WINDOW_MS: "300000"
+  REGISTRATION_RATE_LIMIT_MAX_REQUESTS: "5"
+  QUERY_CACHE_SIZE: "1000"
+  QUERY_CACHE_TTL: "300000"
+  SLOW_QUERY_THRESHOLD: "1000"
+  MAX_BACKUPS: "10"
+  BACKUP_INTERVAL: "86400000"

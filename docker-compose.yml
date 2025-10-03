@@ -1,0 +1,128 @@
+version: '3.8'
+
+services:
+  # Main application
+  app:
+    build:
+      context: .
+      target: development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_PATH=/app/data/database.sqlite
+      - JWT_SECRET=dev-jwt-secret-change-in-production
+      - LOG_LEVEL=debug
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/server/node_modules
+      - app-data:/app/data
+      - app-logs:/app/logs
+    depends_on:
+      - redis
+      - prometheus
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+    depends_on:
+      - app
+
+  # Database backup service
+  backup:
+    build:
+      context: .
+      target: production
+    volumes:
+      - app-data:/app/data
+      - backup-data:/app/backups
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PATH=/app/data/database.sqlite
+    networks:
+      - solar-group-network
+    restart: unless-stopped
+    command: ["node", "server/scripts/backup.js", "auto"]
+    depends_on:
+      - app
+
+volumes:
+  app-data:
+    driver: local
+  app-logs:
+    driver: local
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  backup-data:
+    driver: local
+
+networks:
+  solar-group-network:
+    driver: bridge

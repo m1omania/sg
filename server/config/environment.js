@@ -37,5 +37,51 @@ module.exports = {
   MAX_BODY_SIZE: process.env.MAX_BODY_SIZE || '10mb',
   
   // Logging
-  LOG_LEVEL: process.env.LOG_LEVEL || 'info'
+  LOG_LEVEL: process.env.LOG_LEVEL || 'info',
+  
+  // Deployment
+  DEPLOYMENT_ENV: process.env.DEPLOYMENT_ENV || 'development',
+  CONTAINER_NAME: process.env.CONTAINER_NAME || 'solar-group-app',
+  NAMESPACE: process.env.NAMESPACE || 'solar-group',
+  
+  // Monitoring
+  ENABLE_MONITORING: process.env.ENABLE_MONITORING === 'true' || false,
+  METRICS_PORT: parseInt(process.env.METRICS_PORT || '9090', 10),
+  HEALTH_CHECK_INTERVAL: parseInt(process.env.HEALTH_CHECK_INTERVAL || '30000', 10), // 30 seconds
+  
+  // Alerting
+  ALERT_WEBHOOK_URL: process.env.ALERT_WEBHOOK_URL || '',
+  ALERT_EMAIL: process.env.ALERT_EMAIL || '',
+  ALERT_SLACK_CHANNEL: process.env.ALERT_SLACK_CHANNEL || '#alerts',
+  
+  // Backup & Recovery
+  BACKUP_S3_BUCKET: process.env.BACKUP_S3_BUCKET || '',
+  BACKUP_S3_REGION: process.env.BACKUP_S3_REGION || 'us-east-1',
+  BACKUP_RETENTION_DAYS: parseInt(process.env.BACKUP_RETENTION_DAYS || '30', 10),
+  BACKUP_ENCRYPTION_KEY: process.env.BACKUP_ENCRYPTION_KEY || '',
+  
+  // Performance
+  CLUSTER_MODE: process.env.CLUSTER_MODE === 'true' || false,
+  CLUSTER_WORKERS: parseInt(process.env.CLUSTER_WORKERS || '0', 10), // 0 = auto-detect
+  MEMORY_LIMIT: process.env.MEMORY_LIMIT || '512m',
+  CPU_LIMIT: process.env.CPU_LIMIT || '500m',
+  
+  // Scaling
+  MIN_REPLICAS: parseInt(process.env.MIN_REPLICAS || '1', 10),
+  MAX_REPLICAS: parseInt(process.env.MAX_REPLICAS || '10', 10),
+  TARGET_CPU_UTILIZATION: parseInt(process.env.TARGET_CPU_UTILIZATION || '70', 10),
+  TARGET_MEMORY_UTILIZATION: parseInt(process.env.TARGET_MEMORY_UTILIZATION || '80', 10),
+  
+  // Security
+  ENABLE_CORS: process.env.ENABLE_CORS !== 'false',
+  CORS_ORIGINS: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'],
+  ENABLE_HTTPS: process.env.ENABLE_HTTPS === 'true' || false,
+  SSL_CERT_PATH: process.env.SSL_CERT_PATH || '',
+  SSL_KEY_PATH: process.env.SSL_KEY_PATH || '',
+  
+  // External Services
+  REDIS_URL: process.env.REDIS_URL || '',
+  ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL || '',
+  PROMETHEUS_URL: process.env.PROMETHEUS_URL || 'http://localhost:9090',
+  GRAFANA_URL: process.env.GRAFANA_URL || 'http://localhost:3001'
 };

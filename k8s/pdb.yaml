@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: solar-group-pdb
+  namespace: solar-group
+  labels:
+    app: solar-group-app
+    component: disruption-budget
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: solar-group-app
