@@ -12,7 +12,8 @@ class SGSidebar extends HTMLElement {
             <style>
                 :host {
                     display: block;
-                    width: 100%;
+                    width: 220px;
+                    flex-shrink: 0;
                 }
 
                 .sidebar {
@@ -74,6 +75,10 @@ class SGSidebar extends HTMLElement {
 
                 /* Mobile responsive */
                 @media (max-width: 768px) {
+                    :host {
+                        width: 100%;
+                    }
+
                     .sidebar {
                         position: static;
                         height: auto;
