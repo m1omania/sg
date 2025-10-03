@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     streamEndDate2.setHours(streamEndDate2.getHours() + 2);
     startCountdown('timer-stream', streamEndDate2.getTime());
 
+    // --- Слайдер баннеров ---
+    initBannerSlider();
+
     // --- Балансы из API ---
     const mainBalanceEl = document.getElementById('main-balance');
     const partnerBalanceEl = document.getElementById('partner-balance');
@@ -127,5 +130,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateCountdown();
         setInterval(updateCountdown, 1000);
+    }
+
+    // --- Функция инициализации слайдера баннеров ---
+    function initBannerSlider() {
+        const sliderTrack = document.getElementById('slider-track');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const dots = document.querySelectorAll('.dot');
+        
+        if (!sliderTrack || !prevBtn || !nextBtn) {
+            console.log('Slider elements not found, skipping slider initialization');
+            return;
+        }
+
+        let currentSlide = 0;
+        const totalSlides = document.querySelectorAll('.banner-slide').length;
+
+        function updateSlider() {
+            const translateX = -currentSlide * 100;
+            sliderTrack.style.transform = `translateX(${translateX}%)`;
+            
+            // Обновляем активные точки
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Обновляем состояние кнопок
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlider();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlider();
+            }
+        }
+
+        function goToSlide(slideIndex) {
+            if (slideIndex >= 0 && slideIndex < totalSlides) {
+                currentSlide = slideIndex;
+                updateSlider();
+            }
+        }
+
+        // Обработчики событий
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
+
+        // Автоматическое переключение каждые 5 секунд
+        setInterval(() => {
+            nextSlide();
+            if (currentSlide === 0) {
+                // Если дошли до конца, возвращаемся к началу
+                currentSlide = totalSlides - 1;
+                updateSlider();
+            }
+        }, 5000);
+
+        // Инициализация
+        updateSlider();
+        
+        console.log('Banner slider initialized with', totalSlides, 'slides');
     }
 });

@@ -31,20 +31,112 @@
             margin: 0;
             font-size: 24px;
         }
-        .banners-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
+        .banner-slider {
             margin-top: 16px;
         }
-        .banner-item {
-            background-color: #f9f9f9;
-            padding: 16px;
-            border-radius: 6px;
-            border: 1px solid #eee;
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .banner-item .timer { font-weight: bold; color: #c0392b; }
-        .banner-item a { text-decoration: none; color: #2980b9; font-weight: 500; }
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .banner-slide {
+            min-width: 100%;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-align: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .banner-content .timer {
+            font-weight: bold;
+            color: #ffeb3b;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .banner-content .banner-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .banner-content .banner-link {
+            color: #ffeb3b;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .banner-content .banner-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        .slider-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .slider-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        .slider-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .slider-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dot.active {
+            background: #ffeb3b;
+            transform: scale(1.2);
+        }
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
 
         .registration-status .progress-bar {
             background-color: #e0e0e0;
@@ -176,18 +268,46 @@
             <div class="welcome-header">
                 <h1>Добро пожаловать, Константин!</h1>
             </div>
-            <div class="banners-grid">
-                <div class="banner-item">
-                    <p><span class="timer" id="timer-hunting">0ч 0м 0с</span> — Хантинг — это охота на звёзд! <a href="#">Подробнее</a></p>
-                </div>
-                <div class="banner-item">
-                    <p><span class="timer" id="timer-race">33д 11ч 34м</span> — Большая гонка 2.0 <a href="#">Подробнее</a></p>
-                </div>
-                <div class="banner-item">
-                    <p>Инвестируйте в Дирижабли нового поколения <a href="#">Подробнее</a></p>
-                </div>
-                <div class="banner-item">
-                    <p>Книга инвесторов — впишите своё имя на особую страницу истории проекта <a href="#">Подробнее</a></p>
+            <div class="banner-slider">
+                <div class="slider-container">
+                    <div class="slider-track" id="slider-track">
+                        <div class="banner-slide active">
+                            <div class="banner-content">
+                                <span class="timer" id="timer-hunting">0ч 0м 0с</span>
+                                <span class="banner-text">— Хантинг — это охота на звёзд!</span>
+                                <a href="#" class="banner-link">Подробнее</a>
+                            </div>
+                        </div>
+                        <div class="banner-slide">
+                            <div class="banner-content">
+                                <span class="timer" id="timer-race">33д 11ч 34м</span>
+                                <span class="banner-text">— Большая гонка 2.0</span>
+                                <a href="#" class="banner-link">Подробнее</a>
+                            </div>
+                        </div>
+                        <div class="banner-slide">
+                            <div class="banner-content">
+                                <span class="banner-text">Инвестируйте в Дирижабли нового поколения</span>
+                                <a href="#" class="banner-link">Подробнее</a>
+                            </div>
+                        </div>
+                        <div class="banner-slide">
+                            <div class="banner-content">
+                                <span class="banner-text">Книга инвесторов — впишите своё имя на особую страницу истории проекта</span>
+                                <a href="#" class="banner-link">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slider-btn prev" id="prev-btn">‹</button>
+                        <div class="slider-dots" id="slider-dots">
+                            <span class="dot active" data-slide="0"></span>
+                            <span class="dot" data-slide="1"></span>
+                            <span class="dot" data-slide="2"></span>
+                            <span class="dot" data-slide="3"></span>
+                        </div>
+                        <button class="slider-btn next" id="next-btn">›</button>
+                    </div>
                 </div>
             </div>
         </section>
