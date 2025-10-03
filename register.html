@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <!-- Header Placeholder -->
-    <div id="header-placeholder"></div>
+            <!-- Web Component Header -->
+    <sg-header></sg-header>
 
     <div class="app-layout">
         <!-- Main Content -->
@@ -83,9 +83,10 @@
                 <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
 
-        <script src="components/load-component.js"></script>
+        
+        <script type="module" src="components/web-components/index.js"></script>
     <script src="app.js"></script>
-    <script src="language-switcher.js"></script>
+    
     <script src="register.js"></script>
 </body>
 </html>

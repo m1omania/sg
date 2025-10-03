@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components Example - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- CSS Custom Properties for theming -->
+    <style>
+        :root {
+            /* Header theming */
+            --header-bg: #ffffff;
+            --header-bg-dark: #1f2937;
+            --border-color: #e5e7eb;
+            --border-color-dark: #374151;
+            
+            /* Button theming */
+            --button-bg: #f8fafc;
+            --button-bg-dark: #374151;
+            --button-hover-bg: #e2e8f0;
+            --button-hover-bg-dark: #4b5563;
+            --button-hover-border: #cbd5e1;
+            --button-hover-border-dark: #6b7280;
+            --button-hover-text: #1e293b;
+            
+            /* Dropdown theming */
+            --dropdown-bg: #ffffff;
+            --dropdown-bg-dark: #1f2937;
+            --option-hover-bg: #f1f5f9;
+            --option-hover-bg-dark: #374151;
+            
+            /* Sidebar theming */
+            --sidebar-bg: #ffffff;
+            --sidebar-bg-dark: #1f2937;
+            --nav-hover-bg: #f1f5f9;
+            --nav-hover-bg-dark: #374151;
+            --nav-hover-text: #1e293b;
+            --nav-hover-text-dark: #ffffff;
+            --nav-active-bg: #dbeafe;
+            --nav-active-bg-dark: #1e40af;
+            --nav-active-text: #1d4ed8;
+            --nav-active-text-dark: #93c5fd;
+            
+            /* Text theming */
+            --text-color: #374151;
+            --text-color-dark: #f9fafb;
+            
+            /* Primary color */
+            --primary-color: #3b82f6;
+            
+            /* Accent color */
+            --accent-color: #ef4444;
+            
+            /* Scrollbar theming */
+            --scrollbar-color: #cbd5e1;
+            --scrollbar-hover-color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Web Components will be automatically loaded here -->
+    <sg-header></sg-header>
+    
+    <div class="app-layout">
+        <sg-sidebar></sg-sidebar>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Web Components Example</h1>
+                <p>This page demonstrates the new Web Components architecture.</p>
+            </div>
+            
+            <div class="content-grid">
+                <div class="info-card">
+                    <h2>🎯 Shadow DOM Isolation</h2>
+                    <p>Each component has its own isolated styles that don't conflict with global CSS.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h2>🔄 Automatic Updates</h2>
+                    <p>Change a component file and all pages using it will automatically update.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h2>📱 Mobile Responsive</h2>
+                    <p>Built-in responsive design that adapts to different screen sizes.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h2>🌙 Dark Mode</h2>
+                    <p>Automatic dark mode support based on system preferences.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h2>⚡ Modern APIs</h2>
+                    <p>Uses latest Web Components standards with custom elements and shadow DOM.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h2>🎨 Easy Theming</h2>
+                    <p>Customize appearance using CSS custom properties (CSS variables).</p>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h2>Component Events</h2>
+                <p>Open browser console to see component events:</p>
+                <ul>
+                    <li>Language switching events</li>
+                    <li>Logout events</li>
+                    <li>Navigation events</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Web Components Module -->
+    <script type="module" src="components/web-components/index.js"></script>
+    
+    <!-- App Script -->
+    <script src="app.js"></script>
+    
+    <style>
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .info-card {
+            background: var(--card-bg, #ffffff);
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h2 {
+            margin: 0 0 1rem 0;
+            color: var(--primary-color, #3b82f6);
+        }
+        
+        .info-card p {
+            margin: 0;
+            color: var(--text-color, #374151);
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            background: var(--card-bg, #f8fafc);
+            border: 1px solid var(--border-color, #e5e7eb);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .demo-section h2 {
+            margin: 0 0 1rem 0;
+            color: var(--text-color, #374151);
+        }
+        
+        .demo-section ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .demo-section li {
+            margin: 0.5rem 0;
+            color: var(--text-color, #6b7280);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .info-card {
+                background: var(--card-bg-dark, #1f2937);
+                border-color: var(--border-color-dark, #374151);
+            }
+            
+            .info-card p {
+                color: var(--text-color-dark, #f9fafb);
+            }
+            
+            .demo-section {
+                background: var(--card-bg-dark, #111827);
+                border-color: var(--border-color-dark, #374151);
+            }
+            
+            .demo-section h2 {
+                color: var(--text-color-dark, #f9fafb);
+            }
+            
+            .demo-section li {
+                color: var(--text-color-dark, #d1d5db);
+            }
+        }
+    </style>
+</body>
+</html>

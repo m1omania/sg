@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <!-- Header Placeholder -->
-    <div id="header-placeholder"></div>
+            <!-- Web Component Header -->
+    <sg-header></sg-header>
     <div class="app-layout">
-                <!-- Sidebar Placeholder -->
-        <div id="sidebar-placeholder"></div>
+                        <!-- Web Component Sidebar -->
+        <sg-sidebar></sg-sidebar>
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
@@ -152,9 +152,10 @@
             </div>
         </main>
     </div>
-        <script src="components/load-component.js"></script>
+        
+        <script type="module" src="components/web-components/index.js"></script>
     <script src="app.js"></script>
     <script src="invest.js"></script>
-    <script src="language-switcher.js"></script>
+    
 </body>
 </html>
