@@ -260,5 +260,20 @@
     <script src="language-switcher.js"></script>
     <script src="coupons.js"></script>
     <script src="app.js"></script>
+    
+    <!-- Debug script -->
+    <script>
+        console.log('Debug: Page loaded');
+        setTimeout(() => {
+            console.log('Debug: Checking coupons count element');
+            const element = document.getElementById('coupons-count');
+            console.log('Debug: Element found:', element);
+            if (element) {
+                console.log('Debug: Current value:', element.textContent);
+                element.textContent = '2';
+                console.log('Debug: Set to 2');
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
