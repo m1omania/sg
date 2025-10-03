@@ -3,23 +3,7 @@
   "builds": [
     {
       "src": "server/server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "app.js",
-          "deposit.html",
-          "index.html",
-          "invest.html",
-          "landing.html",
-          "my-investments.html",
-          "projects.html",
-          "register.html",
-          "style.css",
-          "wallet.html",
-          "packages.html",
-          "checkout.html"
-        ]
-      }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -28,8 +12,12 @@
       "dest": "server/server.js"
     },
     {
+      "src": "/(.*\\.(html|css|js|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "server/server.js"
+      "dest": "/index.html"
     }
   ]
 }
