@@ -31,6 +31,21 @@ app.use('/api', limiter);
 // Static files
 app.use(express.static(path.join(__dirname, '../')));
 
+// Serve CSS files
+app.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, '../style.css'));
+});
+
+// Serve JS files
+app.get('/app.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../app.js'));
+});
+
+// Serve manifest files
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(path.join(__dirname, '../manifest.json'));
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
@@ -127,7 +142,12 @@ app.get('/api/projects/:id', (req, res) => {
   res.json(project);
 });
 
-// Serve landing.html for root path (for unauthenticated users)
+// Logout endpoint
+app.post('/api/auth/logout', (req, res) => {
+  res.json({ message: 'Logged out successfully' });
+});
+
+// Serve landing.html for root path (default for unauthenticated users)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../landing.html'));
 });
