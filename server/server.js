@@ -6,6 +6,7 @@ const health = require('./health');
 const config = require('./config/environment');
 const { helmetConfig, securityLogger, bodySizeLimiter, contentTypeChecker, apiLimiter } = require('./middleware/security');
 const { errorHandler, notFoundHandler, unhandledRejectionHandler, uncaughtExceptionHandler, validationErrorHandler, jsonErrorHandler } = require('./middleware/errorHandler');
+const { swaggerUi, specs } = require('./config/swagger');
 const { logger, httpLoggingMiddleware, auditLog } = require('./config/logger');
 const { sanitizeInput } = require('./middleware/sanitization');
 const { metricsMiddleware, errorMetricsMiddleware } = require('./middleware/metrics');
@@ -65,7 +66,15 @@ app.use(metricsMiddleware);
 // Health check endpoint for Render
 app.get('/health', health);
 
+// Swagger documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
+  explorer: true,
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'SolarGroup API Documentation'
+}));
+
 // API routes
+app.use('/api', apiLimiter);
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/coupons', require('./routes/coupons'));

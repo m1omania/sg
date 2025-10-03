@@ -1,5 +1,12 @@
 const express = require('express');
 const router = express.Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: User authentication and registration
+ */
 const bcrypt = require('bcrypt');
 const { dbGet, dbRun } = require('../config/database');
 const config = require('../config/environment');
