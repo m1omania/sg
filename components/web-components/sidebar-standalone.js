@@ -17,6 +17,7 @@ class SGSidebar extends HTMLElement {
 
                 .sidebar {
                     background: #ffffff;
+                    border-right: 1px solid #e5e7eb;
                     height: 100vh;
                     position: sticky;
                     top: 0;
