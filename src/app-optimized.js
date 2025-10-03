@@ -1,150 +1,64 @@
 /**
  * SolarGroup Investment Platform - Optimized JavaScript
- * Modern ES6+ with performance optimizations and PWA features
+ * Modern ES6+ features with performance optimizations
  */
 
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('SW registered: ', registration);
-    } catch (registrationError) {
-      console.log('SW registration failed: ', registrationError);
-    }
-  });
-}
-
-// Performance Monitoring
-class PerformanceMonitor {
+// Global state management
+class StateManager {
   constructor() {
-    this.metrics = new Map();
-    this.observers = new Map();
-  }
-
-  startTiming(name) {
-    this.metrics.set(name, performance.now());
-  }
-
-  endTiming(name) {
-    const startTime = this.metrics.get(name);
-    if (startTime) {
-      const duration = performance.now() - startTime;
-      console.log(`⏱️ ${name}: ${duration.toFixed(2)}ms`);
-      return duration;
-    }
-    return 0;
-  }
-
-  observeElement(element, callback) {
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(callback, {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-      });
-      observer.observe(element);
-      this.observers.set(element, observer);
-    }
-  }
-
-  disconnect() {
-    this.observers.forEach(observer => observer.disconnect());
-    this.observers.clear();
-  }
-}
-
-const perfMonitor = new PerformanceMonitor();
-
-// Utility Functions
-const utils = {
-  // Debounce function for performance
-  debounce(func, wait, immediate = false) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        timeout = null;
-        if (!immediate) func(...args);
-      };
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func(...args);
+    this.state = {
+      user: null,
+      wallet: null,
+      investments: [],
+      projects: [],
+      notifications: [],
+      theme: 'light',
+      currency: 'USD'
     };
-  },
+    this.listeners = new Map();
+  }
 
-  // Throttle function for scroll events
-  throttle(func, limit) {
-    let inThrottle;
-    return function(...args) {
-      if (!inThrottle) {
-        func.apply(this, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    this.notifyListeners(newState);
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  subscribe(key, callback) {
+    if (!this.listeners.has(key)) {
+      this.listeners.set(key, []);
+    }
+    this.listeners.get(key).push(callback);
+  }
+
+  unsubscribe(key, callback) {
+    if (this.listeners.has(key)) {
+      const callbacks = this.listeners.get(key);
+      const index = callbacks.indexOf(callback);
+      if (index > -1) {
+        callbacks.splice(index, 1);
       }
-    };
-  },
-
-  // Format currency with proper localization
-  formatCurrency(amount, currency = 'USD', locale = 'en-US') {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(amount);
-  },
-
-  // Format date with proper localization
-  formatDate(date, options = {}) {
-    const defaultOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    };
-    return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(new Date(date));
-  },
-
-  // Safe JSON parse with fallback
-  safeJsonParse(str, fallback = null) {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      console.warn('JSON parse error:', e);
-      return fallback;
     }
-  },
+  }
 
-  // Generate unique ID
-  generateId() {
-    return Math.random().toString(36).substr(2, 9);
-  },
-
-  // Check if element is in viewport
-  isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-  },
-
-  // Smooth scroll to element
-  smoothScrollTo(element, offset = 0) {
-    const elementPosition = element.offsetTop - offset;
-    window.scrollTo({
-      top: elementPosition,
-      behavior: 'smooth'
+  notifyListeners(changedState) {
+    Object.keys(changedState).forEach(key => {
+      if (this.listeners.has(key)) {
+        this.listeners.get(key).forEach(callback => {
+          callback(changedState[key]);
+        });
+      }
     });
   }
-};
+}
 
-// API Client with caching and error handling
-class ApiClient {
-  constructor(baseURL = '/api') {
-    this.baseURL = baseURL;
+// API service with error handling and caching
+class ApiService {
+  constructor() {
+    this.baseURL = '/api';
     this.cache = new Map();
     this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
   }
@@ -154,38 +68,31 @@ class ApiClient {
     const cacheKey = `${url}_${JSON.stringify(options)}`;
     
     // Check cache first
-    if (options.method !== 'POST' && options.method !== 'PUT' && options.method !== 'DELETE') {
+    if (options.method === 'GET' && this.cache.has(cacheKey)) {
       const cached = this.cache.get(cacheKey);
-      if (cached && Date.now() - cached.timestamp < this.cacheTimeout) {
+      if (Date.now() - cached.timestamp < this.cacheTimeout) {
         return cached.data;
       }
     }
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      },
-      ...options
-    };
-
-    // Add auth token if available
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
     try {
-      const response = await fetch(url, config);
-      
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.getToken()}`,
+          ...options.headers
+        },
+        ...options
+      });
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
       
-      // Cache successful GET requests
-      if (!options.method || options.method === 'GET') {
+      // Cache GET requests
+      if (options.method === 'GET' || !options.method) {
         this.cache.set(cacheKey, {
           data,
           timestamp: Date.now()
@@ -195,487 +102,710 @@ class ApiClient {
       return data;
     } catch (error) {
       console.error('API request failed:', error);
+      ErrorBoundary.handleApiError(error, `API ${endpoint}`);
       throw error;
     }
   }
 
-  get(endpoint, options = {}) {
-    return this.request(endpoint, { ...options, method: 'GET' });
+  getToken() {
+    return localStorage.getItem('authToken');
   }
 
-  post(endpoint, data, options = {}) {
-    return this.request(endpoint, {
-      ...options,
+  setToken(token) {
+    localStorage.setItem('authToken', token);
+  }
+
+  clearToken() {
+    localStorage.removeItem('authToken');
+  }
+
+  // Specific API methods
+  async getWallet(userId) {
+    return this.request(`/wallet/${userId}`);
+  }
+
+  async getInvestments(userId) {
+    return this.request(`/investments/${userId}`);
+  }
+
+  async getProjects() {
+    return this.request('/projects');
+  }
+
+  async getCoupons() {
+    return this.request('/coupons/active');
+  }
+
+  async deposit(userId, amount, method) {
+    return this.request(`/wallet/${userId}/deposit`, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: JSON.stringify({ amount, method })
     });
   }
 
-  put(endpoint, data, options = {}) {
-    return this.request(endpoint, {
-      ...options,
-      method: 'PUT',
-      body: JSON.stringify(data)
+  async invest(projectId, amount) {
+    return this.request('/investments', {
+      method: 'POST',
+      body: JSON.stringify({ projectId, amount })
     });
   }
-
-  delete(endpoint, options = {}) {
-    return this.request(endpoint, { ...options, method: 'DELETE' });
-  }
-
-  clearCache() {
-    this.cache.clear();
-  }
 }
 
-const api = new ApiClient();
-
-// State Management
-class StateManager {
-  constructor() {
-    this.state = new Map();
-    this.listeners = new Map();
+// Utility functions
+class Utils {
+  static formatCurrency(amount, currency = 'USD') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency
+    }).format(amount);
   }
 
-  set(key, value) {
-    const oldValue = this.state.get(key);
-    this.state.set(key, value);
-    this.notify(key, value, oldValue);
+  static formatNumber(number) {
+    return new Intl.NumberFormat('en-US').format(number);
   }
 
-  get(key) {
-    return this.state.get(key);
+  static formatPercentage(value) {
+    return `${value.toFixed(2)}%`;
   }
 
-  subscribe(key, callback) {
-    if (!this.listeners.has(key)) {
-      this.listeners.set(key, new Set());
-    }
-    this.listeners.get(key).add(callback);
+  static formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
   }
 
-  unsubscribe(key, callback) {
-    if (this.listeners.has(key)) {
-      this.listeners.get(key).delete(callback);
-    }
+  static formatDateTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(date));
   }
 
-  notify(key, newValue, oldValue) {
-    if (this.listeners.has(key)) {
-      this.listeners.get(key).forEach(callback => {
-        callback(newValue, oldValue);
-      });
-    }
-  }
-}
-
-const state = new StateManager();
-
-// Timer Management
-class TimerManager {
-  constructor() {
-    this.timers = new Map();
-  }
-
-  createTimer(element, endTime, options = {}) {
-    const timerId = utils.generateId();
-    const timer = {
-      element,
-      endTime: new Date(endTime).getTime(),
-      options: {
-        updateInterval: 1000,
-        onComplete: () => {},
-        ...options
-      },
-      intervalId: null
+  static debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
     };
-
-    this.timers.set(timerId, timer);
-    this.startTimer(timerId);
-    return timerId;
   }
 
-  startTimer(timerId) {
-    const timer = this.timers.get(timerId);
-    if (!timer) return;
-
-    const updateTimer = () => {
-      const now = Date.now();
-      const timeLeft = timer.endTime - now;
-
-      if (timeLeft <= 0) {
-        this.stopTimer(timerId);
-        timer.options.onComplete();
-        return;
-      }
-
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-      if (timer.element) {
-        timer.element.innerHTML = `
-          <div class="timer-display">
-            ${days > 0 ? `<span class="timer-unit">${days}d</span>` : ''}
-            <span class="timer-unit">${hours.toString().padStart(2, '0')}h</span>
-            <span class="timer-unit">${minutes.toString().padStart(2, '0')}m</span>
-            <span class="timer-unit">${seconds.toString().padStart(2, '0')}s</span>
-          </div>
-        `;
+  static throttle(func, limit) {
+    let inThrottle;
+    return function() {
+      const args = arguments;
+      const context = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
       }
     };
-
-    updateTimer();
-    timer.intervalId = setInterval(updateTimer, timer.options.updateInterval);
   }
 
-  stopTimer(timerId) {
-    const timer = this.timers.get(timerId);
-    if (timer && timer.intervalId) {
-      clearInterval(timer.intervalId);
-      timer.intervalId = null;
+  static generateId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  static isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  static isValidAmount(amount) {
+    return !isNaN(amount) && amount > 0;
+  }
+
+  static copyToClipboard(text) {
+    if (navigator.clipboard) {
+      return navigator.clipboard.writeText(text);
+    } else {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      return Promise.resolve();
     }
-  }
-
-  destroyTimer(timerId) {
-    this.stopTimer(timerId);
-    this.timers.delete(timerId);
-  }
-
-  destroyAll() {
-    this.timers.forEach((_, timerId) => this.destroyTimer(timerId));
   }
 }
 
-const timerManager = new TimerManager();
-
-// Wallet Management
-class WalletManager {
-  constructor() {
-    this.balances = {
-      main: 0,
-      bonus: 0,
-      partner: 0
-    };
-    this.currencies = ['USD', 'EUR', 'GBP', 'RUB'];
-    this.currentCurrency = 'USD';
-    this.exchangeRates = {};
-  }
-
-  async loadBalances(userId) {
-    try {
-      perfMonitor.startTiming('loadBalances');
-      const data = await api.get(`/wallet/${userId}`);
+// Animation utilities
+class Animations {
+  static fadeIn(element, duration = 300) {
+    element.style.opacity = '0';
+    element.style.display = 'block';
+    
+    const start = performance.now();
+    
+    function animate(currentTime) {
+      const elapsed = currentTime - start;
+      const progress = Math.min(elapsed / duration, 1);
       
-      this.balances = {
-        main: data.main_balance || 0,
-        bonus: data.bonus_balance || 0,
-        partner: data.partner_balance || 0
-      };
+      element.style.opacity = progress;
       
-      this.updateBalanceDisplay();
-      perfMonitor.endTiming('loadBalances');
-    } catch (error) {
-      console.error('Failed to load wallet balances:', error);
-      this.showError('Failed to load wallet data');
-    }
-  }
-
-  async loadExchangeRates() {
-    try {
-      // In a real app, this would fetch from an exchange rate API
-      this.exchangeRates = {
-        USD: 1,
-        EUR: 0.85,
-        GBP: 0.73,
-        RUB: 75.5
-      };
-    } catch (error) {
-      console.error('Failed to load exchange rates:', error);
-    }
-  }
-
-  convertCurrency(amount, fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) return amount;
-    
-    const fromRate = this.exchangeRates[fromCurrency] || 1;
-    const toRate = this.exchangeRates[toCurrency] || 1;
-    
-    return (amount / fromRate) * toRate;
-  }
-
-  switchCurrency(currency) {
-    if (this.currencies.includes(currency)) {
-      this.currentCurrency = currency;
-      this.updateBalanceDisplay();
-      this.updateCurrencySelector();
-    }
-  }
-
-  updateBalanceDisplay() {
-    const mainElement = document.getElementById('mainBalance');
-    const bonusElement = document.getElementById('bonusBalance');
-    const partnerElement = document.getElementById('partnerBalance');
-    const totalElement = document.getElementById('totalBalance');
-
-    if (mainElement) {
-      const convertedMain = this.convertCurrency(this.balances.main, 'USD', this.currentCurrency);
-      mainElement.textContent = utils.formatCurrency(convertedMain, this.currentCurrency);
-    }
-
-    if (bonusElement) {
-      const convertedBonus = this.convertCurrency(this.balances.bonus, 'USD', this.currentCurrency);
-      bonusElement.textContent = utils.formatCurrency(convertedBonus, this.currentCurrency);
-    }
-
-    if (partnerElement) {
-      const convertedPartner = this.convertCurrency(this.balances.partner, 'USD', this.currentCurrency);
-      partnerElement.textContent = utils.formatCurrency(convertedPartner, this.currentCurrency);
-    }
-
-    if (totalElement) {
-      const total = this.balances.main + this.balances.bonus + this.balances.partner;
-      const convertedTotal = this.convertCurrency(total, 'USD', this.currentCurrency);
-      totalElement.textContent = utils.formatCurrency(convertedTotal, this.currentCurrency);
-    }
-  }
-
-  updateCurrencySelector() {
-    const selector = document.getElementById('currencySelector');
-    if (selector) {
-      selector.value = this.currentCurrency;
-    }
-  }
-
-  showError(message) {
-    // Create or update error notification
-    let errorElement = document.getElementById('walletError');
-    if (!errorElement) {
-      errorElement = document.createElement('div');
-      errorElement.id = 'walletError';
-      errorElement.className = 'error-notification';
-      document.body.appendChild(errorElement);
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
     }
     
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
+    requestAnimationFrame(animate);
+  }
+
+  static fadeOut(element, duration = 300) {
+    const start = performance.now();
+    const startOpacity = parseFloat(getComputedStyle(element).opacity);
     
-    setTimeout(() => {
-      errorElement.style.display = 'none';
-    }, 5000);
+    function animate(currentTime) {
+      const elapsed = currentTime - start;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      element.style.opacity = startOpacity * (1 - progress);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        element.style.display = 'none';
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+
+  static slideDown(element, duration = 300) {
+    element.style.height = '0';
+    element.style.overflow = 'hidden';
+    element.style.display = 'block';
+    
+    const targetHeight = element.scrollHeight;
+    const start = performance.now();
+    
+    function animate(currentTime) {
+      const elapsed = currentTime - start;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      element.style.height = `${targetHeight * progress}px`;
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        element.style.height = 'auto';
+        element.style.overflow = 'visible';
+      }
+    }
+    
+    requestAnimationFrame(animate);
+  }
+
+  static slideUp(element, duration = 300) {
+    const startHeight = element.offsetHeight;
+    const start = performance.now();
+    
+    function animate(currentTime) {
+      const elapsed = currentTime - start;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      element.style.height = `${startHeight * (1 - progress)}px`;
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        element.style.display = 'none';
+        element.style.height = 'auto';
+      }
+    }
+    
+    requestAnimationFrame(animate);
   }
 }
 
-const walletManager = new WalletManager();
-
-// Lazy Loading for Images
-class LazyLoader {
-  constructor() {
-    this.imageObserver = null;
+// Form validation
+class FormValidator {
+  constructor(form) {
+    this.form = form;
+    this.rules = new Map();
+    this.errors = new Map();
     this.init();
   }
 
   init() {
-    if ('IntersectionObserver' in window) {
-      this.imageObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            this.loadImage(img);
-            this.imageObserver.unobserve(img);
-          }
-        });
-      }, {
-        rootMargin: '50px 0px',
-        threshold: 0.01
-      });
-    }
+    this.form.addEventListener('submit', (e) => {
+      if (!this.validate()) {
+        e.preventDefault();
+      }
+    });
+
+    // Real-time validation
+    this.form.addEventListener('input', Utils.debounce((e) => {
+      this.validateField(e.target);
+    }, 300));
   }
 
-  observe(img) {
-    if (this.imageObserver) {
-      this.imageObserver.observe(img);
-    } else {
-      // Fallback for browsers without IntersectionObserver
-      this.loadImage(img);
+  addRule(fieldName, rule) {
+    if (!this.rules.has(fieldName)) {
+      this.rules.set(fieldName, []);
     }
+    this.rules.get(fieldName).push(rule);
   }
 
-  loadImage(img) {
-    const src = img.dataset.src;
-    if (src) {
-      img.src = src;
-      img.classList.add('loaded');
-      img.removeAttribute('data-src');
-    }
+  validate() {
+    let isValid = true;
+    this.errors.clear();
+
+    this.rules.forEach((rules, fieldName) => {
+      const field = this.form.querySelector(`[name="${fieldName}"]`);
+      if (field) {
+        const fieldValid = this.validateField(field);
+        if (!fieldValid) {
+          isValid = false;
+        }
+      }
+    });
+
+    return isValid;
   }
 
-  destroy() {
-    if (this.imageObserver) {
-      this.imageObserver.disconnect();
+  validateField(field) {
+    const fieldName = field.name;
+    const rules = this.rules.get(fieldName) || [];
+    let isValid = true;
+
+    rules.forEach(rule => {
+      const result = rule(field.value, field);
+      if (result !== true) {
+        this.errors.set(fieldName, result);
+        this.showFieldError(field, result);
+        isValid = false;
+      }
+    });
+
+    if (isValid) {
+      this.clearFieldError(field);
+    }
+
+    return isValid;
+  }
+
+  showFieldError(field, message) {
+    field.classList.add('error');
+    
+    let errorElement = field.parentNode.querySelector('.form-error');
+    if (!errorElement) {
+      errorElement = document.createElement('div');
+      errorElement.className = 'form-error';
+      field.parentNode.appendChild(errorElement);
+    }
+    errorElement.textContent = message;
+  }
+
+  clearFieldError(field) {
+    field.classList.remove('error');
+    const errorElement = field.parentNode.querySelector('.form-error');
+    if (errorElement) {
+      errorElement.remove();
     }
   }
 }
 
-const lazyLoader = new LazyLoader();
-
-// Initialize Application
-class App {
+// Notification system
+class NotificationManager {
   constructor() {
-    this.isInitialized = false;
+    this.container = this.createContainer();
+    this.notifications = new Map();
+  }
+
+  createContainer() {
+    const container = document.createElement('div');
+    container.className = 'notification-container';
+    container.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000;
+      max-width: 400px;
+    `;
+    document.body.appendChild(container);
+    return container;
+  }
+
+  show(message, type = 'info', duration = 5000) {
+    const id = Utils.generateId();
+    const notification = this.createNotification(id, message, type);
+    
+    this.container.appendChild(notification);
+    this.notifications.set(id, notification);
+
+    // Auto remove
+    setTimeout(() => {
+      this.remove(id);
+    }, duration);
+
+    return id;
+  }
+
+  createNotification(id, message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      margin-bottom: 10px;
+      padding: 16px;
+      border-left: 4px solid var(--${type}-color);
+      animation: slideIn 0.3s ease-out;
+    `;
+
+    notification.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="notification-icon">
+            ${this.getIcon(type)}
+          </div>
+          <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close" onclick="notificationManager.remove('${id}')">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    `;
+
+    return notification;
+  }
+
+  getIcon(type) {
+    const icons = {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️',
+      info: 'ℹ️'
+    };
+    return icons[type] || icons.info;
+  }
+
+  remove(id) {
+    const notification = this.notifications.get(id);
+    if (notification) {
+      notification.style.animation = 'slideOut 0.3s ease-out';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+        this.notifications.delete(id);
+      }, 300);
+    }
+  }
+
+  clear() {
+    this.notifications.forEach((notification, id) => {
+      this.remove(id);
+    });
+  }
+}
+
+// Main application class
+class SolarGroupApp {
+  constructor() {
+    this.stateManager = new StateManager();
+    this.apiService = new ApiService();
+    this.notificationManager = new NotificationManager();
+    this.loadingSpinner = new LoadingSpinner();
+    this.errorBoundary = new ErrorBoundary();
+    this.formValidators = new Map();
+    
     this.init();
   }
 
-  async init() {
-    if (this.isInitialized) return;
-    
-    perfMonitor.startTiming('appInit');
-    
-    try {
-      await this.setupEventListeners();
-      await this.initializeComponents();
-      await this.loadInitialData();
-      
-      this.isInitialized = true;
-      console.log('✅ App initialized successfully');
-    } catch (error) {
-      console.error('❌ App initialization failed:', error);
-    } finally {
-      perfMonitor.endTiming('appInit');
-    }
+  init() {
+    this.setupEventListeners();
+    this.setupFormValidation();
+    this.setupTheme();
+    this.setupCurrency();
+    this.loadInitialData();
+    this.setupPeriodicUpdates();
   }
 
-  async setupEventListeners() {
-    // Currency selector
-    const currencySelector = document.getElementById('currencySelector');
-    if (currencySelector) {
-      currencySelector.addEventListener('change', (e) => {
-        walletManager.switchCurrency(e.target.value);
+  setupEventListeners() {
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        this.toggleMobileMenu();
       });
     }
 
-    // Lazy load images
-    const lazyImages = document.querySelectorAll('img[data-src]');
-    lazyImages.forEach(img => lazyLoader.observe(img));
+    // Currency switcher
+    const currencySelect = document.querySelector('#currency-select');
+    if (currencySelect) {
+      currencySelect.addEventListener('change', (e) => {
+        this.changeCurrency(e.target.value);
+      });
+    }
 
-    // Smooth scrolling for anchor links
-    document.addEventListener('click', (e) => {
-      const link = e.target.closest('a[href^="#"]');
-      if (link) {
-        e.preventDefault();
-        const targetId = link.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-          utils.smoothScrollTo(targetElement, 80);
-        }
-      }
-    });
+    // Theme toggle
+    const themeToggle = document.querySelector('#theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        this.toggleTheme();
+      });
+    }
 
-    // Handle online/offline status
-    window.addEventListener('online', () => {
-      this.showNotification('Connection restored', 'success');
-      api.clearCache(); // Clear cache when back online
-    });
+    // Window resize handler
+    window.addEventListener('resize', Utils.throttle(() => {
+      this.handleResize();
+    }, 250));
 
-    window.addEventListener('offline', () => {
-      this.showNotification('You are offline', 'warning');
-    });
-
-    // Handle page visibility changes
+    // Page visibility change
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        // Page is hidden, pause timers
-        timerManager.timers.forEach(timer => {
-          if (timer.intervalId) {
-            clearInterval(timer.intervalId);
-            timer.intervalId = null;
-          }
-        });
+        this.pauseUpdates();
       } else {
-        // Page is visible, resume timers
-        timerManager.timers.forEach((timer, timerId) => {
-          if (!timer.intervalId) {
-            timerManager.startTimer(timerId);
-          }
-        });
+        this.resumeUpdates();
       }
     });
   }
 
-  async initializeComponents() {
-    // Initialize timers
-    const timerElements = document.querySelectorAll('[data-timer-end]');
-    timerElements.forEach(element => {
-      const endTime = element.dataset.timerEnd;
-      timerManager.createTimer(element, endTime, {
-        onComplete: () => {
-          element.innerHTML = '<span class="timer-expired">Expired</span>';
-        }
-      });
+  setupFormValidation() {
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+      const validator = new FormValidator(form);
+      this.formValidators.set(form, validator);
     });
+  }
 
-    // Initialize wallet if user is logged in
-    const userId = this.getCurrentUserId();
-    if (userId) {
-      await walletManager.loadBalances(userId);
-      await walletManager.loadExchangeRates();
-    }
+  setupTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    this.setTheme(savedTheme);
+  }
+
+  setupCurrency() {
+    const savedCurrency = localStorage.getItem('currency') || 'USD';
+    this.setCurrency(savedCurrency);
   }
 
   async loadInitialData() {
-    // Load any initial data needed for the page
-    const userId = this.getCurrentUserId();
-    if (userId) {
-      // Load user-specific data
-      state.set('userId', userId);
+    try {
+      this.loadingSpinner.showOverlay('Loading your data...');
+      
+      // Load user data
+      const user = await this.loadUserData();
+      if (user) {
+        this.stateManager.setState({ user });
+        
+        // Load wallet and investments
+        const [wallet, investments] = await Promise.all([
+          this.apiService.getWallet(user.id),
+          this.apiService.getInvestments(user.id)
+        ]);
+        
+        this.stateManager.setState({ wallet, investments });
+      }
+      
+      // Load projects
+      const projects = await this.apiService.getProjects();
+      this.stateManager.setState({ projects });
+      
+    } catch (error) {
+      console.error('Failed to load initial data:', error);
+      this.notificationManager.show('Failed to load data. Please refresh the page.', 'error');
+    } finally {
+      this.loadingSpinner.hideOverlay();
     }
   }
 
-  getCurrentUserId() {
-    // Get user ID from localStorage or session
-    return localStorage.getItem('userId') || sessionStorage.getItem('userId');
+  setupPeriodicUpdates() {
+    // Update wallet balance every 30 seconds
+    this.walletUpdateInterval = setInterval(() => {
+      this.updateWalletBalance();
+    }, 30000);
+
+    // Update notifications every minute
+    this.notificationUpdateInterval = setInterval(() => {
+      this.updateNotifications();
+    }, 60000);
   }
 
-  showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 5000);
+  pauseUpdates() {
+    if (this.walletUpdateInterval) {
+      clearInterval(this.walletUpdateInterval);
+    }
+    if (this.notificationUpdateInterval) {
+      clearInterval(this.notificationUpdateInterval);
+    }
   }
 
-  // Cleanup method
-  destroy() {
-    timerManager.destroyAll();
-    lazyLoader.destroy();
-    perfMonitor.disconnect();
+  resumeUpdates() {
+    this.setupPeriodicUpdates();
+  }
+
+  async loadUserData() {
+    // In a real app, this would come from the API
+    return {
+      id: 1,
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatar: null
+    };
+  }
+
+  async updateWalletBalance() {
+    try {
+      const { user } = this.stateManager.getState();
+      if (user) {
+        const wallet = await this.apiService.getWallet(user.id);
+        this.stateManager.setState({ wallet });
+        this.updateWalletDisplay(wallet);
+      }
+    } catch (error) {
+      console.error('Failed to update wallet balance:', error);
+    }
+  }
+
+  async updateNotifications() {
+    try {
+      // In a real app, this would fetch from the API
+      const notifications = [];
+      this.stateManager.setState({ notifications });
+    } catch (error) {
+      console.error('Failed to update notifications:', error);
+    }
+  }
+
+  updateWalletDisplay(wallet) {
+    const balanceElements = document.querySelectorAll('.wallet-balance');
+    balanceElements.forEach(element => {
+      element.textContent = Utils.formatCurrency(wallet.balance, this.stateManager.getState().currency);
+    });
+  }
+
+  toggleMobileMenu() {
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      nav.classList.toggle('mobile-open');
+    }
+  }
+
+  changeCurrency(currency) {
+    this.stateManager.setState({ currency });
+    localStorage.setItem('currency', currency);
+    this.updateCurrencyDisplay();
+  }
+
+  setCurrency(currency) {
+    this.stateManager.setState({ currency });
+    this.updateCurrencyDisplay();
+  }
+
+  updateCurrencyDisplay() {
+    const { currency } = this.stateManager.getState();
+    const currencyElements = document.querySelectorAll('.currency');
+    currencyElements.forEach(element => {
+      element.textContent = currency;
+    });
+  }
+
+  toggleTheme() {
+    const { theme } = this.stateManager.getState();
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    this.setTheme(newTheme);
+  }
+
+  setTheme(theme) {
+    this.stateManager.setState({ theme });
+    localStorage.setItem('theme', theme);
+    document.body.className = theme;
+  }
+
+  handleResize() {
+    // Handle responsive behavior
+    const nav = document.querySelector('.nav');
+    if (nav && window.innerWidth >= 768) {
+      nav.classList.remove('mobile-open');
+    }
+  }
+
+  // Public methods for external use
+  showNotification(message, type = 'info', duration = 5000) {
+    return this.notificationManager.show(message, type, duration);
+  }
+
+  showLoading(container, text = 'Loading...') {
+    this.loadingSpinner.show(container, { text });
+  }
+
+  hideLoading(container) {
+    this.loadingSpinner.hide(container);
+  }
+
+  async invest(projectId, amount) {
+    try {
+      this.loadingSpinner.showOverlay('Processing investment...');
+      
+      const result = await this.apiService.invest(projectId, amount);
+      
+      this.notificationManager.show('Investment successful!', 'success');
+      this.updateWalletBalance();
+      
+      return result;
+    } catch (error) {
+      this.notificationManager.show('Investment failed. Please try again.', 'error');
+      throw error;
+    } finally {
+      this.loadingSpinner.hideOverlay();
+    }
+  }
+
+  async deposit(amount, method) {
+    try {
+      const { user } = this.stateManager.getState();
+      if (!user) {
+        throw new Error('User not logged in');
+      }
+
+      this.loadingSpinner.showOverlay('Processing deposit...');
+      
+      const result = await this.apiService.deposit(user.id, amount, method);
+      
+      this.notificationManager.show('Deposit successful!', 'success');
+      this.updateWalletBalance();
+      
+      return result;
+    } catch (error) {
+      this.notificationManager.show('Deposit failed. Please try again.', 'error');
+      throw error;
+    } finally {
+      this.loadingSpinner.hideOverlay();
+    }
   }
 }
 
-// Initialize app when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    new App();
-  });
-} else {
-  new App();
-}
+// Initialize application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  window.solarGroupApp = new SolarGroupApp();
+  window.notificationManager = window.solarGroupApp.notificationManager;
+});
 
-// Export for testing or external use
+// Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    App,
-    ApiClient,
+    SolarGroupApp,
     StateManager,
-    TimerManager,
-    WalletManager,
-    LazyLoader,
-    PerformanceMonitor,
-    utils
+    ApiService,
+    Utils,
+    Animations,
+    FormValidator,
+    NotificationManager
   };
 }
