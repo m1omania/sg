@@ -251,8 +251,8 @@ app.get('/api/wallet/:userId', (req, res) => {
   
   res.json({
     id: parseInt(userId),
-    mainBalance: 0.00,
-    partnerBalance: 0.00,
+    main_balance: 0.00,
+    partner_balance: 0.00,
     currency: 'USD',
     lastUpdated: new Date().toISOString()
   });
@@ -290,16 +290,20 @@ app.get('/api/wallet/:userId/transactions', (req, res) => {
 app.post('/api/transactions/deposit', (req, res) => {
   const { userId, amount, paymentMethod } = req.body;
   
+  console.log('Deposit request:', { userId, amount, paymentMethod });
+  
   if (!userId || !amount || !paymentMethod) {
+    console.log('Missing required fields');
     return res.status(400).json({ error: 'User ID, amount and payment method are required' });
   }
   
   if (isNaN(amount) || amount <= 0) {
+    console.log('Invalid amount:', amount);
     return res.status(400).json({ error: 'Amount must be a positive number' });
   }
   
   // For demo purposes, always return success
-  res.json({
+  const response = {
     success: true,
     message: 'Deposit successful',
     transactionId: 'tx_' + Date.now(),
@@ -307,7 +311,10 @@ app.post('/api/transactions/deposit', (req, res) => {
     paymentMethod: paymentMethod,
     status: 'completed',
     date: new Date().toISOString()
-  });
+  };
+  
+  console.log('Deposit response:', response);
+  res.json(response);
 });
 
 app.get('/api/transactions/:userId', (req, res) => {
