@@ -86,7 +86,6 @@
                 <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
                 <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
                 <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
-                <li class="nav-item"><a href="coupons.html" class="nav-link">Купоны и промокоды</a></li>
             </ul>
         </nav>
 
@@ -163,33 +162,6 @@
                         
         </div>
 
-                <!-- Coupons Card -->
-                <div class="account-card account-summary account-summary--coupons">
-                    <div class="account-summary__header">
-                        <div class="account-summary__title-wrap">
-                            <div class="account-summary__icon">🎫</div>
-                            <div>
-                                <h3 class="account-summary__title">Купоны и промокоды</h3>
-                                <div class="account-summary__subtitle">Доступные скидки и бонусы</div>
-                            </div>
-                        </div>
-                        <span class="account-summary__badge account-summary__badge--info" id="coupons-count">0</span>
-                    </div>
-                    <div class="account-summary__amount" id="coupons-amount">
-                        <span class="coupons-total">0 купонов</span>
-                    </div>
-                    <div class="account-summary__controls">
-                        <div class="coupons-preview" id="wallet-coupons">
-                            <!-- Coupons will be populated by JavaScript -->
-                            <div class="no-coupons-message">
-                                <p>Нет активных купонов</p>
-                            </div>
-                        </div>
-                        <div class="account-summary__actions">
-                            <a class="btn btn--primary" href="coupons.html">Все купоны</a>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Transaction History -->
@@ -315,94 +287,5 @@
     <script src="wallet.js"></script>
     <script src="language-switcher.js"></script>
     
-    <!-- Inline coupons logic -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Setting up wallet coupons from API...');
-            
-            // Load coupons from API
-            fetch(`/api/coupons/active/1?t=${Date.now()}`, {
-                cache: 'no-cache',
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache'
-                }
-            })
-                .then(res => {
-                    console.log('Wallet API response status:', res.status);
-                    if (!res.ok) {
-                        throw new Error(`HTTP ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then(coupons => {
-                    console.log('Wallet coupons loaded from API:', coupons.length);
-                    
-                    // Update coupons count
-                    const couponsCount = document.getElementById('coupons-count');
-                    if (couponsCount) {
-                        couponsCount.textContent = coupons.length;
-                        console.log('Updated wallet coupons count to:', coupons.length);
-                    }
-                    
-                    // Update coupons total text
-                    const couponsTotal = document.querySelector('.coupons-total');
-                    if (couponsTotal) {
-                        couponsTotal.textContent = `${coupons.length} купонов`;
-                        console.log('Updated wallet coupons total to:', coupons.length);
-                    }
-                    
-                    // Update coupons preview
-                    const couponsContainer = document.getElementById('wallet-coupons');
-                    if (couponsContainer) {
-                        if (coupons.length > 0) {
-                            const previewCoupons = coupons.slice(0, 3);
-                            couponsContainer.innerHTML = previewCoupons.map(coupon => `
-                                <div class="coupon-item">
-                                    <span class="coupon-code">${coupon.code}</span>
-                                    <span class="coupon-discount">${coupon.discount}%</span>
-                                </div>
-                            `).join('');
-                            
-                            if (coupons.length > 3) {
-                                couponsContainer.innerHTML += `
-                                    <div class="coupon-item" style="justify-content: center; color: var(--color-text-secondary);">
-                                        +${coupons.length - 3} еще...
-                                    </div>
-                                `;
-                            }
-                        } else {
-                            couponsContainer.innerHTML = `
-                                <div class="no-coupons-message">
-                                    <p>Нет активных купонов</p>
-                                </div>
-                            `;
-                        }
-                    }
-                })
-                .catch(e => {
-                    console.error('Error loading wallet coupons from API:', e);
-                    // Show error state
-                    const couponsCount = document.getElementById('coupons-count');
-                    if (couponsCount) {
-                        couponsCount.textContent = '?';
-                    }
-                    
-                    const couponsTotal = document.querySelector('.coupons-total');
-                    if (couponsTotal) {
-                        couponsTotal.textContent = '? купонов';
-                    }
-                    
-                    const couponsContainer = document.getElementById('wallet-coupons');
-                    if (couponsContainer) {
-                        couponsContainer.innerHTML = `
-                            <div class="no-coupons-message">
-                                <p>Ошибка загрузки</p>
-                            </div>
-                        `;
-                    }
-                });
-        });
-    </script>
 </body>
 </html>
