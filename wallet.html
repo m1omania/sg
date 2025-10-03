@@ -215,49 +215,6 @@
     </div>
 
     <script src="app.js"></script>
-    <script>
-        // Wallet-specific JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            const userId = 1; // demo user
-            const mainBalanceEl = document.getElementById('main-balance-amount');
-            const partnerBalanceEl = document.getElementById('partner-balance-amount');
-            const txBody = document.getElementById('transactions-tbody');
-            const depositMainBtn = document.getElementById('deposit-main-btn');
-
-            async function loadWallet() {
-                try {
-                    const res = await fetch(`/api/wallet/${userId}`);
-                    if (res.ok) {
-                        const w = await res.json();
-                        if (mainBalanceEl) mainBalanceEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
-                        if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.partner_balance || 0).toFixed(2)} $`;
-                    }
-                } catch(e) { console.error(e); }
-            }
-
-            async function loadTransactions() {
-                try {
-                    const res = await fetch(`/api/transactions/${userId}`);
-                    if (res.ok) {
-                        const txs = await res.json();
-                        if (txBody) {
-                            txBody.innerHTML = txs.map(t => `
-                                <tr>
-                                  <td>${t.type === 'deposit' ? 'Пополнение' : t.type === 'investment' ? 'Инвестиция' : t.type}</td>
-                                  <td>${new Date(t.created_at).toLocaleDateString('ru-RU')}</td>
-                                  <td>${t.amount > 0 ? '+' : ''}${Number(t.amount).toFixed(2)} $</td>
-                                  <td>${t.description || ''}</td>
-                                  <td><span class="status-badge ${t.status === 'completed' ? 'status-success' : 'status-pending'}">${t.status === 'completed' ? 'Выполнено' : 'В обработке'}</span></td>
-                                </tr>
-                            `).join('');
-                        }
-                    }
-                } catch(e) { console.error(e); }
-            }
-
-            loadWallet();
-            loadTransactions();
-        });
-    </script>
+    <script src="wallet.js"></script>
 </body>
 </html>
