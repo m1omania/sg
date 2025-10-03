@@ -65,6 +65,10 @@ app.get('/invest.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../invest.js'));
 });
 
+app.get('/register.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../register.js'));
+});
+
 app.get('/packages.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../packages.js'));
 });
