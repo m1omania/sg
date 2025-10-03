@@ -261,63 +261,114 @@
     <script src="coupons.js"></script>
     <script src="app.js"></script>
     
+    <!-- Inline menu logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up user menu...');
+            
+            const userDropdown = document.getElementById('userDropdown');
+            if (userDropdown) {
+                console.log('User dropdown found');
+                
+                // Toggle menu on click
+                userDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                    console.log('Menu toggled');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function() {
+                    if (userDropdown.classList.contains('active')) {
+                        userDropdown.classList.remove('active');
+                        console.log('Menu closed');
+                    }
+                });
+                
+                // Handle logout button
+                const logoutBtn = userDropdown.querySelector('.logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('Logout clicked');
+                        window.location.href = 'landing.html';
+                    });
+                }
+            } else {
+                console.log('User dropdown not found');
+            }
+        });
+    </script>
+    
     <!-- Inline coupons logic -->
     <script>
-        // Set coupons count immediately
-        document.getElementById('coupons-count').textContent = '2';
-        
-        // Load coupons data
-        fetch('/api/coupons/active/1')
-            .then(res => res.json())
-            .then(coupons => {
-                console.log('Coupons loaded:', coupons.length);
-                
-                // Update count
-                const couponsCount = document.getElementById('coupons-count');
-                if (couponsCount) {
-                    couponsCount.textContent = coupons.length;
-                }
-                
-                // Render coupons
-                const container = document.getElementById('coupons-container');
-                if (container) {
-                    if (coupons.length === 0) {
-                        container.innerHTML = `
-                            <div class="no-coupons">
-                                <div class="no-coupons__icon">🎫</div>
-                                <h3>Нет активных купонов</h3>
-                                <p>У вас пока нет доступных купонов или промокодов</p>
-                            </div>
-                        `;
-                    } else {
-                        container.innerHTML = coupons.map(coupon => `
-                            <div class="coupon-card" data-coupon-id="${coupon.id}">
-                                <div class="coupon-header">
-                                    <h3 class="coupon-name">${coupon.name}</h3>
-                                    <span class="coupon-code">${coupon.code}</span>
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, updating coupons...');
+            
+            // Set coupons count immediately
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount) {
+                couponsCount.textContent = '2';
+                console.log('Set coupons count to 2');
+            }
+            
+            // Load coupons data
+            fetch('/api/coupons/active/1')
+                .then(res => res.json())
+                .then(coupons => {
+                    console.log('Coupons loaded:', coupons.length);
+                    
+                    // Update count
+                    if (couponsCount) {
+                        couponsCount.textContent = coupons.length;
+                        console.log('Updated coupons count to:', coupons.length);
+                    }
+                    
+                    // Render coupons
+                    const container = document.getElementById('coupons-container');
+                    if (container) {
+                        if (coupons.length === 0) {
+                            container.innerHTML = `
+                                <div class="no-coupons">
+                                    <div class="no-coupons__icon">🎫</div>
+                                    <h3>Нет активных купонов</h3>
+                                    <p>У вас пока нет доступных купонов или промокодов</p>
                                 </div>
-                                <div class="coupon-body">
-                                    <p class="coupon-description">${coupon.description}</p>
-                                    <div class="coupon-details">
-                                        <span class="coupon-discount">${coupon.discount}%</span>
-                                        <span class="coupon-project">${coupon.project_name}</span>
+                            `;
+                        } else {
+                            container.innerHTML = coupons.map(coupon => `
+                                <div class="coupon-card" data-coupon-id="${coupon.id}">
+                                    <div class="coupon-header">
+                                        <h3 class="coupon-name">${coupon.name}</h3>
+                                        <span class="coupon-code">${coupon.code}</span>
+                                    </div>
+                                    <div class="coupon-body">
+                                        <p class="coupon-description">${coupon.description}</p>
+                                        <div class="coupon-details">
+                                            <span class="coupon-discount">${coupon.discount}%</span>
+                                            <span class="coupon-project">${coupon.project_name}</span>
+                                        </div>
+                                    </div>
+                                    <div class="coupon-footer">
+                                        <button class="btn btn--primary use-coupon-btn" data-coupon-id="${coupon.id}">
+                                            Использовать
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="coupon-footer">
-                                    <button class="btn btn--primary use-coupon-btn" data-coupon-id="${coupon.id}">
-                                        Использовать
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('');
+                            `).join('');
+                        }
                     }
-                }
-            })
-            .catch(e => {
-                console.error('Error loading coupons:', e);
-                // Fallback: show 2 coupons
-                document.getElementById('coupons-count').textContent = '2';
-            });
+                })
+                .catch(e => {
+                    console.error('Error loading coupons:', e);
+                    // Fallback: show 2 coupons
+                    if (couponsCount) {
+                        couponsCount.textContent = '2';
+                        console.log('Fallback: set coupons count to 2');
+                    }
+                });
+        });
     </script>
 </body>
 </html>
