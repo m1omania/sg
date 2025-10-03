@@ -57,6 +57,10 @@ app.get('/checkout.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../checkout.js'));
 });
 
+app.get('/my-investments.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../my-investments.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
@@ -270,7 +274,13 @@ let userBalances = {
   }
 };
 
+// Store user investments
+let userInvestments = {
+  1: []
+};
+
 console.log('Initial userBalances:', userBalances);
+console.log('Initial userInvestments:', userInvestments);
 
 // Wallet endpoints
 app.get('/api/wallet/:userId', (req, res) => {
@@ -403,11 +413,32 @@ app.post('/api/transactions/invest', (req, res) => {
   console.log('Balance after investment:', userBalances[userIdNum]);
   console.log('All userBalances after investment:', userBalances);
 
+  // Create investment record
+  const investment = {
+    id: Date.now(),
+    userId: userIdNum,
+    packageId: packageId,
+    amount: investmentAmount,
+    account: account,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    transactionId: 'INV_' + Date.now()
+  };
+
+  // Store investment
+  if (!userInvestments[userIdNum]) {
+    userInvestments[userIdNum] = [];
+  }
+  userInvestments[userIdNum].push(investment);
+
+  console.log('Investment stored:', investment);
+  console.log('All userInvestments after investment:', userInvestments);
+
   // For demo purposes, always return success
   const response = {
     success: true,
     message: 'Investment successful',
-    transactionId: 'INV_' + Date.now(),
+    transactionId: investment.transactionId,
     packageId: packageId,
     amount: investmentAmount,
     account: account,
@@ -443,6 +474,41 @@ app.get('/api/transactions/:userId', (req, res) => {
     }
   ]);
 });
+
+// Get user investments
+app.get('/api/investments/:userId', (req, res) => {
+  const { userId } = req.params;
+  const userIdNum = parseInt(userId);
+  
+  console.log(`GET /api/investments/${userId} - User investments:`, userInvestments[userIdNum] || []);
+  
+  const investments = userInvestments[userIdNum] || [];
+  
+  // Format investments for frontend
+  const formattedInvestments = investments.map(inv => ({
+    id: inv.id,
+    project_name: getProjectName(inv.packageId),
+    amount: inv.amount,
+    final_amount: inv.amount,
+    created_at: inv.createdAt,
+    status: inv.status,
+    transaction_id: inv.transactionId,
+    account: inv.account
+  }));
+  
+  console.log('Formatted investments:', formattedInvestments);
+  res.json(formattedInvestments);
+});
+
+// Helper function to get project name from package ID
+function getProjectName(packageId) {
+  const projectMap = {
+    'Пакет 500 $': 'Совэлмаш',
+    'Пакет 1000 $': 'Совэлмаш', 
+    'Пакет 250 $': 'Дирижабли'
+  };
+  return projectMap[packageId] || 'Неизвестный проект';
+}
 
 // Coupons endpoints
 app.get('/api/coupons/active/:userId', (req, res) => {
