@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правильная структура Layout - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Дополнительные стили для демонстрации правильной структуры */
+        .layout-demo {
+            border: 2px dashed #3b82f6;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f0f9ff;
+        }
+        
+        .layout-demo h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- ПРАВИЛЬНАЯ СТРУКТУРА LAYOUT -->
+    
+    <!-- 1. Header (sticky, z-index: 100) -->
+    <sg-header></sg-header>
+    
+    <!-- 2. Main Layout Container (flex) -->
+    <div class="app-layout">
+        <!-- 3. Sidebar (sticky, z-index: 50) -->
+        <sg-sidebar></sg-sidebar>
+        
+        <!-- 4. Main Content (flex: 1, scrollable) -->
+        <main class="main-content">
+            <div class="layout-demo">
+                <h3>✅ Правильная структура Layout</h3>
+                <p>Эта страница демонстрирует исправленную структуру layout без проблем с позиционированием.</p>
+            </div>
+            
+            <div class="dashboard-container">
+                <div class="dashboard-card">
+                    <h2>Исправленные проблемы:</h2>
+                    <ul>
+                        <li>✅ Header: <span class="highlight">position: sticky, z-index: 100</span></li>
+                        <li>✅ Sidebar: <span class="highlight">position: sticky, z-index: 50</span></li>
+                        <li>✅ Main-content: <span class="highlight">flex: 1, overflow-y: auto</span></li>
+                        <li>✅ Body: <span class="highlight">display: flex, flex-direction: column</span></li>
+                        <li>✅ App-layout: <span class="highlight">display: flex, flex: 1</span></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h2>CSS структура:</h2>
+                    <div class="code-example">
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-layout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: calc(100vh - 80px);
+}
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h2>Z-index иерархия:</h2>
+                    <ul>
+                        <li>Header: <strong>z-index: 100</strong> (выше всего)</li>
+                        <li>Sidebar: <strong>z-index: 50</strong> (под header)</li>
+                        <li>Main-content: <strong>z-index: auto</strong> (обычный поток)</li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h2>Responsive поведение:</h2>
+                    <ul>
+                        <li>📱 <strong>Mobile:</strong> Sidebar становится горизонтальным меню</li>
+                        <li>📱 <strong>Mobile:</strong> Sidebar position: static (не sticky)</li>
+                        <li>📱 <strong>Mobile:</strong> Main-content min-height: auto</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+</body>
+</html>

@@ -19,11 +19,10 @@ class SGSidebar extends HTMLElement {
                     background: #ffffff;
                     border-right: 1px solid #e5e7eb;
                     height: 100vh;
-                    position: fixed;
-                    left: 0;
+                    position: sticky;
                     top: 0;
                     width: 250px;
-                    z-index: 100;
+                    z-index: 50;
                     overflow-y: auto;
                     transition: transform 0.3s ease;
                 }

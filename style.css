@@ -312,6 +312,9 @@ html {
 body {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 *,
@@ -1448,7 +1451,8 @@ select.form-control {
 /* App Layout */
 .app-layout {
   display: flex;
-  min-height: calc(100vh - 80px);
+  flex: 1;
+  min-height: 0;
 }
 
 /* Sidebar */
@@ -1457,6 +1461,12 @@ select.form-control {
   background: var(--color-surface);
   border-right: 1px solid var(--color-border);
   padding: var(--space-16);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 50;
+  flex-shrink: 0;
 }
 
 .nav-menu {
@@ -1494,6 +1504,8 @@ select.form-control {
   flex: 1;
   padding: var(--space-24);
   background: var(--color-background);
+  min-height: calc(100vh - 80px);
+  overflow-y: auto;
 }
 
 .page-header {
@@ -1968,8 +1980,11 @@ select.form-control {
   
   .sidebar {
     width: 100%;
+    height: auto;
+    position: static;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+    padding: var(--space-12);
   }
   
   .nav-menu {
@@ -1981,6 +1996,10 @@ select.form-control {
   .nav-item {
     margin-bottom: 0;
     white-space: nowrap;
+  }
+  
+  .main-content {
+    min-height: auto;
   }
   
   .main-content {

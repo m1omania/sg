@@ -24,7 +24,7 @@ class SGHeader extends HTMLElement {
                     border-bottom: 1px solid #e5e7eb;
                     position: sticky;
                     top: 0;
-                    z-index: 1000;
+                    z-index: 100;
                 }
 
                 .header__logo {
