@@ -1,4 +1,5 @@
 // SolarGroup Coupons App JavaScript
+console.log('app.js loaded');
 
 // API Base URL - в production будет указывать на сервер
 const API_BASE_URL = '/api';
