@@ -16,8 +16,23 @@
         </div>
         <div class="header__controls">
             <div class="language-switcher">
-                <button class="lang-btn active" data-lang="ru">RU</button>
-                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="language-toggle" id="languageToggle">
+                    <span class="flag-icon">🇷🇺</span>
+                    <span class="lang-text">RU</span>
+                    <svg class="dropdown-arrow" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" data-lang="ru">
+                        <span class="flag-icon">🇷🇺</span>
+                        <span class="lang-text">Русский</span>
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <span class="flag-icon">🇺🇸</span>
+                        <span class="lang-text">English</span>
+                    </div>
+                </div>
             </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -248,5 +263,7 @@
         </div>
 
     <script src="app.js"></script>
+    <script src="coupons.js"></script>
+    <script src="language-switcher.js"></script>
 </body>
 </html>

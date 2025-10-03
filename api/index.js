@@ -95,15 +95,6 @@ app.get('/solarlogo.avif', (req, res) => {
   res.sendFile(path.join(__dirname, '../solarlogo.avif'));
 });
 
-// Serve project images
-app.get('/airship.avif', (req, res) => {
-  res.sendFile(path.join(__dirname, '../airship.avif'));
-});
-
-app.get('/sovelmash.avif', (req, res) => {
-  res.sendFile(path.join(__dirname, '../sovelmash.avif'));
-});
-
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
