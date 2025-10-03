@@ -8,6 +8,8 @@ const { helmetConfig, securityLogger, bodySizeLimiter, contentTypeChecker, apiLi
 const { errorHandler, notFoundHandler, unhandledRejectionHandler, uncaughtExceptionHandler, validationErrorHandler, jsonErrorHandler } = require('./middleware/errorHandler');
 const { logger, httpLoggingMiddleware, auditLog } = require('./config/logger');
 const { sanitizeInput } = require('./middleware/sanitization');
+const { metricsMiddleware, errorMetricsMiddleware } = require('./middleware/metrics');
+const { alertMiddleware } = require('./middleware/alerts');
 
 const app = express();
 const PORT = config.PORT;
@@ -57,6 +59,9 @@ app.use(express.static(path.join(__dirname, '../')));
 // Rate limiting for API routes
 app.use('/api', apiLimiter);
 
+// Metrics collection middleware
+app.use(metricsMiddleware);
+
 // Health check endpoint for Render
 app.get('/health', health);
 
@@ -68,6 +73,8 @@ app.use('/api/investments', require('./routes/investments'));
 app.use('/api/wallet', require('./routes/wallet'));
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/transactions', require('./routes/transactions'));
+app.use('/api/health', require('./routes/health'));
+app.use('/api/monitoring', require('./routes/monitoring'));
 
 // JWT auth check
 async function isAuthenticated(req) {
@@ -165,6 +172,10 @@ app.get('/packages', (req, res) => {
 app.get('/checkout', (req, res) => {
   res.sendFile(path.join(__dirname, '../checkout.html'));
 });
+
+// Error handling middleware
+app.use(errorMetricsMiddleware);
+app.use(alertMiddleware);
 
 // Обработка 404 ошибок
 app.use(notFoundHandler);
