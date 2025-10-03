@@ -1,4 +1,4 @@
-const { body, param, query, validationResult } = require('express-validator');
+const { body, param, query, validationResult, sanitizeBody, sanitizeParam, sanitizeQuery } = require('express-validator');
 
 /**
  * Middleware для обработки ошибок валидации
@@ -31,6 +31,8 @@ const validateRegistration = [
     .isLength({ min: 4, max: 6 })
     .isNumeric()
     .withMessage('Verification code must be 4-6 digits'),
+  sanitizeBody('email').trim().escape(),
+  sanitizeBody('code').trim(),
   handleValidationErrors
 ];
 
@@ -45,6 +47,8 @@ const validateLogin = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters'),
+  sanitizeBody('email').trim().escape(),
+  sanitizeBody('password').trim(),
   handleValidationErrors
 ];
 
@@ -58,6 +62,8 @@ const validateDeposit = [
   body('type')
     .isIn(['main', 'partner'])
     .withMessage('Type must be either "main" or "partner"'),
+  sanitizeBody('amount').toFloat(),
+  sanitizeBody('type').trim().escape(),
   handleValidationErrors
 ];
 
@@ -75,6 +81,9 @@ const validateInvestment = [
     .optional()
     .isInt({ min: 1 })
     .withMessage('Coupon ID must be a positive integer'),
+  sanitizeBody('project_id').toInt(),
+  sanitizeBody('amount').toFloat(),
+  sanitizeBody('coupon_id').toInt(),
   handleValidationErrors
 ];
 
@@ -86,6 +95,7 @@ const validatePromoActivation = [
     .isLength({ min: 1, max: 50 })
     .matches(/^[A-Z0-9-]+$/)
     .withMessage('Promo code must contain only uppercase letters, numbers and hyphens'),
+  sanitizeBody('code').trim().toUpperCase().escape(),
   handleValidationErrors
 ];
 
@@ -96,6 +106,7 @@ const validateId = [
   param('id')
     .isInt({ min: 1 })
     .withMessage('ID must be a positive integer'),
+  sanitizeParam('id').toInt(),
   handleValidationErrors
 ];
 
@@ -106,6 +117,7 @@ const validateUserId = [
   param('userId')
     .isInt({ min: 1 })
     .withMessage('User ID must be a positive integer'),
+  sanitizeParam('userId').toInt(),
   handleValidationErrors
 ];
 
@@ -127,6 +139,9 @@ const validateSearch = [
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage('Limit must be between 1 and 100'),
+  sanitizeQuery('q').trim().escape(),
+  sanitizeQuery('page').toInt(),
+  sanitizeQuery('limit').toInt(),
   handleValidationErrors
 ];
 

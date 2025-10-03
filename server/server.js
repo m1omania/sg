@@ -7,6 +7,7 @@ const config = require('./config/environment');
 const { helmetConfig, securityLogger, bodySizeLimiter, contentTypeChecker, apiLimiter } = require('./middleware/security');
 const { errorHandler, notFoundHandler, unhandledRejectionHandler, uncaughtExceptionHandler, validationErrorHandler, jsonErrorHandler } = require('./middleware/errorHandler');
 const { logger, httpLoggingMiddleware, auditLog } = require('./config/logger');
+const { sanitizeInput } = require('./middleware/sanitization');
 
 const app = express();
 const PORT = config.PORT;
@@ -23,6 +24,9 @@ app.use(contentTypeChecker);
 
 // HTTP логирование
 app.use(httpLoggingMiddleware);
+
+// Санитизация входных данных
+app.use(sanitizeInput);
 
 // CORS configuration
 app.use(cors({
