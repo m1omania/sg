@@ -2691,6 +2691,14 @@ select.form-control {
 }
 
 /* Projects Page */
+.investment-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-32);
+  margin-top: var(--space-32);
+  padding: 0 var(--space-16);
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -2700,25 +2708,83 @@ select.form-control {
 
 .project-card {
   background: var(--color-surface);
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-primary);
+}
+
+.project-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
 }
 
 .project-image img {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.05);
+}
+
+.project-overlay {
+  position: absolute;
+  top: var(--space-16);
+  right: var(--space-16);
+  z-index: 2;
+}
+
+.project-status {
+  background: rgba(34, 197, 94, 0.9);
+  color: white;
+  padding: var(--space-4) var(--space-12);
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .project-content {
-  padding: 1.5rem;
+  padding: var(--space-24);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-16);
+}
+
+.project-header h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.project-category {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  padding: var(--space-4) var(--space-8);
+  border-radius: 12px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .project-title {
@@ -2729,15 +2795,44 @@ select.form-control {
 
 .project-description {
   color: var(--color-text-secondary);
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
+  margin-bottom: var(--space-20);
+  line-height: 1.6;
+  font-size: var(--font-size-base);
 }
 
 .project-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-16);
+  margin-bottom: var(--space-20);
+  padding: var(--space-16);
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: var(--font-weight-medium);
+}
+
+.stat-value {
+  display: block;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.project-footer {
+  margin-top: var(--space-20);
 }
 
 .project-actions {
@@ -2747,6 +2842,70 @@ select.form-control {
 
 .project-actions .btn {
   flex: 1;
+}
+
+/* Responsive design for project cards */
+@media (max-width: 768px) {
+  .investment-projects {
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+    padding: 0 var(--space-8);
+  }
+  
+  .project-card {
+    border-radius: 12px;
+  }
+  
+  .project-image {
+    height: 180px;
+  }
+  
+  .project-content {
+    padding: var(--space-20);
+  }
+  
+  .project-stats {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    text-align: center;
+  }
+  
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+}
+
+/* Dark mode support for project cards */
+@media (prefers-color-scheme: dark) {
+  .project-card {
+    background: var(--color-surface-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .project-stats {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .project-category {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--color-primary-light);
+  }
+}
+
+[data-color-scheme="dark"] .project-card {
+  background: var(--color-surface-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-color-scheme="dark"] .project-stats {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-color-scheme="dark"] .project-category {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--color-primary-light);
 }
 
 /* Project Detail Modal */
@@ -2925,7 +3084,7 @@ select.form-control {
 
 .action-icon {
   font-size: 2.5rem;
-  margin-bottom: 
+  margin-bottom: var(--space-16);
 }
 
 /* Account Summary (Homepage) */
