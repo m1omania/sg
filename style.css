@@ -1103,6 +1103,14 @@ select.form-control {
   transition: transform 0.2s ease;
 }
 
+/* SVG logo specific styles */
+.logo-image[src$=".svg"] {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+  fill: currentColor;
+}
+
 .logo-image:hover {
   transform: scale(1.05);
 }
