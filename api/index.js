@@ -269,12 +269,17 @@ let userBalances = {
   }
 };
 
+console.log('Initial userBalances:', userBalances);
+
 // Wallet endpoints
 app.get('/api/wallet/:userId', (req, res) => {
   const { userId } = req.params;
   const userIdNum = parseInt(userId);
   
   const balance = userBalances[userIdNum] || { main_balance: 0.00, partner_balance: 0.00 };
+  
+  console.log(`GET /api/wallet/${userId} - Current balance:`, balance);
+  console.log('All userBalances:', userBalances);
   
   res.json({
     id: userIdNum,
@@ -333,13 +338,17 @@ app.post('/api/transactions/deposit', (req, res) => {
   const userIdNum = parseInt(userId);
   const depositAmount = parseFloat(amount);
   
+  console.log(`POST /api/transactions/deposit - User ${userIdNum}, Amount: ${depositAmount}`);
+  console.log('Balance before update:', userBalances[userIdNum]);
+  
   if (!userBalances[userIdNum]) {
     userBalances[userIdNum] = { main_balance: 0.00, partner_balance: 0.00 };
   }
   
   userBalances[userIdNum].main_balance += depositAmount;
   
-  console.log('Updated balance for user', userIdNum, ':', userBalances[userIdNum]);
+  console.log('Balance after update:', userBalances[userIdNum]);
+  console.log('All userBalances after update:', userBalances);
   
   // For demo purposes, always return success
   const response = {
