@@ -206,31 +206,14 @@ function updateCheckoutButton(package) {
     const mainBalanceEl = document.querySelector('.main-balance-amount');
     const partnerBalanceEl = document.querySelector('.partner-balance-amount');
     
-    if (mainBalanceEl && partnerBalanceEl) {
-        const mainBalance = parseFloat(mainBalanceEl.textContent.replace('Баланс ', '').replace(' $', '').replace(',', '.'));
-        const partnerBalance = parseFloat(partnerBalanceEl.textContent.replace('Баланс ', '').replace(' $', '').replace(',', '.'));
-        const totalBalance = mainBalance + partnerBalance;
-        const requiredAmount = package.total;
-        
-        if (totalBalance >= requiredAmount) {
-            checkoutBtn.textContent = 'Оформить пакет';
-            checkoutBtn.classList.remove('btn--secondary');
-            checkoutBtn.classList.add('btn--primary');
-            checkoutBtn.removeAttribute('data-insufficient-funds');
-            if (insufficientFundsWarning) {
-                insufficientFundsWarning.style.display = 'none';
-            }
-        } else {
-            checkoutBtn.textContent = 'Пополнить счёт';
-            checkoutBtn.classList.remove('btn--primary');
-            checkoutBtn.classList.add('btn--secondary');
-            if (insufficientFundsWarning) {
-                insufficientFundsWarning.style.display = 'flex';
-            }
-            
-            // Add data attribute to indicate insufficient funds
-            checkoutBtn.setAttribute('data-insufficient-funds', 'true');
-        }
+    // For demo purposes, always show "Оформить пакет" button
+    // In real app, this would check actual balance
+    checkoutBtn.textContent = 'Оформить пакет';
+    checkoutBtn.classList.remove('btn--secondary');
+    checkoutBtn.classList.add('btn--primary');
+    checkoutBtn.removeAttribute('data-insufficient-funds');
+    if (insufficientFundsWarning) {
+        insufficientFundsWarning.style.display = 'none';
     }
 }
 
