@@ -650,15 +650,17 @@ async function loadGlobalWalletBalances() {
     if (!res.ok) return;
     const wallet = await res.json();
 
-    // Common element IDs across pages
+    // Common element IDs across pages (skip dashboard page as it has its own handler)
+    const isDashboardPage = window.location.pathname.includes('index.html') || window.location.pathname === '/';
+    
     const mainBalanceEls = [
       document.getElementById('main-balance-amount'), // wallet page
-      document.getElementById('main-balance'),        // dashboard/index or checkout sidebar
+      ...(isDashboardPage ? [] : [document.getElementById('main-balance')]), // dashboard/index handled by dashboard.js
     ].filter(Boolean);
 
     const partnerBalanceEls = [
       document.getElementById('partner-balance-amount'), // wallet page
-      document.getElementById('partner-balance'),        // dashboard/index or checkout sidebar
+      ...(isDashboardPage ? [] : [document.getElementById('partner-balance')]), // dashboard/index handled by dashboard.js
     ].filter(Boolean);
 
     mainBalanceEls.forEach(el => { el.textContent = `${Number(wallet.main_balance).toFixed(2)} $`; });
