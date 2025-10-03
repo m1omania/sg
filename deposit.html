@@ -167,7 +167,7 @@
                 let amountStr = amountInput.value.trim();
                 amountStr = amountStr.replace(',', '.');
                 const amount = parseFloat(amountStr);
-                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                const paymentMethodElement = document.querySelector('input[name="payment-method"]:checked');
                 
                 // Валидация суммы
                 if (isNaN(amount) || amount <= 0) {
@@ -175,20 +175,34 @@
                     return;
                 }
                 
+                // Валидация способа оплаты
+                if (!paymentMethodElement) {
+                    showError('Выберите способ оплаты');
+                    return;
+                }
+                
+                const paymentMethod = paymentMethodElement.value;
+                
                 try {
+                    const requestData = {
+                        userId: 1,
+                        amount: amount,
+                        paymentMethod: paymentMethod
+                    };
+                    
+                    console.log('Sending deposit request:', requestData);
+                    
                     const response = await fetch('/api/transactions/deposit', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            userId: 1,
-                            amount: amount,
-                            paymentMethod: paymentMethod
-                        })
+                        body: JSON.stringify(requestData)
                     });
                     
+                    console.log('Deposit response status:', response.status);
                     const data = await response.json();
+                    console.log('Deposit response data:', data);
                     
                     if (response.ok) {
                         showSuccess(`Счет успешно пополнен на ${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
