@@ -2539,6 +2539,13 @@ select.form-control {
   background-color: var(--color-background);
 }
 
+/* Header on landing page */
+.landing-page sg-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 .header--landing {
   background-color: var(--color-surface);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
