@@ -110,6 +110,10 @@ app.get('/test-layout.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../test-layout.js'));
 });
 
+app.get('/layout-fix-test.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../layout-fix-test.html'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));

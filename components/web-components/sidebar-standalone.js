@@ -21,10 +21,12 @@ class SGSidebar extends HTMLElement {
                     height: 100vh;
                     position: sticky;
                     top: 0;
-                    width: 250px;
+                    width: 220px;
                     z-index: 50;
                     overflow-y: auto;
                     transition: transform 0.3s ease;
+                    margin: 0;
+                    flex-shrink: 0;
                 }
 
                 .nav-menu {
@@ -77,6 +79,7 @@ class SGSidebar extends HTMLElement {
                         height: auto;
                         width: 100%;
                         transform: none;
+                        margin: 0;
                     }
 
                     .nav-link {
