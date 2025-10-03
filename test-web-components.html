@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components Test - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Test different approaches -->
+    <div class="test-container">
+        <h1>Web Components Test Page</h1>
+        
+        <div class="test-section">
+            <h2>Current Approach (Standalone)</h2>
+            <p>This is what we're currently using on the site.</p>
+            <sg-header></sg-header>
+            <sg-sidebar></sg-sidebar>
+        </div>
+        
+        <div class="test-section">
+            <h2>ES6 Modules Test</h2>
+            <p>Testing ES6 modules approach.</p>
+            <div id="module-test">
+                <sg-header-module></sg-header-module>
+                <sg-sidebar-module></sg-sidebar-module>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>IIFE Test</h2>
+            <p>Testing IIFE approach.</p>
+            <div id="iife-test">
+                <sg-header-iife></sg-header-iife>
+                <sg-sidebar-iife></sg-sidebar-iife>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Universal Loader Test</h2>
+            <p>Testing universal loader with automatic fallback.</p>
+            <div id="loader-test">
+                <sg-header-loader></sg-header-loader>
+                <sg-sidebar-loader></sg-sidebar-loader>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Current working approach -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    
+    <!-- ES6 Modules test -->
+    <script type="module">
+        // Test ES6 modules
+        try {
+            import('/components/web-components/header-module.js').then(() => {
+                console.log('✅ ES6 modules loaded successfully');
+                // Create test elements
+                const moduleTest = document.getElementById('module-test');
+                const header = document.createElement('sg-header');
+                const sidebar = document.createElement('sg-sidebar');
+                moduleTest.innerHTML = '';
+                moduleTest.appendChild(header);
+                moduleTest.appendChild(sidebar);
+            }).catch(error => {
+                console.log('❌ ES6 modules failed:', error);
+                document.getElementById('module-test').innerHTML = '<p style="color: red;">ES6 modules not supported or failed to load</p>';
+            });
+        } catch (error) {
+            console.log('❌ ES6 modules not supported:', error);
+            document.getElementById('module-test').innerHTML = '<p style="color: red;">ES6 modules not supported in this browser</p>';
+        }
+    </script>
+    
+    <!-- IIFE test -->
+    <script>
+        // Test IIFE approach
+        setTimeout(() => {
+            try {
+                // Load IIFE versions
+                const headerScript = document.createElement('script');
+                headerScript.src = '/components/web-components/header-iife.js';
+                headerScript.onload = () => {
+                    console.log('✅ IIFE header loaded');
+                    const iifeTest = document.getElementById('iife-test');
+                    const header = document.createElement('sg-header');
+                    iifeTest.innerHTML = '';
+                    iifeTest.appendChild(header);
+                };
+                headerScript.onerror = () => {
+                    console.log('❌ IIFE header failed');
+                    document.getElementById('iife-test').innerHTML = '<p style="color: red;">IIFE loading failed</p>';
+                };
+                document.head.appendChild(headerScript);
+            } catch (error) {
+                console.log('❌ IIFE test failed:', error);
+                document.getElementById('iife-test').innerHTML = '<p style="color: red;">IIFE test failed</p>';
+            }
+        }, 1000);
+    </script>
+    
+    <!-- Universal loader test -->
+    <script>
+        // Test universal loader
+        setTimeout(() => {
+            try {
+                const loaderScript = document.createElement('script');
+                loaderScript.src = '/components/web-components/loader.js';
+                loaderScript.onload = () => {
+                    console.log('✅ Universal loader loaded');
+                    // The loader will automatically initialize components
+                };
+                loaderScript.onerror = () => {
+                    console.log('❌ Universal loader failed');
+                    document.getElementById('loader-test').innerHTML = '<p style="color: red;">Universal loader failed</p>';
+                };
+                document.head.appendChild(loaderScript);
+            } catch (error) {
+                console.log('❌ Universal loader test failed:', error);
+                document.getElementById('loader-test').innerHTML = '<p style="color: red;">Universal loader test failed</p>';
+            }
+        }, 2000);
+    </script>
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: #f8fafc;
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        
+        .test-section p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        
+        /* Ensure components are visible */
+        sg-header, sg-sidebar {
+            display: block;
+            margin: 1rem 0;
+        }
+    </style>
+</body>
+</html>

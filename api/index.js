@@ -82,6 +82,25 @@ app.get('/components/web-components/sidebar-standalone.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../components/web-components/sidebar-standalone.js'));
 });
 
+// ES6 Module versions
+app.get('/components/web-components/header-module.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/header-module.js'));
+});
+
+app.get('/components/web-components/sidebar-module.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/sidebar-module.js'));
+});
+
+// IIFE versions
+app.get('/components/web-components/header-iife.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/header-iife.js'));
+});
+
+// Universal loader
+app.get('/components/web-components/loader.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/loader.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components Usage Examples - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Web Components Usage Examples</h1>
+        
+        <div class="example-section">
+            <h2>1. ES6 Modules (Recommended for modern browsers)</h2>
+            <p>Используйте этот подход для современных браузеров с поддержкой ES6 модулей.</p>
+            
+            <h3>HTML:</h3>
+            <pre><code>&lt;!-- Просто добавьте теги компонентов --&gt;
+&lt;sg-header&gt;&lt;/sg-header&gt;
+&lt;sg-sidebar&gt;&lt;/sg-sidebar&gt;
+
+&lt;!-- Подключите модули --&gt;
+&lt;script type="module" src="/components/web-components/header-module.js"&gt;&lt;/script&gt;
+&lt;script type="module" src="/components/web-components/sidebar-module.js"&gt;&lt;/script&gt;</code></pre>
+            
+            <h3>JavaScript (если нужен импорт):</h3>
+            <pre><code>import { SGHeader, SGSidebar } from '/components/web-components/header-module.js';
+
+// Компоненты уже зарегистрированы, можно использовать
+const header = document.querySelector('sg-header');
+const sidebar = document.querySelector('sg-sidebar');</code></pre>
+        </div>
+        
+        <div class="example-section">
+            <h2>2. IIFE Fallback (Совместимость со старыми браузерами)</h2>
+            <p>Используйте этот подход для максимальной совместимости.</p>
+            
+            <h3>HTML:</h3>
+            <pre><code>&lt;!-- Просто добавьте теги компонентов --&gt;
+&lt;sg-header&gt;&lt;/sg-header&gt;
+&lt;sg-sidebar&gt;&lt;/sg-sidebar&gt;
+
+&lt;!-- Подключите IIFE версии --&gt;
+&lt;script src="/components/web-components/header-iife.js"&gt;&lt;/script&gt;
+&lt;script src="/components/web-components/sidebar-standalone.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        
+        <div class="example-section">
+            <h2>3. Universal Loader (Автоматический fallback)</h2>
+            <p>Рекомендуемый подход - автоматически выбирает лучший метод загрузки.</p>
+            
+            <h3>HTML:</h3>
+            <pre><code>&lt;!-- Просто добавьте теги компонентов --&gt;
+&lt;sg-header&gt;&lt;/sg-header&gt;
+&lt;sg-sidebar&gt;&lt;/sg-sidebar&gt;
+
+&lt;!-- Подключите универсальный загрузчик --&gt;
+&lt;script src="/components/web-components/loader.js"&gt;&lt;/script&gt;</code></pre>
+            
+            <h3>JavaScript (опционально):</h3>
+            <pre><code>// Ручная инициализация
+window.WebComponentsLoader.load();
+
+// Настройка
+window.WebComponentsLoader.config.debug = true;
+window.WebComponentsLoader.config.useModules = false; // Принудительно использовать IIFE</code></pre>
+        </div>
+        
+        <div class="example-section">
+            <h2>4. Standalone (Текущий рабочий вариант)</h2>
+            <p>Текущий подход, который работает на Vercel.</p>
+            
+            <h3>HTML:</h3>
+            <pre><code>&lt;!-- Просто добавьте теги компонентов --&gt;
+&lt;sg-header&gt;&lt;/sg-header&gt;
+&lt;sg-sidebar&gt;&lt;/sg-sidebar&gt;
+
+&lt;!-- Подключите standalone версии --&gt;
+&lt;script src="/components/web-components/header-standalone.js"&gt;&lt;/script&gt;
+&lt;script src="/components/web-components/sidebar-standalone.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        
+        <div class="example-section">
+            <h2>5. События и API</h2>
+            <p>Все версии поддерживают одинаковые события и API.</p>
+            
+            <h3>События:</h3>
+            <pre><code>// Слушаем события смены языка
+document.addEventListener('languageChanged', (e) => {
+    console.log('Language changed to:', e.detail.language);
+});
+
+// Слушаем события выхода
+document.addEventListener('logout', (e) => {
+    console.log('User logged out');
+});
+
+// Слушаем события навигации
+document.addEventListener('navigate', (e) => {
+    console.log('Navigation:', e.detail);
+});</code></pre>
+            
+            <h3>API компонентов:</h3>
+            <pre><code>// Получить элементы
+const header = document.querySelector('sg-header');
+const sidebar = document.querySelector('sg-sidebar');
+
+// Методы header
+header.switchLanguage('en');
+header.handleLogout();
+
+// Методы sidebar
+sidebar.toggle(); // Переключить на мобильных
+sidebar.close(); // Закрыть на мобильных
+sidebar.setActivePage(); // Обновить активную страницу</code></pre>
+        </div>
+        
+        <div class="example-section">
+            <h2>6. Совместимость с Vercel</h2>
+            <table class="compatibility-table">
+                <thead>
+                    <tr>
+                        <th>Подход</th>
+                        <th>Vercel</th>
+                        <th>Старые браузеры</th>
+                        <th>Производительность</th>
+                        <th>Рекомендация</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ES6 Modules</td>
+                        <td>✅ Да</td>
+                        <td>❌ Нет</td>
+                        <td>🚀 Быстро</td>
+                        <td>Для современных проектов</td>
+                    </tr>
+                    <tr>
+                        <td>IIFE</td>
+                        <td>✅ Да</td>
+                        <td>✅ Да</td>
+                        <td>⚡ Средне</td>
+                        <td>Для максимальной совместимости</td>
+                    </tr>
+                    <tr>
+                        <td>Universal Loader</td>
+                        <td>✅ Да</td>
+                        <td>✅ Да</td>
+                        <td>🎯 Оптимально</td>
+                        <td>Рекомендуемый</td>
+                    </tr>
+                    <tr>
+                        <td>Standalone</td>
+                        <td>✅ Да</td>
+                        <td>✅ Да</td>
+                        <td>⚡ Средне</td>
+                        <td>Текущий рабочий</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .example-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .example-section h2 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        
+        .example-section h3 {
+            color: #374151;
+            margin-top: 1.5rem;
+        }
+        
+        pre {
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+        
+        code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        .compatibility-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .compatibility-table th,
+        .compatibility-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .compatibility-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+        
+        .compatibility-table tr:hover {
+            background: #f8fafc;
+        }
+    </style>
+</body>
+</html>
