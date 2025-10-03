@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Купоны и промокоды - SOLARGROUP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo">
+            <img src="SGLogo.svg" alt="SolarGroup" class="logo-image logo-desktop" onerror="this.style.display=none; this.nextElementSibling.style.display=block;">
+            <img src="SGLogosmall.svg" alt="SolarGroup" class="logo-image logo-mobile" onerror="this.style.display=none; this.previousElementSibling.style.display=block;">
+            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+        </div>
+        <div class="header__controls">
+            <div class="language-switcher">
+                <button class="language-toggle" id="languageToggle">
+                    <span class="flag-icon">🇷🇺</span>
+                    <span class="lang-text">RU</span>
+                    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" data-lang="ru">
+                        <span class="flag-icon">🇷🇺</span>
+                        <span class="lang-text">Русский</span>
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <span class="flag-icon">🇺🇸</span>
+                        <span class="lang-text">English</span>
+                    </div>
+                </div>
+            </div>
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-count">2</span>
+            </button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-profile">
+                    <div class="user-avatar">К</div>
+                    <span class="user-name">Константин</span>
+                    <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="user-menu">
+                    <a href="index.html" class="user-menu-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9,22 9,12 15,12 15,22"></polyline>
+                        </svg>
+                        Главная
+                    </a>
+                    <a href="wallet.html" class="user-menu-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Кошелёк
+                    </a>
+                    <a href="invest.html" class="user-menu-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                        Инвестировать
+                    </a>
+                    <a href="my-investments.html" class="user-menu-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3h18v18H3zM9 9h6v6H9z"></path>
+                        </svg>
+                        Мои инвестиции
+                    </a>
+                    <a href="coupons.html" class="user-menu-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        Купоны
+                    </a>
+                    <hr class="user-menu-divider">
+                    <button class="user-menu-item logout-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16,17 21,12 16,7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Выйти
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="wallet.html" class="nav-link">Кошелёк</a></li>
+                <li class="nav-item"><a href="invest.html" class="nav-link">Инвестировать</a></li>
+                <li class="nav-item"><a href="my-investments.html" class="nav-link">Мои инвестиции</a></li>
+                <li class="nav-item"><a href="coupons.html" class="nav-link">Купоны и промокоды</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Купоны и промокоды</h1>
+            </div>
+
+            <!-- Empty Content -->
+            <div class="empty-state">
+                <div class="empty-state__icon">🎫</div>
+                <h2>Страница в разработке</h2>
+                <p>Функционал купонов и промокодов будет добавлен в ближайшее время</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="language-switcher.js"></script>
+</body>
+</html>
