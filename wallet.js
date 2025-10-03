@@ -142,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
     loadWalletBalances();
     loadTransactions();
     loadCoupons();
+    
+    // Force reload coupons every 2 seconds for demo purposes
+    setInterval(() => {
+        console.log('Refreshing coupons data...');
+        loadCoupons();
+    }, 2000);
 
     // Coupon activation
     const activateForm = document.getElementById('activate-coupon-form');
