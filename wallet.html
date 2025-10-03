@@ -317,37 +317,8 @@
     
     <!-- Inline coupons logic -->
     <script>
-        // Set coupons count immediately (before DOM ready)
-        setTimeout(function() {
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount) {
-                couponsCount.textContent = '2';
-                console.log('Wallet immediate: Set coupons count to 2');
-            }
-            
-            const couponsTotal = document.querySelector('.coupons-total');
-            if (couponsTotal) {
-                couponsTotal.textContent = '2 купонов';
-                console.log('Wallet immediate: Set coupons total to 2');
-            }
-        }, 100);
-        
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Setting up wallet coupons...');
-            
-            // Set coupons count again
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount) {
-                couponsCount.textContent = '2';
-                console.log('Wallet DOM ready: Set coupons count to 2');
-            }
-            
-            // Update coupons total text
-            const couponsTotal = document.querySelector('.coupons-total');
-            if (couponsTotal) {
-                couponsTotal.textContent = '2 купонов';
-                console.log('Wallet DOM ready: Set coupons total to 2');
-            }
+            console.log('Setting up wallet coupons from API...');
             
             // Load coupons from API
             fetch(`/api/coupons/active/1?t=${Date.now()}`, {
@@ -357,15 +328,28 @@
                     'Pragma': 'no-cache'
                 }
             })
-                .then(res => res.json())
+                .then(res => {
+                    console.log('Wallet API response status:', res.status);
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}`);
+                    }
+                    return res.json();
+                })
                 .then(coupons => {
-                    console.log('Wallet coupons loaded:', coupons.length);
+                    console.log('Wallet coupons loaded from API:', coupons.length);
                     
+                    // Update coupons count
+                    const couponsCount = document.getElementById('coupons-count');
                     if (couponsCount) {
                         couponsCount.textContent = coupons.length;
+                        console.log('Updated wallet coupons count to:', coupons.length);
                     }
+                    
+                    // Update coupons total text
+                    const couponsTotal = document.querySelector('.coupons-total');
                     if (couponsTotal) {
                         couponsTotal.textContent = `${coupons.length} купонов`;
+                        console.log('Updated wallet coupons total to:', coupons.length);
                     }
                     
                     // Update coupons preview
@@ -397,26 +381,28 @@
                     }
                 })
                 .catch(e => {
-                    console.error('Error loading wallet coupons:', e);
-                    // Keep fallback values
+                    console.error('Error loading wallet coupons from API:', e);
+                    // Show error state
+                    const couponsCount = document.getElementById('coupons-count');
+                    if (couponsCount) {
+                        couponsCount.textContent = '?';
+                    }
+                    
+                    const couponsTotal = document.querySelector('.coupons-total');
+                    if (couponsTotal) {
+                        couponsTotal.textContent = '? купонов';
+                    }
+                    
+                    const couponsContainer = document.getElementById('wallet-coupons');
+                    if (couponsContainer) {
+                        couponsContainer.innerHTML = `
+                            <div class="no-coupons-message">
+                                <p>Ошибка загрузки</p>
+                            </div>
+                        `;
+                    }
                 });
         });
-        
-        // Also try after a delay
-        setTimeout(function() {
-            const couponsCount = document.getElementById('coupons-count');
-            const couponsTotal = document.querySelector('.coupons-total');
-            
-            if (couponsCount && couponsCount.textContent === '0') {
-                couponsCount.textContent = '2';
-                console.log('Wallet delayed: Set coupons count to 2');
-            }
-            
-            if (couponsTotal && couponsTotal.textContent === '0 купонов') {
-                couponsTotal.textContent = '2 купонов';
-                console.log('Wallet delayed: Set coupons total to 2');
-            }
-        }, 2000);
     </script>
 </body>
 </html>

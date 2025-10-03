@@ -210,16 +210,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize page
     console.log('Initializing coupons page...');
     loadCoupons();
-    
-    // Force reload coupons every 2 seconds for demo purposes
-    setInterval(() => {
-        console.log('Refreshing coupons data...');
-        loadCoupons();
-    }, 2000);
-    
-    // Also try to load coupons after a short delay
-    setTimeout(() => {
-        console.log('Delayed load attempt...');
-        loadCoupons();
-    }, 1000);
 });

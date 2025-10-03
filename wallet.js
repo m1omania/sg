@@ -82,11 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Coupons API response status:', res.status);
             if (!res.ok) {
                 console.log('Coupons API response not ok:', res.status);
-                // Fallback: set to 2
-                const couponsCount = document.getElementById('coupons-count');
-                if (couponsCount) {
-                    couponsCount.textContent = '2';
-                }
                 return;
             }
             const coupons = await res.json();
@@ -140,11 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Coupons loaded');
         } catch (e) {
             console.error('Error loading coupons:', e);
-            // Fallback: set to 2
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount) {
-                couponsCount.textContent = '2';
-            }
         }
     }
 
@@ -152,12 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadWalletBalances();
     loadTransactions();
     loadCoupons();
-    
-    // Force reload coupons every 2 seconds for demo purposes
-    setInterval(() => {
-        console.log('Refreshing coupons data...');
-        loadCoupons();
-    }, 2000);
 
     // Coupon activation
     const activateForm = document.getElementById('activate-coupon-form');

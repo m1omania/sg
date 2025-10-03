@@ -316,27 +316,10 @@
     
     <!-- Inline coupons logic -->
     <script>
-        // Set coupons count immediately (before DOM ready)
-        setTimeout(function() {
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount) {
-                couponsCount.textContent = '2';
-                console.log('Immediate: Set coupons count to 2');
-            }
-        }, 100);
-        
-        // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, updating coupons...');
+            console.log('DOM loaded, loading coupons from API...');
             
-            // Set coupons count again
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount) {
-                couponsCount.textContent = '2';
-                console.log('DOM ready: Set coupons count to 2');
-            }
-            
-            // Load coupons data
+            // Load coupons data from API
             fetch(`/api/coupons/active/1?t=${Date.now()}`, {
                 cache: 'no-cache',
                 headers: {
@@ -344,11 +327,18 @@
                     'Pragma': 'no-cache'
                 }
             })
-                .then(res => res.json())
+                .then(res => {
+                    console.log('API response status:', res.status);
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}`);
+                    }
+                    return res.json();
+                })
                 .then(coupons => {
-                    console.log('Coupons loaded:', coupons.length);
+                    console.log('Coupons loaded from API:', coupons.length);
                     
                     // Update count
+                    const couponsCount = document.getElementById('coupons-count');
                     if (couponsCount) {
                         couponsCount.textContent = coupons.length;
                         console.log('Updated coupons count to:', coupons.length);
@@ -390,23 +380,25 @@
                     }
                 })
                 .catch(e => {
-                    console.error('Error loading coupons:', e);
-                    // Fallback: show 2 coupons
+                    console.error('Error loading coupons from API:', e);
+                    // Show error state
+                    const couponsCount = document.getElementById('coupons-count');
                     if (couponsCount) {
-                        couponsCount.textContent = '2';
-                        console.log('Fallback: set coupons count to 2');
+                        couponsCount.textContent = '?';
+                    }
+                    
+                    const container = document.getElementById('coupons-container');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="no-coupons">
+                                <div class="no-coupons__icon">❌</div>
+                                <h3>Ошибка загрузки</h3>
+                                <p>Не удалось загрузить купоны. Попробуйте обновить страницу.</p>
+                            </div>
+                        `;
                     }
                 });
         });
-        
-        // Also try after a delay
-        setTimeout(function() {
-            const couponsCount = document.getElementById('coupons-count');
-            if (couponsCount && couponsCount.textContent === '0') {
-                couponsCount.textContent = '2';
-                console.log('Delayed: Set coupons count to 2');
-            }
-        }, 2000);
     </script>
 </body>
 </html>
