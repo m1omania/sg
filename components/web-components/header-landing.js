@@ -70,7 +70,7 @@ class SgHeaderLanding extends HTMLElement {
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
-                    padding: 0.5rem;
+                    padding: 0.75rem 1rem;
                     background: #ffffff;
                     border: 1px solid #d1d5db;
                     border-radius: 0.5rem;
@@ -165,7 +165,7 @@ class SgHeaderLanding extends HTMLElement {
                     }
 
                     .language-toggle {
-                        padding: 0.5rem;
+                        padding: 0.75rem 0.5rem;
                         font-size: 0.8rem;
                     }
 
