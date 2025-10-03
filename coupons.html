@@ -263,54 +263,77 @@
     
     <!-- Inline menu logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Set up menu immediately
+        function setupMenu() {
             console.log('Setting up user menu...');
             
             const userDropdown = document.getElementById('userDropdown');
             if (userDropdown) {
                 console.log('User dropdown found');
                 
+                // Remove existing listeners to avoid duplicates
+                userDropdown.replaceWith(userDropdown.cloneNode(true));
+                const newUserDropdown = document.getElementById('userDropdown');
+                
                 // Toggle menu on click
-                userDropdown.addEventListener('click', function(e) {
+                newUserDropdown.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    userDropdown.classList.toggle('active');
-                    console.log('Menu toggled');
+                    newUserDropdown.classList.toggle('active');
+                    console.log('Menu toggled, active:', newUserDropdown.classList.contains('active'));
                 });
                 
                 // Close menu when clicking outside
-                document.addEventListener('click', function() {
-                    if (userDropdown.classList.contains('active')) {
-                        userDropdown.classList.remove('active');
-                        console.log('Menu closed');
+                document.addEventListener('click', function(e) {
+                    if (!newUserDropdown.contains(e.target) && newUserDropdown.classList.contains('active')) {
+                        newUserDropdown.classList.remove('active');
+                        console.log('Menu closed by outside click');
                     }
                 });
                 
                 // Handle logout button
-                const logoutBtn = userDropdown.querySelector('.logout-btn');
+                const logoutBtn = newUserDropdown.querySelector('.logout-btn');
                 if (logoutBtn) {
                     logoutBtn.addEventListener('click', function(e) {
                         e.preventDefault();
+                        e.stopPropagation();
                         console.log('Logout clicked');
                         window.location.href = 'landing.html';
                     });
                 }
+                
+                console.log('Menu setup complete');
             } else {
                 console.log('User dropdown not found');
             }
-        });
+        }
+        
+        // Try multiple times
+        document.addEventListener('DOMContentLoaded', setupMenu);
+        setTimeout(setupMenu, 100);
+        setTimeout(setupMenu, 500);
+        setTimeout(setupMenu, 1000);
     </script>
     
     <!-- Inline coupons logic -->
     <script>
+        // Set coupons count immediately (before DOM ready)
+        setTimeout(function() {
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount) {
+                couponsCount.textContent = '2';
+                console.log('Immediate: Set coupons count to 2');
+            }
+        }, 100);
+        
         // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, updating coupons...');
             
-            // Set coupons count immediately
+            // Set coupons count again
             const couponsCount = document.getElementById('coupons-count');
             if (couponsCount) {
                 couponsCount.textContent = '2';
-                console.log('Set coupons count to 2');
+                console.log('DOM ready: Set coupons count to 2');
             }
             
             // Load coupons data
@@ -375,6 +398,15 @@
                     }
                 });
         });
+        
+        // Also try after a delay
+        setTimeout(function() {
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount && couponsCount.textContent === '0') {
+                couponsCount.textContent = '2';
+                console.log('Delayed: Set coupons count to 2');
+            }
+        }, 2000);
     </script>
 </body>
 </html>
