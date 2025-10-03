@@ -543,8 +543,37 @@ function getProjectName(packageId) {
 app.get('/api/coupons/active/:userId', (req, res) => {
   const { userId } = req.params;
   
-  // For demo purposes, return empty array
-  res.json([]);
+  // Demo coupons data
+  const demoCoupons = [
+    {
+      id: 1,
+      code: 'WELCOME25',
+      name: 'Добро пожаловать',
+      description: 'Скидка для новых пользователей',
+      discount: 25,
+      discount_amount: 25,
+      project_name: 'Любой',
+      expires_at: '2025-12-31T23:59:59.000Z',
+      conditions: 'Минимальная сумма $250',
+      used: false,
+      created_at: '2025-01-01T00:00:00.000Z'
+    },
+    {
+      id: 2,
+      code: 'INVEST50',
+      name: 'Инвестиционный бонус',
+      description: 'Бонус за первую инвестицию',
+      discount: 50,
+      discount_amount: 50,
+      project_name: 'Дирижабли',
+      expires_at: '2025-06-30T23:59:59.000Z',
+      conditions: 'Только для проекта Дирижабли',
+      used: false,
+      created_at: '2025-01-15T00:00:00.000Z'
+    }
+  ];
+  
+  res.json(demoCoupons);
 });
 
 app.post('/api/coupons/activate', (req, res) => {
@@ -563,6 +592,25 @@ app.post('/api/coupons/activate', (req, res) => {
       code: code,
       discount: 25.00,
       type: 'bonus'
+    }
+  });
+});
+
+// Use coupon endpoint
+app.post('/api/coupons/use', (req, res) => {
+  const { couponId, userId } = req.body;
+  
+  if (!couponId || !userId) {
+    return res.status(400).json({ error: 'Coupon ID and User ID are required' });
+  }
+  
+  // For demo purposes, always return success
+  res.json({ 
+    success: true, 
+    message: 'Купон успешно использован',
+    coupon: {
+      id: couponId,
+      used: true
     }
   });
 });
