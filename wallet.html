@@ -16,10 +16,24 @@
         </div>
         <div class="header__controls">
             <div class="language-switcher">
-                <button class="lang-btn active" data-lang="ru">RU</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                        
-        </div>
+                <button class="language-toggle" id="languageToggle">
+                    <span class="flag-icon">🇷🇺</span>
+                    <span class="lang-text">RU</span>
+                    <svg class="dropdown-arrow" width="12" height="8" viewBox="0 0 12 8" fill="none">
+                        <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option" data-lang="ru">
+                        <span class="flag-icon">🇷🇺</span>
+                        <span class="lang-text">Русский</span>
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <span class="flag-icon">🇺🇸</span>
+                        <span class="lang-text">English</span>
+                    </div>
+                </div>
+            </div>
             <button class="notification-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -181,12 +195,22 @@
 
             <!-- Transaction History -->
             <div class="transaction-history">
-                <h2>История операций</h2>
-                <div class="history-table-container">
+                <div class="transaction-history__header">
+                    <h2>История операций</h2>
+                    <div class="transaction-filters">
+                        <button class="filter-btn active" data-filter="all">Все</button>
+                        <button class="filter-btn" data-filter="deposit">Пополнения</button>
+                        <button class="filter-btn" data-filter="withdrawal">Выводы</button>
+                        <button class="filter-btn" data-filter="investment">Инвестиции</button>
+                    </div>
+                </div>
+                
+                <!-- Desktop Table View -->
+                <div class="history-table-container desktop-view">
                     <table class="history-table">
                         <thead>
                             <tr>
-                                <th>Тип</th>
+                                <th>Тип операции</th>
                                 <th>Дата</th>
                                 <th>Сумма</th>
                                 <th>Описание</th>
@@ -195,10 +219,18 @@
                         </thead>
                         <tbody id="transactions-tbody"></tbody>
                     </table>
-                            
-        </div>
-                        
-        </div>
+                </div>
+                
+                <!-- Mobile Card View -->
+                <div class="history-cards-container mobile-view" id="transactions-cards">
+                    <!-- Transaction cards will be populated by JavaScript -->
+                </div>
+                
+                <!-- Load More Button -->
+                <div class="transaction-history__footer">
+                    <button class="btn btn--secondary" id="load-more-btn">Загрузить еще</button>
+                </div>
+            </div>
         </main>
                 
         </div>
@@ -282,5 +314,6 @@
 
     <script src="app.js"></script>
     <script src="wallet.js"></script>
+    <script src="language-switcher.js"></script>
 </body>
 </html>
