@@ -6,6 +6,7 @@ const config = require('../config/environment');
 const { generateToken } = require('../middleware/auth');
 const { validateRegistration, validateLogin } = require('../middleware/validation');
 const { authLimiter, registrationLimiter } = require('../middleware/security');
+const { logger, auditLog } = require('../config/logger');
 
 // Шаг 1: Отправка кода подтверждения
 router.post('/send-verification', 
@@ -28,6 +29,12 @@ router.post('/send-verification',
       `, [email]);
       
       if (existingUser) {
+        auditLog.securityEvent('registration_attempt_existing_email', {
+          email,
+          ip: req.ip,
+          userAgent: req.get('User-Agent')
+        });
+        
         return res.status(409).json({ 
           error: 'User with this email already exists',
           code: 'USER_EXISTS'
@@ -37,12 +44,23 @@ router.post('/send-verification',
       // В реальном приложении здесь должна быть отправка кода на email
       // Для демонстрации просто возвращаем успех
       
+      auditLog.systemEvent('verification_code_sent', {
+        email,
+        ip: req.ip
+      });
+      
       res.json({
         message: 'Verification code sent successfully',
         email: email
       });
     } catch (err) {
-      console.error('Send verification error:', err);
+      logger.error('Send verification error:', {
+        error: err.message,
+        stack: err.stack,
+        email,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
@@ -109,6 +127,14 @@ router.post('/register',
       };
       const token = generateToken(user);
       
+      // Аудит успешной регистрации
+      auditLog.userAction(user.id, 'user_registered', {
+        email: user.email,
+        username: user.username,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
       res.status(201).json({
         message: 'User registered successfully',
         user: {
@@ -121,7 +147,13 @@ router.post('/register',
         tempPassword // В реальном приложении не отправляем пароль!
       });
     } catch (err) {
-      console.error('Registration error:', err);
+      logger.error('Registration error:', {
+        error: err.message,
+        stack: err.stack,
+        email,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
@@ -146,6 +178,12 @@ router.post('/login',
       `, [email]);
       
       if (!user) {
+        auditLog.securityEvent('login_attempt_invalid_email', {
+          email,
+          ip: req.ip,
+          userAgent: req.get('User-Agent')
+        });
+        
         return res.status(401).json({ 
           error: 'Invalid email or password',
           code: 'INVALID_CREDENTIALS'
@@ -156,6 +194,13 @@ router.post('/login',
       const isValidPassword = await bcrypt.compare(password, user.password_hash);
       
       if (!isValidPassword) {
+        auditLog.securityEvent('login_attempt_invalid_password', {
+          email,
+          userId: user.id,
+          ip: req.ip,
+          userAgent: req.get('User-Agent')
+        });
+        
         return res.status(401).json({ 
           error: 'Invalid email or password',
           code: 'INVALID_CREDENTIALS'
@@ -167,6 +212,13 @@ router.post('/login',
         id: user.id,
         username: user.username,
         email: user.email
+      });
+      
+      // Аудит успешного входа
+      auditLog.userAction(user.id, 'user_logged_in', {
+        email: user.email,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
       });
       
       res.json({
@@ -182,7 +234,13 @@ router.post('/login',
         token
       });
     } catch (err) {
-      console.error('Login error:', err);
+      logger.error('Login error:', {
+        error: err.message,
+        stack: err.stack,
+        email,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'

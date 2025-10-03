@@ -5,9 +5,15 @@ const { dbGet } = require('./config/database');
 const health = require('./health');
 const config = require('./config/environment');
 const { helmetConfig, securityLogger, bodySizeLimiter, contentTypeChecker, apiLimiter } = require('./middleware/security');
+const { errorHandler, notFoundHandler, unhandledRejectionHandler, uncaughtExceptionHandler, validationErrorHandler, jsonErrorHandler } = require('./middleware/errorHandler');
+const { logger, httpLoggingMiddleware, auditLog } = require('./config/logger');
 
 const app = express();
 const PORT = config.PORT;
+
+// Обработчики необработанных исключений
+process.on('unhandledRejection', unhandledRejectionHandler);
+process.on('uncaughtException', uncaughtExceptionHandler);
 
 // Security middleware (должны быть первыми)
 app.use(helmetConfig);
@@ -15,15 +21,31 @@ app.use(securityLogger);
 app.use(bodySizeLimiter);
 app.use(contentTypeChecker);
 
+// HTTP логирование
+app.use(httpLoggingMiddleware);
+
 // CORS configuration
 app.use(cors({
   origin: config.FRONTEND_URL,
   credentials: true
 }));
 
-// Body parsing middleware
-app.use(express.json({ limit: config.MAX_BODY_SIZE }));
+// Body parsing middleware с обработкой ошибок
+app.use(express.json({ 
+  limit: config.MAX_BODY_SIZE,
+  verify: (req, res, buf) => {
+    try {
+      JSON.parse(buf);
+    } catch (e) {
+      throw new Error('Invalid JSON');
+    }
+  }
+}));
 app.use(express.urlencoded({ extended: true, limit: config.MAX_BODY_SIZE }));
+
+// Обработка ошибок парсинга
+app.use(jsonErrorHandler);
+app.use(validationErrorHandler);
 
 // Static files
 app.use(express.static(path.join(__dirname, '../')));
@@ -140,6 +162,21 @@ app.get('/checkout', (req, res) => {
   res.sendFile(path.join(__dirname, '../checkout.html'));
 });
 
+// Обработка 404 ошибок
+app.use(notFoundHandler);
+
+// Централизованный обработчик ошибок (должен быть последним)
+app.use(errorHandler);
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server is running on port ${PORT}`, {
+    environment: config.NODE_ENV,
+    port: PORT,
+    timestamp: new Date().toISOString()
+  });
+  
+  auditLog.systemEvent('server_started', {
+    port: PORT,
+    environment: config.NODE_ENV
+  });
 });

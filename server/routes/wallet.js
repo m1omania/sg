@@ -3,6 +3,7 @@ const router = express.Router();
 const { dbGet, dbRun } = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 const { validateDeposit, validateUserId } = require('../middleware/validation');
+const { logger, auditLog } = require('../config/logger');
 
 // Получить информацию о кошельке пользователя
 router.get('/:userId', 
@@ -13,6 +14,13 @@ router.get('/:userId',
     
     // Проверяем, что пользователь запрашивает свой кошелек
     if (req.user.id !== parseInt(userId)) {
+      auditLog.securityEvent('unauthorized_wallet_access', {
+        requestedUserId: userId,
+        actualUserId: req.user.id,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
       return res.status(403).json({ 
         error: 'Access denied',
         code: 'ACCESS_DENIED'
@@ -45,7 +53,13 @@ router.get('/:userId',
       
       res.json(response);
     } catch (err) {
-      console.error('Wallet fetch error:', err);
+      logger.error('Wallet fetch error:', {
+        error: err.message,
+        stack: err.stack,
+        userId,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
@@ -63,6 +77,13 @@ router.get('/:userId/coupons',
     
     // Проверяем, что пользователь запрашивает свои купоны
     if (req.user.id !== parseInt(userId)) {
+      auditLog.securityEvent('unauthorized_coupons_access', {
+        requestedUserId: userId,
+        actualUserId: req.user.id,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
       return res.status(403).json({ 
         error: 'Access denied',
         code: 'ACCESS_DENIED'
@@ -80,7 +101,13 @@ router.get('/:userId/coupons',
       `, [userId]);
       res.json(rows);
     } catch (err) {
-      console.error('Coupons fetch error:', err);
+      logger.error('Coupons fetch error:', {
+        error: err.message,
+        stack: err.stack,
+        userId,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
@@ -100,6 +127,15 @@ router.post('/:userId/deposit',
     
     // Проверяем, что пользователь пополняет свой кошелек
     if (req.user.id !== parseInt(userId)) {
+      auditLog.securityEvent('unauthorized_deposit_attempt', {
+        requestedUserId: userId,
+        actualUserId: req.user.id,
+        amount,
+        type,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
       return res.status(403).json({ 
         error: 'Access denied',
         code: 'ACCESS_DENIED'
@@ -128,12 +164,29 @@ router.post('/:userId/deposit',
       // Получаем обновленную информацию о кошельке
       const row = await dbGet(`SELECT * FROM wallets WHERE user_id = ?`, [userId]);
       
+      // Аудит успешного пополнения
+      auditLog.userAction(userId, 'wallet_deposit', {
+        amount,
+        type,
+        newBalance: row[field],
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      });
+      
       res.json({
         message: 'Deposit successful',
         wallet: row
       });
     } catch (err) {
-      console.error('Deposit error:', err);
+      logger.error('Deposit error:', {
+        error: err.message,
+        stack: err.stack,
+        userId,
+        amount,
+        type,
+        ip: req.ip
+      });
+      
       res.status(500).json({ 
         error: 'Internal server error',
         code: 'INTERNAL_ERROR'
