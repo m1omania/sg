@@ -82,23 +82,48 @@ document.addEventListener('DOMContentLoaded', function() {
             const coupons = await res.json();
             console.log('Coupons data:', coupons);
             
-            const couponsContainer = document.querySelector('.coupons-list');
+            // Update coupons count badge
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount) {
+                couponsCount.textContent = coupons.length;
+            }
+            
+            // Update coupons amount display
+            const couponsAmount = document.getElementById('coupons-amount');
+            if (couponsAmount) {
+                const couponsTotal = couponsAmount.querySelector('.coupons-total');
+                if (couponsTotal) {
+                    couponsTotal.textContent = `${coupons.length} купонов`;
+                }
+            }
+            
+            // Update coupons preview
+            const couponsContainer = document.getElementById('wallet-coupons');
             if (couponsContainer) {
                 if (coupons.length > 0) {
-                    couponsContainer.innerHTML = coupons.map(coupon => `
-                        <div class="coupon-card">
-                            <h4>${coupon.name}</h4>
-                            <p>Проект: ${coupon.project_name || 'Любой'}</p>
-                            <p>${coupon.discount_amount} бонус</p>
-                            <p>Истекает: ${new Date(coupon.expires_at).toLocaleDateString()}</p>
-                            <p>Условия: ${coupon.conditions}</p>
-                            <p>Код: ${coupon.code}</p>
-                            <button onclick="useCoupon(${coupon.id})">Использовать</button>
-                            <button onclick="copyCode('${coupon.code}')">Копировать код</button>
+                    // Show first 2-3 coupons in preview
+                    const previewCoupons = coupons.slice(0, 3);
+                    couponsContainer.innerHTML = previewCoupons.map(coupon => `
+                        <div class="coupon-item">
+                            <span class="coupon-code">${coupon.code}</span>
+                            <span class="coupon-discount">${coupon.discount}%</span>
                         </div>
                     `).join('');
+                    
+                    // Add "show more" if there are more coupons
+                    if (coupons.length > 3) {
+                        couponsContainer.innerHTML += `
+                            <div class="coupon-item" style="justify-content: center; color: var(--color-text-secondary);">
+                                +${coupons.length - 3} еще...
+                            </div>
+                        `;
+                    }
                 } else {
-                    couponsContainer.innerHTML = '<p>Нет активных купонов</p>';
+                    couponsContainer.innerHTML = `
+                        <div class="no-coupons-message">
+                            <p>Нет активных купонов</p>
+                        </div>
+                    `;
                 }
             }
             console.log('Coupons loaded');

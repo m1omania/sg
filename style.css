@@ -3277,7 +3277,66 @@ select.form-control {
   border-color: rgba(var(--color-success-rgb), 0.3);
   background: linear-gradient(0deg, rgba(var(--color-success-rgb), 0.04), rgba(var(--color-success-rgb), 0.04)), var(--color-surface);
 }
+
+.account-summary--coupons {
+  border-color: rgba(14, 165, 233, 0.3);
+  background: linear-gradient(0deg, rgba(14, 165, 233, 0.04), rgba(14, 165, 233, 0.04)), var(--color-surface);
+}
+
+.account-summary--coupons:hover {
+  border-color: rgba(14, 165, 233, 0.5);
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
+}
+
 .account-summary__badge--success {
   background: var(--color-success);
   color: var(--color-btn-primary-text);
+}
+
+.account-summary__badge--info {
+  background: #0ea5e9;
+  color: white;
+}
+
+.coupons-total {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.coupons-preview {
+  flex: 1;
+  margin-right: var(--space-16);
+}
+
+.coupons-preview .no-coupons-message {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  padding: var(--space-8) 0;
+}
+
+.coupons-preview .coupon-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-12);
+  background: var(--color-bg-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-8);
+  font-size: var(--font-size-sm);
+}
+
+.coupons-preview .coupon-item:last-child {
+  margin-bottom: 0;
+}
+
+.coupon-code {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.coupon-discount {
+  color: var(--color-success);
+  font-weight: var(--font-weight-medium);
 }
