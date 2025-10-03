@@ -286,6 +286,55 @@ app.get('/api/wallet/:userId/transactions', (req, res) => {
   ]);
 });
 
+// Transactions endpoints
+app.post('/api/transactions/deposit', (req, res) => {
+  const { userId, amount, paymentMethod } = req.body;
+  
+  if (!userId || !amount || !paymentMethod) {
+    return res.status(400).json({ error: 'User ID, amount and payment method are required' });
+  }
+  
+  if (isNaN(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'Amount must be a positive number' });
+  }
+  
+  // For demo purposes, always return success
+  res.json({
+    success: true,
+    message: 'Deposit successful',
+    transactionId: 'tx_' + Date.now(),
+    amount: parseFloat(amount),
+    paymentMethod: paymentMethod,
+    status: 'completed',
+    date: new Date().toISOString()
+  });
+});
+
+app.get('/api/transactions/:userId', (req, res) => {
+  const { userId } = req.params;
+  
+  res.json([
+    {
+      id: 1,
+      type: 'deposit',
+      amount: 100.00,
+      currency: 'USD',
+      status: 'completed',
+      paymentMethod: 'card',
+      date: new Date().toISOString()
+    },
+    {
+      id: 2,
+      type: 'withdrawal',
+      amount: 50.00,
+      currency: 'USD',
+      status: 'pending',
+      paymentMethod: 'bank',
+      date: new Date().toISOString()
+    }
+  ]);
+});
+
 // Serve landing.html for root path (default for unauthenticated users)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../landing.html'));
