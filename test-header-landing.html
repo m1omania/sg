@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Header Landing - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        
+        .status-ok {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .status-error {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .code-example {
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Test Header Landing -->
+    <sg-header-landing></sg-header-landing>
+    
+    <div class="test-container">
+        <h1>Test Header Landing Component</h1>
+        <p>Эта страница тестирует загрузку и отображение компонента header-landing.</p>
+        
+        <!-- Проверка загрузки компонента -->
+        <div class="test-section">
+            <h2>🔍 Проверка загрузки компонента</h2>
+            <div id="component-check">
+                <p><strong>Статус загрузки:</strong> <span id="load-status">проверяется...</span></p>
+                <p><strong>Элемент найден:</strong> <span id="element-status">проверяется...</span></p>
+                <p><strong>Shadow DOM:</strong> <span id="shadow-status">проверяется...</span></p>
+            </div>
+        </div>
+        
+        <!-- Проверка функциональности -->
+        <div class="test-section">
+            <h2>⚙️ Проверка функциональности</h2>
+            <div id="functionality-check">
+                <p><strong>Language switcher:</strong> <span id="lang-switcher-status">проверяется...</span></p>
+                <p><strong>Logo:</strong> <span id="logo-status">проверяется...</span></p>
+                <p><strong>Dropdown:</strong> <span id="dropdown-status">проверяется...</span></p>
+            </div>
+        </div>
+        
+        <!-- Информация о компоненте -->
+        <div class="test-section">
+            <h2>📋 Информация о компоненте</h2>
+            <div class="code-example">
+&lt;sg-header-landing&gt;&lt;/sg-header-landing&gt;
+&lt;script src="components/web-components/header-landing.js"&gt;&lt;/script&gt;
+            </div>
+        </div>
+        
+        <!-- Проверка ошибок -->
+        <div class="test-section">
+            <h2>🚨 Проверка ошибок</h2>
+            <div id="error-check">
+                <p><strong>JavaScript ошибки:</strong> <span id="js-errors">проверяется...</span></p>
+                <p><strong>Network ошибки:</strong> <span id="network-errors">проверяется...</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="components/web-components/header-landing.js"></script>
+    
+    <script>
+        // Проверка загрузки компонента
+        function checkComponent() {
+            const loadStatus = document.getElementById('load-status');
+            const elementStatus = document.getElementById('element-status');
+            const shadowStatus = document.getElementById('shadow-status');
+            const langSwitcherStatus = document.getElementById('lang-switcher-status');
+            const logoStatus = document.getElementById('logo-status');
+            const dropdownStatus = document.getElementById('dropdown-status');
+            const jsErrors = document.getElementById('js-errors');
+            const networkErrors = document.getElementById('network-errors');
+            
+            // Проверка загрузки скрипта
+            if (typeof SgHeaderLanding !== 'undefined') {
+                loadStatus.textContent = '✅ Скрипт загружен';
+                loadStatus.className = 'status-ok';
+            } else {
+                loadStatus.textContent = '❌ Скрипт не загружен';
+                loadStatus.className = 'status-error';
+            }
+            
+            // Проверка элемента
+            const headerElement = document.querySelector('sg-header-landing');
+            if (headerElement) {
+                elementStatus.textContent = '✅ Элемент найден';
+                elementStatus.className = 'status-ok';
+                
+                // Проверка Shadow DOM
+                if (headerElement.shadowRoot) {
+                    shadowStatus.textContent = '✅ Shadow DOM создан';
+                    shadowStatus.className = 'status-ok';
+                    
+                    // Проверка функциональности
+                    const languageToggle = headerElement.shadowRoot.getElementById('languageToggle');
+                    if (languageToggle) {
+                        langSwitcherStatus.textContent = '✅ Language switcher найден';
+                        langSwitcherStatus.className = 'status-ok';
+                    } else {
+                        langSwitcherStatus.textContent = '❌ Language switcher не найден';
+                        langSwitcherStatus.className = 'status-error';
+                    }
+                    
+                    const logo = headerElement.shadowRoot.querySelector('.logo');
+                    if (logo) {
+                        logoStatus.textContent = '✅ Logo найден';
+                        logoStatus.className = 'status-ok';
+                    } else {
+                        logoStatus.textContent = '❌ Logo не найден';
+                        logoStatus.className = 'status-error';
+                    }
+                    
+                    const dropdown = headerElement.shadowRoot.getElementById('languageDropdown');
+                    if (dropdown) {
+                        dropdownStatus.textContent = '✅ Dropdown найден';
+                        dropdownStatus.className = 'status-ok';
+                    } else {
+                        dropdownStatus.textContent = '❌ Dropdown не найден';
+                        dropdownStatus.className = 'status-error';
+                    }
+                } else {
+                    shadowStatus.textContent = '❌ Shadow DOM не создан';
+                    shadowStatus.className = 'status-error';
+                }
+            } else {
+                elementStatus.textContent = '❌ Элемент не найден';
+                elementStatus.className = 'status-error';
+            }
+            
+            // Проверка ошибок
+            let errorCount = 0;
+            window.addEventListener('error', function(e) {
+                errorCount++;
+                jsErrors.textContent = `❌ ${errorCount} ошибок`;
+                jsErrors.className = 'status-error';
+            });
+            
+            if (errorCount === 0) {
+                jsErrors.textContent = '✅ Ошибок нет';
+                jsErrors.className = 'status-ok';
+            }
+            
+            // Проверка network ошибок
+            fetch('components/web-components/header-landing.js')
+                .then(response => {
+                    if (response.ok) {
+                        networkErrors.textContent = '✅ Файл доступен';
+                        networkErrors.className = 'status-ok';
+                    } else {
+                        networkErrors.textContent = `❌ HTTP ${response.status}`;
+                        networkErrors.className = 'status-error';
+                    }
+                })
+                .catch(error => {
+                    networkErrors.textContent = `❌ ${error.message}`;
+                    networkErrors.className = 'status-error';
+                });
+        }
+        
+        // Проверка при загрузке
+        window.addEventListener('load', checkComponent);
+        
+        // Проверка каждые 2 секунды
+        setInterval(checkComponent, 2000);
+        
+        // Логирование для отладки
+        console.log('Test page loaded');
+        console.log('SgHeaderLanding:', typeof SgHeaderLanding);
+        console.log('Header element:', document.querySelector('sg-header-landing'));
+    </script>
+</body>
+</html>

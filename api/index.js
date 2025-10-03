@@ -126,6 +126,10 @@ app.get('/sidebar-width-test.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../sidebar-width-test.html'));
 });
 
+app.get('/test-header-landing.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../test-header-landing.html'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
