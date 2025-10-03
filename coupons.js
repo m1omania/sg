@@ -5,26 +5,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load coupons from API
     async function loadCoupons() {
         try {
-            console.log('Loading coupons...');
-            const res = await fetch(`/api/coupons/active/${userId}`);
+            console.log('Loading coupons from API...');
+            const res = await fetch(`/api/coupons/active/${userId}`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
             console.log('Coupons API response status:', res.status);
             if (!res.ok) {
                 console.log('Coupons API response not ok:', res.status);
                 return;
             }
             const coupons = await res.json();
-            console.log('Coupons data:', coupons);
+            console.log('Coupons data received:', coupons);
+            console.log('Number of coupons:', coupons.length);
             
             // Update coupons count
             const couponsCount = document.getElementById('coupons-count');
             if (couponsCount) {
                 couponsCount.textContent = coupons.length;
+                console.log('Updated coupons count to:', coupons.length);
             }
             
             // Render coupons
             renderCoupons(coupons);
             
-            console.log('Coupons loaded');
+            console.log('Coupons loaded successfully');
         } catch (e) {
             console.error('Error loading coupons:', e);
         }
@@ -196,5 +203,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize page
+    console.log('Initializing coupons page...');
     loadCoupons();
+    
+    // Force reload coupons every 5 seconds for demo purposes
+    setInterval(() => {
+        console.log('Refreshing coupons data...');
+        loadCoupons();
+    }, 5000);
 });

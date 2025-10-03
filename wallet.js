@@ -72,15 +72,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load coupons from API
     async function loadCoupons() {
         try {
-            console.log('Loading coupons...');
-            const res = await fetch(`/api/coupons/active/${userId}`);
+            console.log('Loading coupons from API...');
+            const res = await fetch(`/api/coupons/active/${userId}`, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            });
             console.log('Coupons API response status:', res.status);
             if (!res.ok) {
                 console.log('Coupons API response not ok:', res.status);
                 return;
             }
             const coupons = await res.json();
-            console.log('Coupons data:', coupons);
+            console.log('Coupons data received:', coupons);
+            console.log('Number of coupons:', coupons.length);
             
             // Update coupons count badge
             const couponsCount = document.getElementById('coupons-count');
