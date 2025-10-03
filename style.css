@@ -1095,6 +1095,33 @@ select.form-control {
   color: var(--color-primary);
 }
 
+.logo-image {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
+  .logo-image {
+    height: 32px;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    height: 28px;
+    max-width: 120px;
+  }
+}
+
 .header__controls {
   display: flex;
   align-items: center;
