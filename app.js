@@ -179,7 +179,7 @@ function setupUserMenu() {
     const userDropdown = document.getElementById('userDropdown');
     if (!userDropdown) return; // Exit if menu not on page
 
-    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtn = userDropdown.querySelector('.logout-btn');
 
     userDropdown.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -192,7 +192,7 @@ function setupUserMenu() {
         }
     });
 
-    const dropdownMenu = userDropdown.querySelector('.dropdown-menu');
+    const dropdownMenu = userDropdown.querySelector('.user-menu');
     if (dropdownMenu) {
         dropdownMenu.addEventListener('click', function(e) {
             e.stopPropagation();
