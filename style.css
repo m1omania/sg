@@ -2540,10 +2540,26 @@ select.form-control {
 }
 
 /* Header on landing page */
-.landing-page sg-header {
+.landing-page sg-header,
+.landing-page sg-header-landing {
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+/* Register page layout */
+.register-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.register-layout .main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .header--landing {

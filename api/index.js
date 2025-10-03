@@ -78,6 +78,10 @@ app.get('/components/web-components/header-standalone.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../components/web-components/header-standalone.js'));
 });
 
+app.get('/components/web-components/header-landing.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/header-landing.js'));
+});
+
 app.get('/components/web-components/sidebar-standalone.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../components/web-components/sidebar-standalone.js'));
 });
