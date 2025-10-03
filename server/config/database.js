@@ -1,145 +1,189 @@
-const Database = require('better-sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 // Создаем базу данных SQLite
-const db = new Database(path.join('/tmp', 'database.sqlite'));
+const db = new sqlite3.Database(path.join('/tmp', 'database.sqlite'));
+
+// Промис-обертка для sqlite3
+const dbRun = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function(err) {
+      if (err) reject(err);
+      else resolve({ lastInsertRowid: this.lastInsertRowid, changes: this.changes });
+    });
+  });
+};
+
+const dbGet = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.get(sql, params, (err, row) => {
+      if (err) reject(err);
+      else resolve(row);
+    });
+  });
+};
+
+const dbAll = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+};
+
+const dbExec = (sql) => {
+  return new Promise((resolve, reject) => {
+    db.exec(sql, (err) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+};
 
 // Создаем таблицы при первом запуске
-try {
-  // Таблица пользователей
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE NOT NULL,
-      email TEXT UNIQUE NOT NULL,
-      phone TEXT,
-      password_hash TEXT NOT NULL,
-      email_verified BOOLEAN DEFAULT FALSE,
-      phone_verified BOOLEAN DEFAULT FALSE,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+const initializeTables = async () => {
+  try {
+    // Таблица пользователей
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        phone TEXT,
+        password_hash TEXT NOT NULL,
+        email_verified BOOLEAN DEFAULT FALSE,
+        phone_verified BOOLEAN DEFAULT FALSE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 
-  // Таблица купонов
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS coupons (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      project TEXT NOT NULL,
-      project_color TEXT NOT NULL,
-      bonus TEXT NOT NULL,
-      expiry_date DATE NOT NULL,
-      days_left INTEGER NOT NULL,
-      conditions TEXT,
-      code TEXT UNIQUE NOT NULL,
-      description TEXT,
-      status TEXT DEFAULT 'active',
-      min_amount REAL DEFAULT 0,
-      source TEXT DEFAULT 'manual',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+    // Таблица купонов
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS coupons (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        project TEXT NOT NULL,
+        project_color TEXT NOT NULL,
+        bonus TEXT NOT NULL,
+        expiry_date DATE NOT NULL,
+        days_left INTEGER NOT NULL,
+        conditions TEXT,
+        code TEXT UNIQUE NOT NULL,
+        description TEXT,
+        status TEXT DEFAULT 'active',
+        min_amount REAL DEFAULT 0,
+        source TEXT DEFAULT 'manual',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 
-  // Таблица истории использования купонов
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS coupon_history (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      coupon_id INTEGER,
-      user_id INTEGER,
-      action TEXT NOT NULL, -- 'used', 'expired', 'created'
-      transaction_id TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (coupon_id) REFERENCES coupons (id),
-      FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-  `);
+    // Таблица истории использования купонов
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS coupon_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        coupon_id INTEGER,
+        user_id INTEGER,
+        action TEXT NOT NULL, -- 'used', 'expired', 'created'
+        transaction_id TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (coupon_id) REFERENCES coupons (id),
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    `);
 
-  // Таблица инвестиций
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS investments (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      project_id INTEGER,
-      project_name TEXT NOT NULL,
-      amount REAL NOT NULL,
-      coupon_id INTEGER,
-      final_amount REAL NOT NULL,
-      transaction_id TEXT UNIQUE,
-      status TEXT DEFAULT 'active', -- active, completed, cancelled
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id),
-      FOREIGN KEY (coupon_id) REFERENCES coupons (id)
-    )
-  `);
+    // Таблица инвестиций
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS investments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        project_id INTEGER,
+        project_name TEXT NOT NULL,
+        amount REAL NOT NULL,
+        coupon_id INTEGER,
+        final_amount REAL NOT NULL,
+        transaction_id TEXT UNIQUE,
+        status TEXT DEFAULT 'active', -- active, completed, cancelled
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id),
+        FOREIGN KEY (coupon_id) REFERENCES coupons (id)
+      )
+    `);
 
-  // Таблица кошельков
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS wallets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER UNIQUE,
-      main_balance REAL DEFAULT 0.0,
-      bonus_balance REAL DEFAULT 0.0,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-  `);
+    // Таблица кошельков
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS wallets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER UNIQUE,
+        main_balance REAL DEFAULT 0.0,
+        bonus_balance REAL DEFAULT 0.0,
+        partner_balance REAL DEFAULT 0.0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    `);
 
-  // Таблица транзакций
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS transactions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      type TEXT NOT NULL, -- deposit, withdrawal, investment, coupon
-      amount REAL NOT NULL,
-      currency TEXT DEFAULT 'USD',
-      status TEXT DEFAULT 'completed', -- pending, completed, failed, cancelled
-      payment_method TEXT, -- card, crypto, etc.
-      transaction_id TEXT UNIQUE,
-      description TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-  `);
+    // Таблица транзакций
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        type TEXT NOT NULL, -- deposit, withdrawal, investment, coupon
+        amount REAL NOT NULL,
+        currency TEXT DEFAULT 'USD',
+        status TEXT DEFAULT 'completed', -- pending, completed, failed, cancelled
+        payment_method TEXT, -- card, crypto, etc.
+        transaction_id TEXT UNIQUE,
+        description TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    `);
 
-  // Таблица проектов
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS projects (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT,
-      image_url TEXT,
-      min_investment REAL DEFAULT 0,
-      interest_rate REAL NOT NULL, -- процентная ставка
-      duration INTEGER, -- срок в месяцах
-      status TEXT DEFAULT 'active', -- active, completed, upcoming
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
+    // Таблица проектов
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        image_url TEXT,
+        min_investment REAL DEFAULT 0,
+        interest_rate REAL NOT NULL, -- процентная ставка
+        duration INTEGER, -- срок в месяцах
+        status TEXT DEFAULT 'active', -- active, completed, upcoming
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
 
-  // Таблица уведомлений
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS notifications (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      title TEXT NOT NULL,
-      message TEXT NOT NULL,
-      type TEXT DEFAULT 'info', -- info, success, warning, error
-      is_read BOOLEAN DEFAULT FALSE,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-  `);
-} catch (err) {
-  console.error('Error creating tables:', err.message);
-}
+    // Таблица уведомлений
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        title TEXT NOT NULL,
+        message TEXT NOT NULL,
+        type TEXT DEFAULT 'info', -- info, success, warning, error
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    `);
+
+    console.log('Database tables created successfully');
+  } catch (err) {
+    console.error('Error creating tables:', err.message);
+  }
+};
 
 // Инициализация базы данных с тестовыми данными
-const initializeDatabase = () => {
+const initializeDatabase = async () => {
   try {
+    await initializeTables();
+    
     // Проверим, есть ли уже купоны
-    const couponCount = db.prepare("SELECT COUNT(*) as count FROM coupons").get();
+    const couponCount = await dbGet("SELECT COUNT(*) as count FROM coupons");
     
     if (couponCount.count === 0) {
       const defaultCoupons = [
@@ -187,37 +231,31 @@ const initializeDatabase = () => {
         }
       ];
 
-      const insertCoupon = db.prepare(`
-        INSERT INTO coupons 
-        (name, project, project_color, bonus, expiry_date, days_left, conditions, code, description, status, min_amount, source)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `);
-
-      const insertMany = db.transaction((coupons) => {
-        for (const coupon of coupons) {
-          insertCoupon.run(
-            coupon.name,
-            coupon.project,
-            coupon.project_color,
-            coupon.bonus,
-            coupon.expiry_date,
-            coupon.days_left,
-            coupon.conditions,
-            coupon.code,
-            coupon.description,
-            coupon.status,
-            coupon.min_amount,
-            coupon.source
-          );
-        }
-      });
-
-      insertMany(defaultCoupons);
+      for (const coupon of defaultCoupons) {
+        await dbRun(`
+          INSERT INTO coupons 
+          (name, project, project_color, bonus, expiry_date, days_left, conditions, code, description, status, min_amount, source)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          coupon.name,
+          coupon.project,
+          coupon.project_color,
+          coupon.bonus,
+          coupon.expiry_date,
+          coupon.days_left,
+          coupon.conditions,
+          coupon.code,
+          coupon.description,
+          coupon.status,
+          coupon.min_amount,
+          coupon.source
+        ]);
+      }
       console.log('Default coupons added to database');
     }
 
     // Проверим наличие тестовых проектов
-    const projectCount = db.prepare("SELECT COUNT(*) as count FROM projects").get();
+    const projectCount = await dbGet("SELECT COUNT(*) as count FROM projects");
     
     if (projectCount.count === 0) {
       const defaultProjects = [
@@ -250,66 +288,53 @@ const initializeDatabase = () => {
         }
       ];
 
-      const insertProject = db.prepare(`
-        INSERT INTO projects 
-        (name, description, image_url, min_investment, interest_rate, duration, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `);
-
-      const insertProjects = db.transaction((projects) => {
-        for (const project of projects) {
-          insertProject.run(
-            project.name,
-            project.description,
-            project.image_url,
-            project.min_investment,
-            project.interest_rate,
-            project.duration,
-            project.status
-          );
-        }
-      });
-
-      insertProjects(defaultProjects);
+      for (const project of defaultProjects) {
+        await dbRun(`
+          INSERT INTO projects 
+          (name, description, image_url, min_investment, interest_rate, duration, status)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [
+          project.name,
+          project.description,
+          project.image_url,
+          project.min_investment,
+          project.interest_rate,
+          project.duration,
+          project.status
+        ]);
+      }
       console.log('Default projects added to database');
     }
 
     // Проверим наличие тестового пользователя
-    const userCount = db.prepare("SELECT COUNT(*) as count FROM users").get();
+    const userCount = await dbGet("SELECT COUNT(*) as count FROM users");
     
     if (userCount.count === 0) {
       // В целях демонстрации добавим тестового пользователя
-      // В реальном приложении никогда не храним пароли в открытом виде!
-      const insertUser = db.prepare(`
+      const userInfo = await dbRun(`
         INSERT INTO users (username, email, phone, password_hash, email_verified, phone_verified) 
         VALUES (?, ?, ?, ?, ?, ?)
-      `);
-      
-      const userInfo = insertUser.run(
+      `, [
         'Константин', 
         'konstantin@example.com', 
         '+79991234567',
         'demo_password_hash',
         1,
         1
-      );
+      ]);
       
       // Создаем кошелек для пользователя
-      const insertWallet = db.prepare(`
+      await dbRun(`
         INSERT INTO wallets (user_id, main_balance, bonus_balance) 
         VALUES (?, ?, ?)
-      `);
-      
-      insertWallet.run(userInfo.lastInsertRowid, 1000.00, 25.00);
+      `, [userInfo.lastInsertRowid, 1000.00, 25.00]);
       console.log('Demo user and wallet created');
       
       // Добавляем приветственный купон пользователю
-      const welcomeCoupon = db.prepare(`
+      await dbRun(`
         INSERT INTO coupon_history (coupon_id, user_id, action)
         VALUES (?, ?, 'created')
-      `);
-      
-      welcomeCoupon.run(1, userInfo.lastInsertRowid); // Купон с ID 1 - приветственный
+      `, [1, userInfo.lastInsertRowid]); // Купон с ID 1 - приветственный
       console.log('Welcome coupon added to user');
     }
   } catch (err) {
@@ -320,4 +345,10 @@ const initializeDatabase = () => {
 // Выполняем инициализацию
 initializeDatabase();
 
-module.exports = db;
+module.exports = {
+  db,
+  dbRun,
+  dbGet,
+  dbAll,
+  dbExec
+};
