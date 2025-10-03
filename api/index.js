@@ -142,9 +142,91 @@ app.get('/api/projects/:id', (req, res) => {
   res.json(project);
 });
 
-// Logout endpoint
+// Auth endpoints
 app.post('/api/auth/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
+});
+
+// Registration endpoints
+app.post('/api/auth/send-code', (req, res) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ error: 'Email is required' });
+  }
+  
+  // For demo purposes, always return success
+  res.json({ 
+    message: 'Code sent successfully',
+    demoCode: '123456' // Demo code for testing
+  });
+});
+
+app.post('/api/auth/verify-code', (req, res) => {
+  const { email, code } = req.body;
+  
+  if (!email || !code) {
+    return res.status(400).json({ error: 'Email and code are required' });
+  }
+  
+  // For demo purposes, accept code 123456
+  if (code === '123456') {
+    res.json({ 
+      message: 'Code verified successfully',
+      token: 'demo-token-' + Date.now(),
+      user: {
+        id: 1,
+        email: email,
+        username: 'demo_user_' + Date.now()
+      }
+    });
+  } else {
+    res.status(400).json({ error: 'Invalid verification code' });
+  }
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { email, password, code } = req.body;
+  
+  if (!email || !password || !code) {
+    return res.status(400).json({ error: 'Email, password and code are required' });
+  }
+  
+  // For demo purposes, accept code 123456
+  if (code === '123456') {
+    res.json({ 
+      message: 'User registered successfully',
+      user: {
+        id: 1,
+        email: email,
+        username: 'user_' + Date.now(),
+        emailVerified: true
+      },
+      token: 'demo-token-' + Date.now()
+    });
+  } else {
+    res.status(400).json({ error: 'Invalid verification code' });
+  }
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
+  }
+  
+  // For demo purposes, accept any email/password
+  res.json({ 
+    message: 'Login successful',
+    user: {
+      id: 1,
+      email: email,
+      username: 'user_' + Date.now(),
+      emailVerified: true
+    },
+    token: 'demo-token-' + Date.now()
+  });
 });
 
 // Serve landing.html for root path (default for unauthenticated users)
