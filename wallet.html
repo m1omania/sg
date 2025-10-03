@@ -335,7 +335,7 @@
             }
             
             // Load coupons from API
-            fetch('/api/coupons/active/1', {
+            fetch(`/api/coupons/active/1?t=${Date.now()}`, {
                 cache: 'no-cache',
                 headers: {
                     'Cache-Control': 'no-cache',
