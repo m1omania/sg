@@ -95,11 +95,9 @@ class SgHeaderLanding extends HTMLElement {
                     color: #ffffff;
                 }
 
-                .language-flag {
-                    width: 20px;
-                    height: 15px;
-                    border-radius: 2px;
-                    object-fit: cover;
+                .flag-icon {
+                    font-size: 16px;
+                    line-height: 1;
                 }
 
                 .dropdown-arrow {
@@ -170,9 +168,8 @@ class SgHeaderLanding extends HTMLElement {
                         font-size: 0.8rem;
                     }
 
-                    .language-flag {
-                        width: 16px;
-                        height: 12px;
+                    .flag-icon {
+                        font-size: 14px;
                     }
                 }
 
@@ -204,19 +201,19 @@ class SgHeaderLanding extends HTMLElement {
                     <!-- Language Switcher -->
                     <div class="language-switcher">
                         <button class="language-toggle" id="languageToggle">
-                            <img src="https://flagcdn.com/w20/ru.png" alt="RU" class="language-flag" id="currentFlag">
+                            <span class="flag-icon" id="currentFlag">🇷🇺</span>
                             <span id="currentLang">RU</span>
                             <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
                         </button>
                         <div class="language-dropdown" id="languageDropdown">
-                            <a href="#" class="language-option active" data-lang="ru" data-flag="https://flagcdn.com/w20/ru.png">
-                                <img src="https://flagcdn.com/w20/ru.png" alt="RU" class="language-flag">
+                            <a href="#" class="language-option active" data-lang="ru" data-flag="🇷🇺">
+                                <span class="flag-icon">🇷🇺</span>
                                 <span>Русский</span>
                             </a>
-                            <a href="#" class="language-option" data-lang="en" data-flag="https://flagcdn.com/w20/us.png">
-                                <img src="https://flagcdn.com/w20/us.png" alt="EN" class="language-flag">
+                            <a href="#" class="language-option" data-lang="en" data-flag="🇺🇸">
+                                <span class="flag-icon">🇺🇸</span>
                                 <span>English</span>
                             </a>
                         </div>
@@ -274,7 +271,7 @@ class SgHeaderLanding extends HTMLElement {
         const options = this.shadowRoot.querySelectorAll('.language-option');
         
         // Update current display
-        if (flag) currentFlag.src = flag;
+        if (flag) currentFlag.textContent = flag;
         currentLang.textContent = lang.toUpperCase();
         
         // Update active option
