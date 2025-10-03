@@ -127,6 +127,11 @@ app.get('/api/projects/:id', (req, res) => {
   res.json(project);
 });
 
+// Serve index.html for root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
