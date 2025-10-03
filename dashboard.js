@@ -20,6 +20,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Балансы из API ---
     const mainBalanceEl = document.getElementById('main-balance');
     const partnerBalanceEl = document.getElementById('partner-balance');
+    
+    console.log('Balance elements found:', {
+        mainBalanceEl: !!mainBalanceEl,
+        partnerBalanceEl: !!partnerBalanceEl,
+        mainBalanceElId: mainBalanceEl?.id,
+        partnerBalanceElId: partnerBalanceEl?.id
+    });
 
     async function loadDashboardBalances() {
         try {
@@ -32,8 +39,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const w = await res.json();
             console.log('Dashboard wallet data:', w);
-            if (mainBalanceEl) mainBalanceEl.textContent = `${Number(w.main_balance).toFixed(2)} $`;
-            if (partnerBalanceEl) partnerBalanceEl.textContent = `${Number(w.partner_balance || 0).toFixed(2)} $`;
+            
+            if (mainBalanceEl) {
+                const newText = `${Number(w.main_balance).toFixed(2)} $`;
+                mainBalanceEl.textContent = newText;
+                console.log('Updated main balance to:', newText);
+            } else {
+                console.log('mainBalanceEl not found!');
+            }
+            
+            if (partnerBalanceEl) {
+                const newText = `${Number(w.partner_balance || 0).toFixed(2)} $`;
+                partnerBalanceEl.textContent = newText;
+                console.log('Updated partner balance to:', newText);
+            } else {
+                console.log('partnerBalanceEl not found!');
+            }
+            
             console.log('Dashboard balances updated');
         } catch (e) { 
             console.error('Error loading dashboard balances:', e); 
