@@ -650,21 +650,27 @@ async function loadGlobalWalletBalances() {
     if (!res.ok) return;
     const wallet = await res.json();
 
-    // Common element IDs across pages (skip dashboard page as it has its own handler)
-    const isDashboardPage = window.location.pathname.includes('index.html') || window.location.pathname === '/';
+    // Skip balance updates for pages that have their own handlers
+    const hasOwnHandler = window.location.pathname.includes('index.html') || 
+                         window.location.pathname === '/' ||
+                         window.location.pathname.includes('wallet.html') ||
+                         window.location.pathname.includes('checkout.html');
     
-    const mainBalanceEls = [
-      document.getElementById('main-balance-amount'), // wallet page
-      ...(isDashboardPage ? [] : [document.getElementById('main-balance')]), // dashboard/index handled by dashboard.js
-    ].filter(Boolean);
+    if (!hasOwnHandler) {
+      // Only update balances for pages without their own handlers
+      const mainBalanceEls = [
+        document.getElementById('main-balance-amount'),
+        document.getElementById('main-balance')
+      ].filter(Boolean);
 
-    const partnerBalanceEls = [
-      document.getElementById('partner-balance-amount'), // wallet page
-      ...(isDashboardPage ? [] : [document.getElementById('partner-balance')]), // dashboard/index handled by dashboard.js
-    ].filter(Boolean);
+      const partnerBalanceEls = [
+        document.getElementById('partner-balance-amount'),
+        document.getElementById('partner-balance')
+      ].filter(Boolean);
 
-    mainBalanceEls.forEach(el => { el.textContent = `${Number(wallet.main_balance).toFixed(2)} $`; });
-    partnerBalanceEls.forEach(el => { el.textContent = `${Number(wallet.partner_balance || 0).toFixed(2)} $`; });
+      mainBalanceEls.forEach(el => { el.textContent = `${Number(wallet.main_balance).toFixed(2)} $`; });
+      partnerBalanceEls.forEach(el => { el.textContent = `${Number(wallet.partner_balance || 0).toFixed(2)} $`; });
+    }
   } catch (e) {
     // Silent fail for pages without wallet access
     console.error('Failed to load global wallet balances', e);

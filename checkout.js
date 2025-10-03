@@ -45,11 +45,21 @@ function initializeCheckoutPage(packageId) {
     
     // Update page content
     document.title = package.name + ' - SolarGroup';
-    document.querySelector('h1').textContent = package.name;
-    document.querySelector('.package-stage').textContent = package.description;
-    document.querySelector('.package-shares').textContent = package.shares.toLocaleString();
-    document.querySelector('.package-project').textContent = package.project;
-    document.querySelector('.package-total').textContent = package.total.toFixed(2) + ' $';
+    
+    const h1 = document.querySelector('h1');
+    if (h1) h1.textContent = package.name;
+    
+    const packageStage = document.getElementById('package-stage');
+    if (packageStage) packageStage.textContent = package.description;
+    
+    const summaryShares = document.getElementById('summary-shares');
+    if (summaryShares) summaryShares.textContent = package.shares.toLocaleString();
+    
+    const summaryProject = document.getElementById('summary-project');
+    if (summaryProject) summaryProject.textContent = package.project;
+    
+    const summaryTotal = document.getElementById('summary-total');
+    if (summaryTotal) summaryTotal.textContent = package.total.toFixed(2) + ' $';
     
     // Load wallet balances
     loadCheckoutBalances();
