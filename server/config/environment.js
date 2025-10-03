@@ -10,6 +10,16 @@ module.exports = {
   
   // Database
   DATABASE_URL: process.env.DATABASE_URL || 'sqlite:///tmp/database.sqlite',
+  DATABASE_PATH: process.env.DATABASE_PATH || '/tmp/database.sqlite',
+  
+  // Database Performance
+  QUERY_CACHE_SIZE: parseInt(process.env.QUERY_CACHE_SIZE || '1000', 10),
+  QUERY_CACHE_TTL: parseInt(process.env.QUERY_CACHE_TTL || '300000', 10), // 5 minutes
+  SLOW_QUERY_THRESHOLD: parseInt(process.env.SLOW_QUERY_THRESHOLD || '1000', 10), // 1 second
+  
+  // Backup Settings
+  MAX_BACKUPS: parseInt(process.env.MAX_BACKUPS || '10', 10),
+  BACKUP_INTERVAL: parseInt(process.env.BACKUP_INTERVAL || '86400000', 10), // 24 hours
   
   // CORS
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',

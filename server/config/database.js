@@ -1,8 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const QueryOptimizer = require('./query-optimizer');
 
 // Создаем базу данных SQLite
 const db = new sqlite3.Database(path.join('/tmp', 'database.sqlite'));
+
+// Инициализируем оптимизатор запросов
+const queryOptimizer = new QueryOptimizer();
 
 // Промис-обертка для sqlite3
 const dbRun = (sql, params = []) => {
@@ -15,20 +19,74 @@ const dbRun = (sql, params = []) => {
 };
 
 const dbGet = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
+  return new Promise(async (resolve, reject) => {
+    const startTime = Date.now();
+    
+    try {
+      // Проверяем кэш для SELECT запросов
+      if (queryOptimizer.isCacheableQuery(sql)) {
+        const cached = queryOptimizer.getCachedQuery(sql, params);
+        if (cached) {
+          const duration = Date.now() - startTime;
+          queryOptimizer.logQueryStats(sql, params, duration, true);
+          return resolve(cached);
+        }
+      }
+
+      db.get(sql, params, (err, row) => {
+        const duration = Date.now() - startTime;
+        
+        if (err) {
+          reject(err);
+        } else {
+          // Кэшируем результат для SELECT запросов
+          if (queryOptimizer.isCacheableQuery(sql)) {
+            queryOptimizer.cacheQuery(sql, params, row);
+          }
+          
+          queryOptimizer.logQueryStats(sql, params, duration, false);
+          resolve(row);
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
   });
 };
 
 const dbAll = (sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
+  return new Promise(async (resolve, reject) => {
+    const startTime = Date.now();
+    
+    try {
+      // Проверяем кэш для SELECT запросов
+      if (queryOptimizer.isCacheableQuery(sql)) {
+        const cached = queryOptimizer.getCachedQuery(sql, params);
+        if (cached) {
+          const duration = Date.now() - startTime;
+          queryOptimizer.logQueryStats(sql, params, duration, true);
+          return resolve(cached);
+        }
+      }
+
+      db.all(sql, params, (err, rows) => {
+        const duration = Date.now() - startTime;
+        
+        if (err) {
+          reject(err);
+        } else {
+          // Кэшируем результат для SELECT запросов
+          if (queryOptimizer.isCacheableQuery(sql)) {
+            queryOptimizer.cacheQuery(sql, params, rows);
+          }
+          
+          queryOptimizer.logQueryStats(sql, params, duration, false);
+          resolve(rows);
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
   });
 };
 
@@ -342,13 +400,34 @@ const initializeDatabase = async () => {
   }
 };
 
+// Импортируем MigrationManager
+const MigrationManager = require('./migrations');
+
 // Выполняем инициализацию
-initializeDatabase();
+const initializeWithMigrations = async () => {
+  try {
+    // Сначала инициализируем базовые таблицы
+    await initializeDatabase();
+    
+    // Затем запускаем миграции
+    const migrationManager = new MigrationManager();
+    await migrationManager.runMigrations();
+    
+    console.log('Database initialization and migrations completed');
+  } catch (err) {
+    console.error('Database initialization failed:', err);
+    throw err;
+  }
+};
+
+// Выполняем инициализацию с миграциями
+initializeWithMigrations();
 
 module.exports = {
   db,
   dbRun,
   dbGet,
   dbAll,
-  dbExec
+  dbExec,
+  queryOptimizer
 };
