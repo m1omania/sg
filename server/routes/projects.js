@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/database');
+const { dbGet, dbAll } = require('../config/database');
 
 // Получить все активные проекты
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const stmt = db.prepare(`
+    const projects = await dbAll(`
       SELECT * FROM projects 
       WHERE status = 'active'
       ORDER BY created_at DESC
     `);
     
-    const projects = stmt.all();
     res.json(projects);
   } catch (err) {
     console.error('Error fetching projects:', err);
@@ -20,16 +19,14 @@ router.get('/', (req, res) => {
 });
 
 // Получить проект по ID
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
   
   try {
-    const stmt = db.prepare(`
+    const project = await dbGet(`
       SELECT * FROM projects 
       WHERE id = ?
-    `);
-    
-    const project = stmt.get(id);
+    `, [id]);
     
     if (!project) {
       return res.status(404).json({ error: 'Project not found' });
@@ -42,23 +39,5 @@ router.get('/:id', (req, res) => {
   }
 });
 
-// Поиск проектов
-router.get('/search/:query', (req, res) => {
-  const { query } = req.params;
-  
-  try {
-    const stmt = db.prepare(`
-      SELECT * FROM projects 
-      WHERE status = 'active' AND (name LIKE ? OR description LIKE ?)
-      ORDER BY created_at DESC
-    `);
-    
-    const projects = stmt.all(`%${query}%`, `%${query}%`);
-    res.json(projects);
-  } catch (err) {
-    console.error('Error searching projects:', err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 module.exports = router;
