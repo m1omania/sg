@@ -409,8 +409,8 @@ const initializeWithMigrations = async () => {
     // Сначала инициализируем базовые таблицы
     await initializeDatabase();
     
-    // Затем запускаем миграции
-    const migrationManager = new MigrationManager();
+    // Затем запускаем миграции, передавая функции базы данных
+    const migrationManager = new MigrationManager(dbExec, dbGet, dbAll, dbRun);
     await migrationManager.runMigrations();
     
     console.log('Database initialization and migrations completed');

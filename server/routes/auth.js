@@ -7,7 +7,7 @@ const router = express.Router();
  *   name: Authentication
  *   description: User authentication and registration
  */
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { dbGet, dbRun } = require('../config/database');
 const config = require('../config/environment');
 const { generateToken } = require('../middleware/auth');

@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { dbGet, dbAll, dbRun } = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
-const { validateId, validateSearch, handleValidationErrors } = require('../middleware/validation');
-const { validateCouponCreation, validatePromoActivation, sanitizeInput } = require('../middleware/sanitization');
+const { validateId, validateSearch, validatePromoActivation, handleValidationErrors } = require('../middleware/validation');
+const { validateCouponCreation, sanitizeInput } = require('../middleware/sanitization');
 const { body, sanitizeBody } = require('express-validator');
 const { logger, auditLog } = require('../config/logger');
 
@@ -147,7 +147,7 @@ router.post('/use',
     body('couponId')
       .isInt({ min: 1 })
       .withMessage('Coupon ID must be a positive integer'),
-    sanitizeBody('couponId').toInt(),
+    body('couponId').toInt(),
     handleValidationErrors
   ],
   async (req, res) => {

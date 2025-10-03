@@ -1,10 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-const { dbExec, dbGet, dbAll } = require('./database');
 const { logger } = require('./logger');
 
 class MigrationManager {
-  constructor() {
+  constructor(dbExec, dbGet, dbAll, dbRun) {
+    this.dbExec = dbExec;
+    this.dbGet = dbGet;
+    this.dbAll = dbAll;
+    this.dbRun = dbRun;
     this.migrationsDir = path.join(__dirname, '../migrations');
     this.migrationsTable = 'schema_migrations';
   }
@@ -14,7 +17,7 @@ class MigrationManager {
    */
   async init() {
     try {
-      await dbExec(`
+      await this.dbExec(`
         CREATE TABLE IF NOT EXISTS ${this.migrationsTable} (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           version VARCHAR(255) UNIQUE NOT NULL,
@@ -35,7 +38,7 @@ class MigrationManager {
    */
   async getExecutedMigrations() {
     try {
-      const migrations = await dbAll(`
+      const migrations = await this.dbAll(`
         SELECT version, filename, executed_at, checksum 
         FROM ${this.migrationsTable} 
         ORDER BY version
@@ -80,7 +83,7 @@ class MigrationManager {
     
     try {
       // Проверяем, не выполнена ли уже эта миграция
-      const existing = await dbGet(`
+      const existing = await this.dbGet(`
         SELECT * FROM ${this.migrationsTable} WHERE version = ?
       `, [version]);
       
@@ -95,10 +98,10 @@ class MigrationManager {
 
       // Выполняем миграцию
       logger.info(`Running migration ${version}: ${filename}`);
-      await dbExec(content);
+      await this.dbExec(content);
 
       // Записываем информацию о выполненной миграции
-      await dbExec(`
+      await this.dbRun(`
         INSERT INTO ${this.migrationsTable} (version, filename, checksum)
         VALUES (?, ?, ?)
       `, [version, filename, checksum]);
@@ -149,7 +152,7 @@ class MigrationManager {
    */
   async rollbackLastMigration() {
     try {
-      const lastMigration = await dbGet(`
+      const lastMigration = await this.dbGet(`
         SELECT * FROM ${this.migrationsTable} 
         ORDER BY executed_at DESC 
         LIMIT 1

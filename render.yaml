@@ -3,7 +3,7 @@ services:
     name: solar-group-app
     env: node
     plan: free
-    buildCommand: cd server && npm install
+    buildCommand: cd server && npm ci --production
     startCommand: cd server && node server.js
     envVars:
       - key: NODE_ENV

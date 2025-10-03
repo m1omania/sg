@@ -1,5 +1,5 @@
 # Multi-stage build for SolarGroup Investment Platform
-FROM node:20-alpine AS base
+FROM node:20.18.0-alpine AS base
 
 # Install system dependencies
 RUN apk add --no-cache \

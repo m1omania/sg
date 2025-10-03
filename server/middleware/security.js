@@ -53,8 +53,11 @@ const registrationLimiter = rateLimit({
 const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 минут
   delayAfter: 50, // начинаем замедлять после 50 запросов
-  delayMs: 500, // добавляем 500ms задержки на каждый запрос
+  delayMs: () => 500, // добавляем 500ms задержки на каждый запрос
   maxDelayMs: 20000, // максимум 20 секунд задержки
+  validate: {
+    delayMs: false // отключаем предупреждение
+  }
 });
 
 /**
