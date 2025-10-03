@@ -317,21 +317,36 @@
     
     <!-- Inline coupons logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Setting up wallet coupons...');
-            
-            // Set coupons count immediately
+        // Set coupons count immediately (before DOM ready)
+        setTimeout(function() {
             const couponsCount = document.getElementById('coupons-count');
             if (couponsCount) {
                 couponsCount.textContent = '2';
-                console.log('Set wallet coupons count to 2');
+                console.log('Wallet immediate: Set coupons count to 2');
+            }
+            
+            const couponsTotal = document.querySelector('.coupons-total');
+            if (couponsTotal) {
+                couponsTotal.textContent = '2 купонов';
+                console.log('Wallet immediate: Set coupons total to 2');
+            }
+        }, 100);
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setting up wallet coupons...');
+            
+            // Set coupons count again
+            const couponsCount = document.getElementById('coupons-count');
+            if (couponsCount) {
+                couponsCount.textContent = '2';
+                console.log('Wallet DOM ready: Set coupons count to 2');
             }
             
             // Update coupons total text
             const couponsTotal = document.querySelector('.coupons-total');
             if (couponsTotal) {
                 couponsTotal.textContent = '2 купонов';
-                console.log('Set coupons total to 2');
+                console.log('Wallet DOM ready: Set coupons total to 2');
             }
             
             // Load coupons from API
@@ -386,6 +401,22 @@
                     // Keep fallback values
                 });
         });
+        
+        // Also try after a delay
+        setTimeout(function() {
+            const couponsCount = document.getElementById('coupons-count');
+            const couponsTotal = document.querySelector('.coupons-total');
+            
+            if (couponsCount && couponsCount.textContent === '0') {
+                couponsCount.textContent = '2';
+                console.log('Wallet delayed: Set coupons count to 2');
+            }
+            
+            if (couponsTotal && couponsTotal.textContent === '0 купонов') {
+                couponsTotal.textContent = '2 купонов';
+                console.log('Wallet delayed: Set coupons total to 2');
+            }
+        }, 2000);
     </script>
 </body>
 </html>
