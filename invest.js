@@ -11,10 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     viewPackagesBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const projectCard = this.closest('.project-card');
-            const projectName = projectCard.querySelector('h3').textContent;
-            const minAmount = projectCard.querySelector('.project-min-amount').textContent.replace('Мин. сумма ', '').replace('$', '');
+            const projectName = projectCard.querySelector('h2').textContent; // Changed from h3 to h2
             
-            console.log('View packages clicked for:', projectName, 'Min amount:', minAmount);
+            console.log('View packages clicked for:', projectName);
             
             // Redirect to packages page with project filter
             const projectMap = {
