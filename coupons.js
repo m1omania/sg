@@ -1,5 +1,7 @@
 // Coupons page functionality
+console.log('Coupons.js loaded');
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing coupons page');
     const userId = 1; // Demo user ID
     
     // Load coupons from API
@@ -23,9 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Update coupons count
             const couponsCount = document.getElementById('coupons-count');
+            console.log('Looking for coupons-count element:', couponsCount);
             if (couponsCount) {
                 couponsCount.textContent = coupons.length;
                 console.log('Updated coupons count to:', coupons.length);
+            } else {
+                console.error('coupons-count element not found!');
             }
             
             // Render coupons
@@ -211,4 +216,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Refreshing coupons data...');
         loadCoupons();
     }, 2000);
+    
+    // Also try to load coupons after a short delay
+    setTimeout(() => {
+        console.log('Delayed load attempt...');
+        loadCoupons();
+    }, 1000);
 });
