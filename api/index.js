@@ -78,6 +78,23 @@ app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
 });
 
+// Serve logo files
+app.get('/SGLogo.svg', (req, res) => {
+  res.sendFile(path.join(__dirname, '../SGLogo.svg'));
+});
+
+app.get('/SGLogosmall.svg', (req, res) => {
+  res.sendFile(path.join(__dirname, '../SGLogosmall.svg'));
+});
+
+app.get('/solarlogo.png', (req, res) => {
+  res.sendFile(path.join(__dirname, '../solarlogo.png'));
+});
+
+app.get('/solarlogo.avif', (req, res) => {
+  res.sendFile(path.join(__dirname, '../solarlogo.avif'));
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
