@@ -45,6 +45,10 @@ app.get('/deposit.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../deposit.js'));
 });
 
+app.get('/dashboard.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dashboard.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
