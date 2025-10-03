@@ -73,12 +73,10 @@ class SGSidebar extends HTMLElement {
                 /* Mobile responsive */
                 @media (max-width: 768px) {
                     .sidebar {
-                        transform: translateX(-100%);
-                        width: 280px;
-                    }
-
-                    .sidebar.open {
-                        transform: translateX(0);
+                        position: static;
+                        height: auto;
+                        width: 100%;
+                        transform: none;
                     }
 
                     .nav-link {

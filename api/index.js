@@ -101,6 +101,15 @@ app.get('/components/web-components/loader.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../components/web-components/loader.js'));
 });
 
+// Test files
+app.get('/responsive-test.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../responsive-test.html'));
+});
+
+app.get('/test-layout.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../test-layout.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));

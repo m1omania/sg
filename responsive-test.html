@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Layout Test - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Тестовые стили для проверки адаптивности */
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .test-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+        }
+        
+        .test-card h3 {
+            margin-top: 0;
+            color: #374151;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-ok { background: #10b981; }
+        .status-warning { background: #f59e0b; }
+        .status-error { background: #ef4444; }
+        
+        .breakpoint-test {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .breakpoint-item {
+            padding: 0.5rem 1rem;
+            background: #3b82f6;
+            color: white;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .breakpoint-item.active {
+            background: #10b981;
+        }
+        
+        .layout-visual {
+            border: 2px dashed #6b7280;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: #f9fafb;
+        }
+        
+        .layout-box {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .layout-box.header { background: #fef3c7; border-color: #f59e0b; }
+        .layout-box.sidebar { background: #d1fae5; border-color: #10b981; }
+        .layout-box.main { background: #e0e7ff; border-color: #6366f1; }
+        
+        /* Тестовые медиа-запросы для проверки */
+        @media (max-width: 1200px) {
+            .breakpoint-test .breakpoint-item[data-bp="xl"] { display: none; }
+        }
+        
+        @media (max-width: 992px) {
+            .breakpoint-test .breakpoint-item[data-bp="lg"] { display: none; }
+        }
+        
+        @media (max-width: 768px) {
+            .breakpoint-test .breakpoint-item[data-bp="md"] { display: none; }
+        }
+        
+        @media (max-width: 576px) {
+            .breakpoint-test .breakpoint-item[data-bp="sm"] { display: none; }
+        }
+        
+        @media (max-width: 480px) {
+            .breakpoint-test .breakpoint-item[data-bp="xs"] { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <sg-header></sg-header>
+    
+    <!-- Main Layout -->
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <sg-sidebar></sg-sidebar>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="test-container">
+                <h1>Responsive Layout Test</h1>
+                <p>Эта страница тестирует адаптивность и позиционирование всех элементов на разных размерах экрана.</p>
+                
+                <!-- Breakpoint Indicator -->
+                <div class="test-section">
+                    <h2>📱 Текущий размер экрана</h2>
+                    <div class="breakpoint-test">
+                        <div class="breakpoint-item" data-bp="xl">XL (1200px+)</div>
+                        <div class="breakpoint-item" data-bp="lg">LG (992px+)</div>
+                        <div class="breakpoint-item" data-bp="md">MD (768px+)</div>
+                        <div class="breakpoint-item" data-bp="sm">SM (576px+)</div>
+                        <div class="breakpoint-item" data-bp="xs">XS (480px+)</div>
+                    </div>
+                    <p><strong>Текущая ширина:</strong> <span id="current-width"></span>px</p>
+                </div>
+                
+                <!-- Layout Structure Test -->
+                <div class="test-section">
+                    <h2>🏗️ Структура Layout</h2>
+                    <div class="layout-visual">
+                        <div class="layout-box header">Header (sticky, z-index: 100)</div>
+                        <div style="display: flex;">
+                            <div class="layout-box sidebar">Sidebar (sticky, z-index: 50)</div>
+                            <div class="layout-box main" style="flex: 1;">Main Content (flex: 1)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Z-index Test -->
+                <div class="test-section">
+                    <h2>🎯 Z-index иерархия</h2>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h3><span class="status-indicator status-ok"></span>Header</h3>
+                            <p><strong>z-index:</strong> 100</p>
+                            <p><strong>position:</strong> sticky</p>
+                            <p><strong>top:</strong> 0</p>
+                        </div>
+                        <div class="test-card">
+                            <h3><span class="status-indicator status-ok"></span>Sidebar</h3>
+                            <p><strong>z-index:</strong> 50</p>
+                            <p><strong>position:</strong> sticky</p>
+                            <p><strong>top:</strong> 0</p>
+                        </div>
+                        <div class="test-card">
+                            <h3><span class="status-indicator status-ok"></span>Main Content</h3>
+                            <p><strong>z-index:</strong> auto</p>
+                            <p><strong>position:</strong> static</p>
+                            <p><strong>flex:</strong> 1</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Responsive Behavior Test -->
+                <div class="test-section">
+                    <h2>📱 Responsive поведение</h2>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h3><span class="status-indicator status-ok"></span>Desktop (768px+)</h3>
+                            <ul>
+                                <li>Sidebar: вертикальное меню слева</li>
+                                <li>Sidebar: position sticky</li>
+                                <li>Main: flex: 1 справа</li>
+                                <li>Header: полная ширина сверху</li>
+                            </ul>
+                        </div>
+                        <div class="test-card">
+                            <h3><span class="status-indicator status-ok"></span>Mobile (768px-)</h3>
+                            <ul>
+                                <li>Sidebar: горизонтальное меню</li>
+                                <li>Sidebar: position static</li>
+                                <li>Main: под sidebar</li>
+                                <li>Header: полная ширина сверху</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Overflow Test -->
+                <div class="test-section">
+                    <h2>📜 Тест прокрутки контента</h2>
+                    <div class="test-card">
+                        <h3>Длинный контент для проверки прокрутки</h3>
+                        <p>Этот блок содержит много текста для проверки правильной работы прокрутки в main-content области.</p>
+                        <div style="height: 200px; background: linear-gradient(45deg, #f0f9ff, #e0f2fe); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin: 1rem 0;">
+                            <p><strong>Высота: 200px</strong><br>Проверьте, что эта область прокручивается правильно</p>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <div style="height: 200px; background: linear-gradient(45deg, #fef3c7, #fde68a); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin: 1rem 0;">
+                            <p><strong>Еще один блок высотой 200px</strong><br>Контент должен прокручиваться в main-content</p>
+                        </div>
+                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                    </div>
+                </div>
+                
+                <!-- Interactive Elements Test -->
+                <div class="test-section">
+                    <h2>🖱️ Тест интерактивных элементов</h2>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h3>Header элементы</h3>
+                            <ul>
+                                <li>Логотип: должен быть кликабельным</li>
+                                <li>Переключатель языков: должен работать</li>
+                                <li>Уведомления: должны отображаться</li>
+                                <li>Меню пользователя: должно открываться</li>
+                            </ul>
+                        </div>
+                        <div class="test-card">
+                            <h3>Sidebar элементы</h3>
+                            <ul>
+                                <li>Навигационные ссылки: должны работать</li>
+                                <li>Активная страница: должна подсвечиваться</li>
+                                <li>Hover эффекты: должны работать</li>
+                                <li>Мобильное меню: должно адаптироваться</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Performance Test -->
+                <div class="test-section">
+                    <h2>⚡ Тест производительности</h2>
+                    <div class="test-card">
+                        <h3>Проверка загрузки</h3>
+                        <p><strong>Время загрузки страницы:</strong> <span id="load-time"></span>ms</p>
+                        <p><strong>Количество DOM элементов:</strong> <span id="dom-count"></span></p>
+                        <p><strong>Размер CSS:</strong> <span id="css-size"></span>KB</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    
+    <script>
+        // Тестирование адаптивности
+        function updateBreakpointIndicator() {
+            const width = window.innerWidth;
+            document.getElementById('current-width').textContent = width;
+            
+            // Обновляем активный breakpoint
+            document.querySelectorAll('.breakpoint-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (width >= 1200) {
+                document.querySelector('[data-bp="xl"]').classList.add('active');
+            } else if (width >= 992) {
+                document.querySelector('[data-bp="lg"]').classList.add('active');
+            } else if (width >= 768) {
+                document.querySelector('[data-bp="md"]').classList.add('active');
+            } else if (width >= 576) {
+                document.querySelector('[data-bp="sm"]').classList.add('active');
+            } else {
+                document.querySelector('[data-bp="xs"]').classList.add('active');
+            }
+        }
+        
+        // Тестирование производительности
+        function measurePerformance() {
+            const loadTime = performance.now();
+            document.getElementById('load-time').textContent = Math.round(loadTime);
+            
+            const domCount = document.querySelectorAll('*').length;
+            document.getElementById('dom-count').textContent = domCount;
+            
+            // Примерный размер CSS (в реальности нужно измерять по-другому)
+            const cssSize = Math.round(document.styleSheets[0].cssRules.length * 0.1);
+            document.getElementById('css-size').textContent = cssSize;
+        }
+        
+        // Проверка layout на разных размерах
+        function testLayout() {
+            const header = document.querySelector('sg-header');
+            const sidebar = document.querySelector('sg-sidebar');
+            const main = document.querySelector('.main-content');
+            
+            console.log('Layout Test Results:');
+            console.log('Header:', {
+                position: getComputedStyle(header).position,
+                zIndex: getComputedStyle(header).zIndex,
+                top: getComputedStyle(header).top
+            });
+            console.log('Sidebar:', {
+                position: getComputedStyle(sidebar).position,
+                zIndex: getComputedStyle(sidebar).zIndex,
+                width: getComputedStyle(sidebar).width
+            });
+            console.log('Main:', {
+                flex: getComputedStyle(main).flex,
+                overflow: getComputedStyle(main).overflowY
+            });
+        }
+        
+        // Инициализация тестов
+        window.addEventListener('load', () => {
+            updateBreakpointIndicator();
+            measurePerformance();
+            testLayout();
+        });
+        
+        window.addEventListener('resize', updateBreakpointIndicator);
+        
+        // Тест на мобильных устройствах
+        if (window.innerWidth <= 768) {
+            console.log('Mobile layout detected');
+            // Дополнительные тесты для мобильных
+        }
+    </script>
+</body>
+</html>
