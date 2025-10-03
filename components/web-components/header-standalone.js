@@ -68,7 +68,7 @@ class SGHeader extends HTMLElement {
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
-                    padding: 0.5rem 1rem;
+                    padding: 0.5rem;
                     background: #f8fafc;
                     border: 1px solid #e5e7eb;
                     border-radius: 0.5rem;
@@ -262,7 +262,7 @@ class SGHeader extends HTMLElement {
                     }
 
                     .language-toggle {
-                        padding: 0.375rem 0.75rem;
+                        padding: 0.5rem;
                     }
 
                     .user-name {
