@@ -2562,6 +2562,13 @@ select.form-control {
   padding: 2rem;
 }
 
+/* Header on register page */
+body:not(.landing-page) sg-header-landing {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 .header--landing {
   background-color: var(--color-surface);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
