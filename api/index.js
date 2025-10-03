@@ -73,6 +73,15 @@ app.get('/packages.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../packages.js'));
 });
 
+// Web Components standalone files
+app.get('/components/web-components/header-standalone.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/header-standalone.js'));
+});
+
+app.get('/components/web-components/sidebar-standalone.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../components/web-components/sidebar-standalone.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
