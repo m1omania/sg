@@ -203,8 +203,9 @@ app.post('/api/auth/verify-code', (req, res) => {
 app.post('/api/auth/register', (req, res) => {
   const { email, password, code } = req.body;
   
-  if (!email || !password || !code) {
-    return res.status(400).json({ error: 'Email, password and code are required' });
+  // For demo purposes, we only require email and code
+  if (!email || !code) {
+    return res.status(400).json({ error: 'Email and code are required' });
   }
   
   // For demo purposes, accept code 123456
