@@ -114,6 +114,10 @@ app.get('/layout-fix-test.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../layout-fix-test.html'));
 });
 
+app.get('/gap-fix-test.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../gap-fix-test.html'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
