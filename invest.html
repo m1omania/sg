@@ -96,12 +96,12 @@
                             </div>
                             <div class="stat">
                                 <span class="stat-label">Мин. сумма</span>
-                                <span class="stat-value">$500</span>
+                                <span class="stat-value project-min-amount">$500</span>
                             </div>
                         </div>
                     </div>
                     <div class="project-footer">
-                        <button class="btn btn--primary invest-btn" data-project="airships">Смотреть пакеты</button>
+                        <button class="btn btn--primary">Смотреть пакеты</button>
                     </div>
                 </div>
 
@@ -126,12 +126,12 @@
                             </div>
                             <div class="stat">
                                 <span class="stat-label">Мин. сумма</span>
-                                <span class="stat-value">$1000</span>
+                                <span class="stat-value project-min-amount">$1000</span>
                             </div>
                         </div>
                     </div>
                     <div class="project-footer">
-                        <button class="btn btn--primary invest-btn" data-project="sovelmash">Смотреть пакеты</button>
+                        <button class="btn btn--primary">Смотреть пакеты</button>
                     </div>
                 </div>
             </div>
@@ -147,20 +147,21 @@
                         <form id="investment-form">
                             <div class="form-group">
                                 <label class="form-label">Проект:</label>
-                                <input type="text" class="form-control" id="project-name" readonly>
-                                <input type="hidden" id="project-id">
+                                <select class="form-control" id="project-select" required>
+                                    <option value="">Выберите проект</option>
+                                    <option value="Дирижабли">Дирижабли</option>
+                                    <option value="Совэлмаш">Совэлмаш</option>
+                                </select>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label">Сумма инвестиции ($):</label>
-                                <input type="number" class="form-control" id="investment-amount" min="1" step="0.01" required>
+                                <input type="number" class="form-control" id="amount-input" min="1" step="0.01" required>
                             </div>
                             
                             <div class="form-group">
                                 <label class="form-label">Применить купон (если есть):</label>
-                                <select class="form-control" id="coupon-select">
-                                    <option value="">Без купона</option>
-                                </select>
+                                <input type="text" class="form-control" id="coupon-input" placeholder="Введите код купона">
                             </div>
                             
                             <div class="investment-summary">
@@ -197,195 +198,6 @@
     </div>
 
     <script src="app.js"></script>
-    <script>
-        // Investment Page JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeInvestmentPage();
-        });
-
-        function initializeInvestmentPage() {
-            setupEventListeners();
-        }
-
-        function setupEventListeners() {
-            // Investment buttons
-            document.querySelectorAll('.invest-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const project = this.dataset.project;
-                    window.location.href = `packages.html?project=${project}`;
-                });
-            });
-
-            // Close modals
-            document.querySelectorAll('.modal-close').forEach(button => {
-                button.addEventListener('click', closeModal);
-            });
-
-            // Close when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    closeModal(e);
-                }
-            });
-
-            // Calculate investment summary
-            const amountInput = document.getElementById('investment-amount');
-            if (amountInput) {
-                amountInput.addEventListener('input', calculateInvestmentSummary);
-            }
-
-            const couponSelect = document.getElementById('coupon-select');
-            if (couponSelect) {
-                couponSelect.addEventListener('change', calculateInvestmentSummary);
-            }
-
-            // Confirm investment
-            const confirmBtn = document.getElementById('confirm-investment-btn');
-            if (confirmBtn) {
-                confirmBtn.addEventListener('click', confirmInvestment);
-            }
-
-            // Notification close
-            const notificationClose = document.querySelector('.notification-close');
-            if (notificationClose) {
-                notificationClose.addEventListener('click', () => {
-                    document.getElementById('success-notification').classList.add('hidden');
-                });
-            }
-        }
-
-        function openInvestmentModal(e) {
-            const project = e.target.dataset.project;
-            const projectName = project === 'airships' ? 'Дирижабли' : 'Совэлмаш';
-            
-            document.getElementById('project-id').value = project;
-            document.getElementById('project-name').value = projectName;
-            
-            // Load user coupons
-            loadUserCoupons();
-            
-            // Reset form
-            document.getElementById('investment-amount').value = '';
-            document.getElementById('base-amount').textContent = '$0.00';
-            document.getElementById('discount-amount').textContent = '$0.00';
-            document.getElementById('total-amount').textContent = '$0.00';
-            
-            document.getElementById('investment-modal').classList.remove('hidden');
-        }
-
-        async function loadUserCoupons() {
-            try {
-                const response = await fetch('/api/coupons/active');
-                if (response.ok) {
-                    const coupons = await response.json();
-                    const select = document.getElementById('coupon-select');
-                    
-                    // Clear existing options except the first one
-                    select.innerHTML = '<option value="">Без купона</option>';
-                    
-                    // Add active coupons
-                    coupons.forEach(coupon => {
-                        const option = document.createElement('option');
-                        option.value = coupon.id;
-                        option.textContent = `${coupon.name} (${coupon.bonus})`;
-                        select.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading coupons:', error);
-            }
-        }
-
-        function calculateInvestmentSummary() {
-            const amount = parseFloat(document.getElementById('investment-amount').value) || 0;
-            const couponSelect = document.getElementById('coupon-select');
-            const selectedCouponId = couponSelect.value;
-            
-            let discount = 0;
-            
-            // Find selected coupon
-            if (selectedCouponId) {
-                const selectedOption = couponSelect.options[couponSelect.selectedIndex];
-                const couponText = selectedOption.textContent;
-                const bonusMatch = couponText.match(/\((.+)\)/);
-                if (bonusMatch) {
-                    const bonus = bonusMatch[1].trim();
-                    if (bonus.includes('%')) {
-                        const percent = parseFloat(bonus.replace('%', ''));
-                        discount = amount * (percent / 100);
-                    } else {
-                        const value = parseFloat(bonus.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
-                        discount = value;
-                    }
-                }
-            }
-            
-            const total = amount - discount;
-            
-            document.getElementById('base-amount').textContent = `${amount.toFixed(2)}`;
-            document.getElementById('discount-amount').textContent = `-${discount.toFixed(2)}`;
-            document.getElementById('total-amount').textContent = `${total.toFixed(2)}`;
-        }
-
-        async function confirmInvestment() {
-            const projectId = document.getElementById('project-id').value;
-            const amount = parseFloat(document.getElementById('investment-amount').value);
-            const couponId = document.getElementById('coupon-select').value || null;
-            
-            if (!amount || amount <= 0) {
-                showNotification('Введите корректную сумму инвестиции');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/investments/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userId: 1, // Demo user ID
-                        projectId: projectId,
-                        amount: amount,
-                        couponId: couponId
-                    })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    showNotification(`Инвестиция успешно создана! ID операции: ${result.investment.transactionId}`);
-                    closeModal();
-                    
-                    // In a real app, you might redirect to a success page or update the UI
-                } else {
-                    showNotification('Ошибка при создании инвестиции');
-                }
-            } catch (error) {
-                console.error('Error creating investment:', error);
-                showNotification('Ошибка при создании инвестиции');
-            }
-        }
-
-        function closeModal() {
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.classList.add('hidden');
-            });
-        }
-
-        function showNotification(message) {
-            const notification = document.getElementById('success-notification');
-            const messageElement = document.getElementById('notification-text');
-            
-            if (messageElement) {
-                messageElement.textContent = message;
-            }
-            
-            notification.classList.remove('hidden');
-            
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+    <script src="invest.js"></script>
 </body>
 </html>

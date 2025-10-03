@@ -61,6 +61,10 @@ app.get('/my-investments.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../my-investments.js'));
 });
 
+app.get('/invest.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../invest.js'));
+});
+
 // Serve manifest files
 app.get('/manifest.json', (req, res) => {
   res.sendFile(path.join(__dirname, '../manifest.json'));
