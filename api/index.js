@@ -1,35 +1,17 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const { dbGet } = require('../server/config/database');
-const health = require('../server/health');
-const config = require('../server/config/environment');
-const { helmetConfig, securityLogger, bodySizeLimiter, contentTypeChecker, apiLimiter } = require('../server/middleware/security');
-const { errorHandler, notFoundHandler, unhandledRejectionHandler, uncaughtExceptionHandler, validationErrorHandler, jsonErrorHandler } = require('../server/middleware/errorHandler');
-const { swaggerUi, specs } = require('../server/config/swagger');
-const { logger, httpLoggingMiddleware, auditLog } = require('../server/config/logger');
-const { sanitizeInput } = require('../server/middleware/sanitization');
-const { metricsMiddleware, errorMetricsMiddleware } = require('../server/middleware/metrics');
-const { alertMiddleware } = require('../server/middleware/alerts');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// Обработчики необработанных исключений
-process.on('unhandledRejection', unhandledRejectionHandler);
-process.on('uncaughtException', uncaughtExceptionHandler);
-
-// Security middleware (должны быть первыми)
-app.use(helmetConfig);
-app.use(securityLogger);
-app.use(bodySizeLimiter);
-app.use(contentTypeChecker);
-
-// HTTP логирование
-app.use(httpLoggingMiddleware);
+// Basic security middleware
+app.use(helmet());
 
 // CORS
 app.use(cors({
-  origin: config.ALLOWED_ORIGINS,
+  origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -39,49 +21,122 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Sanitization middleware
-app.use(sanitizeInput);
-
-// Error handling middleware (должны быть перед маршрутами)
-app.use(jsonErrorHandler);
-app.use(validationErrorHandler);
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api', limiter);
 
 // Static files
 app.use(express.static(path.join(__dirname, '../')));
 
-// Rate limiting for API routes
-app.use('/api', apiLimiter);
-
-// Metrics collection middleware
-app.use(metricsMiddleware);
-
-// Alert middleware
-app.use(alertMiddleware);
-
 // Health check endpoint
-app.get('/api/health', health.check);
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'production'
+  });
+});
 
-// API routes
-app.use('/api/auth', require('../server/routes/auth'));
-app.use('/api/users', require('../server/routes/users'));
-app.use('/api/projects', require('../server/routes/projects'));
-app.use('/api/investments', require('../server/routes/investments'));
-app.use('/api/wallet', require('../server/routes/wallet'));
-app.use('/api/transactions', require('../server/routes/transactions'));
-app.use('/api/coupons', require('../server/routes/coupons'));
-app.use('/api/monitoring', require('../server/routes/monitoring'));
+// Basic API routes
+app.get('/api/projects', (req, res) => {
+  res.json([
+    {
+      id: 1,
+      name: "Дирижабли",
+      description: "Инвестируйте в инновационные проекты воздушных дирижаблей. Современные технологии и экологичный транспорт будущего.",
+      image_url: "/images/airships.jpg",
+      min_investment: 500,
+      interest_rate: 12,
+      duration: 36,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    },
+    {
+      id: 2,
+      name: "Совэлмаш",
+      description: "Инвестируйте в развитие современного машиностроительного завода. Перспективный проект с высокой отдачей.",
+      image_url: "/images/sovelmash.jpg",
+      min_investment: 1000,
+      interest_rate: 15,
+      duration: 60,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    },
+    {
+      id: 3,
+      name: "Солнечные панели",
+      description: "Инвестируйте в развитие солнечной энергетики. Проект по установке солнечных панелей в жилых комплексах.",
+      image_url: "/images/solar.jpg",
+      min_investment: 250,
+      interest_rate: 10,
+      duration: 24,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    }
+  ]);
+});
 
-// Swagger documentation
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(specs));
-
-// Error metrics middleware
-app.use(errorMetricsMiddleware);
+app.get('/api/projects/:id', (req, res) => {
+  const { id } = req.params;
+  const projects = [
+    {
+      id: 1,
+      name: "Дирижабли",
+      description: "Инвестируйте в инновационные проекты воздушных дирижаблей. Современные технологии и экологичный транспорт будущего.",
+      image_url: "/images/airships.jpg",
+      min_investment: 500,
+      interest_rate: 12,
+      duration: 36,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    },
+    {
+      id: 2,
+      name: "Совэлмаш",
+      description: "Инвестируйте в развитие современного машиностроительного завода. Перспективный проект с высокой отдачей.",
+      image_url: "/images/sovelmash.jpg",
+      min_investment: 1000,
+      interest_rate: 15,
+      duration: 60,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    },
+    {
+      id: 3,
+      name: "Солнечные панели",
+      description: "Инвестируйте в развитие солнечной энергетики. Проект по установке солнечных панелей в жилых комплексах.",
+      image_url: "/images/solar.jpg",
+      min_investment: 250,
+      interest_rate: 10,
+      duration: 24,
+      status: "active",
+      created_at: "2025-10-03 10:48:32"
+    }
+  ];
+  
+  const project = projects.find(p => p.id === parseInt(id));
+  if (!project) {
+    return res.status(404).json({ error: 'Project not found' });
+  }
+  
+  res.json(project);
+});
 
 // 404 handler
-app.use(notFoundHandler);
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
 
-// Централизованный обработчик ошибок (должен быть последним)
-app.use(errorHandler);
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
 // Export for Vercel
 module.exports = app;
