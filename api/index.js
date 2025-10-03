@@ -127,9 +127,55 @@ app.get('/api/projects/:id', (req, res) => {
   res.json(project);
 });
 
-// Serve index.html for root path
+// Serve landing.html for root path (for unauthenticated users)
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../landing.html'));
+});
+
+// Serve index.html for authenticated users
+app.get('/index.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+// Serve other HTML pages
+app.get('/landing.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../landing.html'));
+});
+
+app.get('/register.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../register.html'));
+});
+
+app.get('/projects.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../projects.html'));
+});
+
+app.get('/invest.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../invest.html'));
+});
+
+app.get('/wallet.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../wallet.html'));
+});
+
+app.get('/my-investments.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../my-investments.html'));
+});
+
+app.get('/deposit.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../deposit.html'));
+});
+
+app.get('/checkout.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../checkout.html'));
+});
+
+app.get('/packages.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../packages.html'));
+});
+
+app.get('/coupons.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../coupons.html'));
 });
 
 // 404 handler
