@@ -147,14 +147,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="coupon-actions">
-                <button class="btn btn--small" onclick="showCouponDetails(${coupon.id})">
+                <button class="btn btn--small coupon-details-btn" data-coupon-id="${coupon.id}">
                     Подробнее
                 </button>
-                ${!isHistory ? `<button class="btn btn--small btn--primary" onclick="useCoupon(${coupon.id})">
+                ${!isHistory ? `<button class="btn btn--small btn--primary coupon-use-btn" data-coupon-id="${coupon.id}">
                     Использовать
                 </button>` : ''}
             </div>
         `;
+        
+        // Add event listeners to buttons
+        const detailsBtn = card.querySelector('.coupon-details-btn');
+        if (detailsBtn) {
+            detailsBtn.addEventListener('click', () => {
+                showCouponDetails(coupon.id);
+            });
+        }
+        
+        const useBtn = card.querySelector('.coupon-use-btn');
+        if (useBtn) {
+            useBtn.addEventListener('click', () => {
+                useCoupon(coupon.id);
+            });
+        }
         
         return card;
     }
