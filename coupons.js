@@ -278,14 +278,44 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Modal found:', modal);
         
-        // Show modal immediately with loading state
+        // Show modal immediately with test content
         modal.style.display = 'block';
         
         const title = document.getElementById('couponDetailsTitle');
         const body = document.getElementById('couponDetailsBody');
         
-        title.textContent = 'Загрузка...';
-        body.innerHTML = '<p>Загружаем детали купона...</p>';
+        title.textContent = 'Тест купона #' + couponId;
+        body.innerHTML = `
+            <div class="coupon-details-full">
+                <div class="coupon-header-detail">
+                    <div class="coupon-code-detail">TEST${couponId}</div>
+                    <div class="coupon-status-detail active">Активен</div>
+                </div>
+                
+                <div class="coupon-info">
+                    <h4>Описание</h4>
+                    <p>Тестовый купон для проверки модального окна</p>
+                    
+                    <h4>Размер скидки</h4>
+                    <div class="discount-info">
+                        <span class="discount-amount-large">25%</span>
+                        <span class="discount-text">скидка</span>
+                    </div>
+                    
+                    <h4>Проект</h4>
+                    <p><strong>Любой проект</strong></p>
+                    
+                    <h4>Условия использования</h4>
+                    <p>Минимальная сумма $100</p>
+                    
+                    <h4>Срок действия</h4>
+                    <p>31 декабря 2025</p>
+                </div>
+            </div>
+        `;
+        
+        console.log('Modal should be visible now');
+        return;
         
         // Find coupon data
         let coupon = null;
