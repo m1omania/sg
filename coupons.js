@@ -210,6 +210,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Coupon details modal functionality
+    const couponDetailsModal = document.getElementById('couponDetailsModal');
+    const closeCouponDetailsModal = document.getElementById('closeCouponDetailsModal');
+    
+    if (closeCouponDetailsModal) {
+        closeCouponDetailsModal.addEventListener('click', () => {
+            couponDetailsModal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside
+    if (couponDetailsModal) {
+        couponDetailsModal.addEventListener('click', (e) => {
+            if (e.target === couponDetailsModal) {
+                couponDetailsModal.style.display = 'none';
+            }
+        });
+    }
+    
     if (addCouponForm) {
         addCouponForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -248,7 +267,99 @@ document.addEventListener('DOMContentLoaded', function() {
     // Global functions for coupon actions
     window.showCouponDetails = function(couponId) {
         console.log('Show details for coupon:', couponId);
-        // Implement coupon details modal
+        
+        // Find coupon data
+        let coupon = null;
+        
+        // Try to find in active coupons first
+        fetch(`/api/coupons/active/1`)
+            .then(response => response.json())
+            .then(coupons => {
+                coupon = coupons.find(c => c.id == couponId);
+                if (!coupon) {
+                    // Try to find in history coupons
+                    return fetch(`/api/coupons/history/1`);
+                }
+                return Promise.resolve(coupons);
+            })
+            .then(response => {
+                if (response && response.json) {
+                    return response.json();
+                }
+                return response;
+            })
+            .then(coupons => {
+                if (!coupon && coupons) {
+                    coupon = coupons.find(c => c.id == couponId);
+                }
+                
+                if (coupon) {
+                    // Fill modal with coupon details
+                    const modal = document.getElementById('couponDetailsModal');
+                    const title = document.getElementById('couponDetailsTitle');
+                    const body = document.getElementById('couponDetailsBody');
+                    
+                    title.textContent = coupon.name;
+                    
+                    const statusText = coupon.used ? 'Использован' : 
+                                     (coupon.status === 'expired') ? 'Просрочен' : 'Активен';
+                    const statusClass = coupon.used ? 'used' : 
+                                      (coupon.status === 'expired') ? 'expired' : 'active';
+                    
+                    body.innerHTML = `
+                        <div class="coupon-details-full">
+                            <div class="coupon-header-detail">
+                                <div class="coupon-code-detail">${coupon.code}</div>
+                                <div class="coupon-status-detail ${statusClass}">${statusText}</div>
+                            </div>
+                            
+                            <div class="coupon-info">
+                                <h4>Описание</h4>
+                                <p>${coupon.description}</p>
+                                
+                                <h4>Размер скидки</h4>
+                                <div class="discount-info">
+                                    <span class="discount-amount-large">${coupon.discount}%</span>
+                                    <span class="discount-text">скидка</span>
+                                </div>
+                                
+                                <h4>Проект</h4>
+                                <p><strong>${coupon.project_name}</strong></p>
+                                
+                                <h4>Условия использования</h4>
+                                <p>${coupon.conditions}</p>
+                                
+                                <h4>Срок действия</h4>
+                                <p>${new Date(coupon.expires_at).toLocaleDateString('ru-RU')}</p>
+                                
+                                ${coupon.used_at ? `
+                                    <h4>Дата использования</h4>
+                                    <p>${new Date(coupon.used_at).toLocaleDateString('ru-RU')}</p>
+                                ` : ''}
+                                
+                                ${coupon.investment_amount ? `
+                                    <h4>Сумма инвестиции</h4>
+                                    <p>$${coupon.investment_amount}</p>
+                                ` : ''}
+                                
+                                ${coupon.discount_amount && coupon.discount_amount !== coupon.discount ? `
+                                    <h4>Размер скидки</h4>
+                                    <p>$${coupon.discount_amount}</p>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Show modal
+                    modal.style.display = 'block';
+                } else {
+                    alert('Купон не найден');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading coupon details:', error);
+                alert('Ошибка загрузки деталей купона');
+            });
     };
     
     window.useCoupon = function(couponId) {
