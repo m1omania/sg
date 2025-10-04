@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест баланса</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .test { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer; margin: 5px; }
+        .result { background: white; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 3px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Тест баланса</h1>
+    
+    <div class="test">
+        <h3>1. Получить баланс</h3>
+        <button onclick="getBalance()">GET /api/wallet/1</button>
+        <div id="balance-result" class="result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2. Пополнить счет</h3>
+        <button onclick="deposit()">POST /api/transactions/deposit</button>
+        <div id="deposit-result" class="result"></div>
+    </div>
+    
+    <div class="test">
+        <h3>3. Проверить баланс после пополнения</h3>
+        <button onclick="getBalanceAfterDeposit()">GET /api/wallet/1</button>
+        <div id="balance-after-result" class="result"></div>
+    </div>
+
+    <script>
+        async function getBalance() {
+            try {
+                const response = await fetch('/api/wallet/1');
+                const data = await response.json();
+                document.getElementById('balance-result').textContent = `Status: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                document.getElementById('balance-result').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function deposit() {
+            try {
+                const response = await fetch('/api/transactions/deposit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: 1,
+                        amount: 1000,
+                        paymentMethod: 'card'
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('deposit-result').textContent = `Status: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                document.getElementById('deposit-result').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function getBalanceAfterDeposit() {
+            try {
+                const response = await fetch('/api/wallet/1');
+                const data = await response.json();
+                document.getElementById('balance-after-result').textContent = `Status: ${response.status}\nResponse: ${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                document.getElementById('balance-after-result').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
