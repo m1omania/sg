@@ -186,29 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Modal functionality
-    const addCouponModal = document.getElementById('addCouponModal');
-    const addCouponBtn = document.getElementById('addCouponBtn');
-    const closeAddCouponModal = document.getElementById('closeAddCouponModal');
-    const cancelAddCoupon = document.getElementById('cancelAddCoupon');
-    const addCouponForm = document.getElementById('addCouponForm');
-    
-    if (addCouponBtn) {
-        addCouponBtn.addEventListener('click', () => {
-            addCouponModal.style.display = 'block';
-        });
-    }
-    
-    if (closeAddCouponModal) {
-        closeAddCouponModal.addEventListener('click', () => {
-            addCouponModal.style.display = 'none';
-        });
-    }
-    
-    if (cancelAddCoupon) {
-        cancelAddCoupon.addEventListener('click', () => {
-            addCouponModal.style.display = 'none';
-        });
-    }
     
     // Coupon details modal functionality
     const couponDetailsModal = document.getElementById('couponDetailsModal');
@@ -229,40 +206,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    if (addCouponForm) {
-        addCouponForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(addCouponForm);
-            const code = formData.get('code');
-            
-            try {
-                const response = await fetch('/api/coupons/activate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                        code: code
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert('Промокод успешно активирован!');
-                    addCouponModal.style.display = 'none';
-                    addCouponForm.reset();
-                    loadActiveCoupons(); // Reload active coupons
-                } else {
-                    alert('Ошибка: ' + result.error);
-                }
-            } catch (error) {
-                console.error('Error activating coupon:', error);
-                alert('Ошибка при активации промокода');
-            }
-        });
-    }
     
     // Global functions for coupon actions
     window.showCouponDetails = function(couponId) {

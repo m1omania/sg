@@ -2004,10 +2004,6 @@ select.form-control {
     border-bottom-color: #007bff;
 }
 
-.coupons-actions {
-    margin-bottom: 20px;
-    text-align: right;
-}
 
 .coupons-grid {
     display: grid;
