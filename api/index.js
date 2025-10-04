@@ -73,6 +73,10 @@ app.get('/packages.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../packages.js'));
 });
 
+app.get('/coupons.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../coupons.js'));
+});
+
 // Web Components standalone files
 app.get('/components/web-components/header-standalone.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../components/web-components/header-standalone.js'));
