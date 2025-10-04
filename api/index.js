@@ -1,32 +1,23 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// Basic security middleware
-app.use(helmet());
-
-// CORS
-app.use(cors({
-  origin: '*',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
+// Simplified CORS for prototype
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
 
 // Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use('/api', limiter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Static files
 app.use(express.static(path.join(__dirname, '../')));
@@ -156,16 +147,7 @@ app.get('/solarlogo.avif', (req, res) => {
   res.sendFile(path.join(__dirname, '../solarlogo.avif'));
 });
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    version: '1.0.0',
-    environment: process.env.NODE_ENV || 'production'
-  });
-});
+// Health check removed for prototype
 
 // Basic API routes
 app.get('/api/projects', (req, res) => {
@@ -369,8 +351,7 @@ let userInvestments = {
   1: []
 };
 
-console.log('Initial userBalances:', userBalances);
-console.log('Initial userInvestments:', userInvestments);
+// Debug logging removed for prototype
 
 // Wallet endpoints
 app.get('/api/wallet/:userId', (req, res) => {
@@ -379,8 +360,7 @@ app.get('/api/wallet/:userId', (req, res) => {
   
   const balance = userBalances[userIdNum] || { main_balance: 0.00, partner_balance: 0.00 };
   
-  console.log(`GET /api/wallet/${userId} - Current balance:`, balance);
-  console.log('All userBalances:', userBalances);
+  // Debug logging removed for prototype
   
   res.json({
     id: userIdNum,
@@ -423,15 +403,15 @@ app.get('/api/wallet/:userId/transactions', (req, res) => {
 app.post('/api/transactions/deposit', (req, res) => {
   const { userId, amount, paymentMethod } = req.body;
   
-  console.log('Deposit request:', { userId, amount, paymentMethod });
+  // Debug logging removed for prototype
   
   if (!userId || !amount || !paymentMethod) {
-    console.log('Missing required fields');
+    // Debug logging removed for prototype
     return res.status(400).json({ error: 'User ID, amount and payment method are required' });
   }
   
   if (isNaN(amount) || amount <= 0) {
-    console.log('Invalid amount:', amount);
+    // Debug logging removed for prototype
     return res.status(400).json({ error: 'Amount must be a positive number' });
   }
   
@@ -439,8 +419,7 @@ app.post('/api/transactions/deposit', (req, res) => {
   const userIdNum = parseInt(userId);
   const depositAmount = parseFloat(amount);
   
-  console.log(`POST /api/transactions/deposit - User ${userIdNum}, Amount: ${depositAmount}`);
-  console.log('Balance before update:', userBalances[userIdNum]);
+  // Debug logging removed for prototype
   
   if (!userBalances[userIdNum]) {
     userBalances[userIdNum] = { main_balance: 0.00, partner_balance: 0.00 };
@@ -448,8 +427,7 @@ app.post('/api/transactions/deposit', (req, res) => {
   
   userBalances[userIdNum].main_balance += depositAmount;
   
-  console.log('Balance after update:', userBalances[userIdNum]);
-  console.log('All userBalances after update:', userBalances);
+  // Debug logging removed for prototype
   
   // For demo purposes, always return success
   const response = {
@@ -462,7 +440,7 @@ app.post('/api/transactions/deposit', (req, res) => {
     date: new Date().toISOString()
   };
   
-  console.log('Deposit response:', response);
+  // Debug logging removed for prototype
   res.json(response);
 });
 
@@ -470,15 +448,15 @@ app.post('/api/transactions/deposit', (req, res) => {
 app.post('/api/transactions/invest', (req, res) => {
   const { userId, packageId, amount, account, paymentType } = req.body;
 
-  console.log('Investment request:', { userId, packageId, amount, account, paymentType });
+  // Debug logging removed for prototype
 
   if (!userId || !packageId || !amount || !account) {
-    console.log('Missing required fields for investment');
+    // Debug logging removed for prototype
     return res.status(400).json({ error: 'User ID, package ID, amount and account are required' });
   }
 
   if (isNaN(amount) || amount <= 0) {
-    console.log('Invalid amount for investment:', amount);
+    // Debug logging removed for prototype
     return res.status(400).json({ error: 'Amount must be a positive number' });
   }
 
@@ -486,8 +464,7 @@ app.post('/api/transactions/invest', (req, res) => {
   const userIdNum = parseInt(userId);
   const investmentAmount = parseFloat(amount);
 
-  console.log(`POST /api/transactions/invest - User ${userIdNum}, Amount: ${investmentAmount}`);
-  console.log('Balance before investment:', userBalances[userIdNum]);
+  // Debug logging removed for prototype
 
   if (!userBalances[userIdNum]) {
     userBalances[userIdNum] = { main_balance: 0.00, partner_balance: 0.00 };
@@ -500,8 +477,7 @@ app.post('/api/transactions/invest', (req, res) => {
     userBalances[userIdNum].partner_balance -= investmentAmount;
   }
 
-  console.log('Balance after investment:', userBalances[userIdNum]);
-  console.log('All userBalances after investment:', userBalances);
+  // Debug logging removed for prototype
 
   // Create investment record
   const investment = {
@@ -521,8 +497,7 @@ app.post('/api/transactions/invest', (req, res) => {
   }
   userInvestments[userIdNum].push(investment);
 
-  console.log('Investment stored:', investment);
-  console.log('All userInvestments after investment:', userInvestments);
+  // Debug logging removed for prototype
 
   // For demo purposes, always return success
   const response = {
@@ -536,7 +511,7 @@ app.post('/api/transactions/invest', (req, res) => {
     date: new Date().toISOString()
   };
 
-  console.log('Investment response:', response);
+  // Debug logging removed for prototype
   res.json(response);
 });
 
@@ -570,7 +545,7 @@ app.get('/api/investments/:userId', (req, res) => {
   const { userId } = req.params;
   const userIdNum = parseInt(userId);
   
-  console.log(`GET /api/investments/${userId} - User investments:`, userInvestments[userIdNum] || []);
+  // Debug logging removed for prototype
   
   const investments = userInvestments[userIdNum] || [];
   
@@ -586,7 +561,7 @@ app.get('/api/investments/:userId', (req, res) => {
     account: inv.account
   }));
   
-  console.log('Formatted investments:', formattedInvestments);
+  // Debug logging removed for prototype
   res.json(formattedInvestments);
 });
 
