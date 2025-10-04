@@ -147,29 +147,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="coupon-actions">
-                <button class="btn btn--small coupon-details-btn" data-coupon-id="${coupon.id}">
+                <button class="btn btn--small" onclick="showCouponDetails(${coupon.id})">
                     Подробнее
                 </button>
-                ${!isHistory ? `<button class="btn btn--small btn--primary coupon-use-btn" data-coupon-id="${coupon.id}">
+                ${!isHistory ? `<button class="btn btn--small btn--primary" onclick="useCoupon(${coupon.id})">
                     Использовать
                 </button>` : ''}
             </div>
         `;
-        
-        // Add event listeners to buttons
-        const detailsBtn = card.querySelector('.coupon-details-btn');
-        if (detailsBtn) {
-            detailsBtn.addEventListener('click', () => {
-                showCouponDetails(coupon.id);
-            });
-        }
-        
-        const useBtn = card.querySelector('.coupon-use-btn');
-        if (useBtn) {
-            useBtn.addEventListener('click', () => {
-                useCoupon(coupon.id);
-            });
-        }
         
         return card;
     }
@@ -293,62 +278,25 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Modal found:', modal);
         
-        // Show modal immediately with test content
+        // Show modal immediately with loading state
         modal.style.display = 'block';
         
         const title = document.getElementById('couponDetailsTitle');
         const body = document.getElementById('couponDetailsBody');
         
-        title.textContent = 'Тест купона #' + couponId;
-        body.innerHTML = `
-            <div class="coupon-details-full">
-                <div class="coupon-header-detail">
-                    <div class="coupon-code-detail">TEST${couponId}</div>
-                    <div class="coupon-status-detail active">Активен</div>
-                </div>
-                
-                <div class="coupon-info">
-                    <h4>Описание</h4>
-                    <p>Тестовый купон для проверки модального окна</p>
-                    
-                    <h4>Размер скидки</h4>
-                    <div class="discount-info">
-                        <span class="discount-amount-large">25%</span>
-                        <span class="discount-text">скидка</span>
-                    </div>
-                    
-                    <h4>Проект</h4>
-                    <p><strong>Любой проект</strong></p>
-                    
-                    <h4>Условия использования</h4>
-                    <p>Минимальная сумма $100</p>
-                    
-                    <h4>Срок действия</h4>
-                    <p>31 декабря 2025</p>
-                </div>
-            </div>
-        `;
-        
-        console.log('Modal should be visible now');
-        return;
+        title.textContent = 'Загрузка...';
+        body.innerHTML = '<p>Загружаем детали купона...</p>';
         
         // Find coupon data
         let coupon = null;
         
         // Try to find in active coupons first
         fetch(`/api/coupons/active/1`)
-            .then(response => {
-                console.log('Active coupons response:', response.status);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(coupons => {
-                console.log('Active coupons data:', coupons);
                 coupon = coupons.find(c => c.id == couponId);
-                console.log('Found coupon in active:', coupon);
-                
                 if (!coupon) {
                     // Try to find in history coupons
-                    console.log('Not found in active, searching history...');
                     return fetch(`/api/coupons/history/1`);
                 }
                 return Promise.resolve(coupons);
@@ -360,10 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response;
             })
             .then(coupons => {
-                console.log('History coupons data:', coupons);
                 if (!coupon && coupons) {
                     coupon = coupons.find(c => c.id == couponId);
-                    console.log('Found coupon in history:', coupon);
                 }
                 
                 if (coupon) {
