@@ -98,6 +98,8 @@
         // Coupons page functionality
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Coupons page loaded');
+            console.log('Document ready state:', document.readyState);
+            console.log('Window location:', window.location.href);
             
             const userId = 1; // Demo user
             const activeCouponsGrid = document.getElementById('activeCouponsGrid');
@@ -105,38 +107,76 @@
             const tabButtons = document.querySelectorAll('.tab-btn');
             const tabContents = document.querySelectorAll('.tab-content');
             
+            console.log('Elements found:', {
+                activeCouponsGrid: !!activeCouponsGrid,
+                historyCouponsGrid: !!historyCouponsGrid,
+                tabButtons: tabButtons.length,
+                tabContents: tabContents.length
+            });
+            
             // Load active coupons
             async function loadActiveCoupons() {
                 try {
                     console.log('Loading active coupons...');
+                    console.log('activeCouponsGrid element:', activeCouponsGrid);
+                    
                     const response = await fetch(`/api/coupons/active/${userId}`);
                     console.log('Active coupons response status:', response.status);
+                    console.log('Response headers:', response.headers);
                     
                     if (!response.ok) {
                         console.log('Active coupons response not ok:', response.status);
+                        if (activeCouponsGrid) {
+                            activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка загрузки: ' + response.status + '</p></div>';
+                        }
                         return;
                     }
                     
-                    const coupons = await response.json();
+                    const responseText = await response.text();
+                    console.log('Raw response text:', responseText);
+                    
+                    let coupons;
+                    try {
+                        coupons = JSON.parse(responseText);
+                    } catch (parseError) {
+                        console.error('JSON parse error:', parseError);
+                        console.log('Response was not valid JSON:', responseText);
+                        if (activeCouponsGrid) {
+                            activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка парсинга JSON</p></div>';
+                        }
+                        return;
+                    }
+                    
                     console.log('Active coupons data:', coupons);
                     
                     if (activeCouponsGrid) {
                         activeCouponsGrid.innerHTML = '';
+                        
+                        if (!Array.isArray(coupons)) {
+                            console.error('Coupons is not an array:', coupons);
+                            activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Неверный формат данных</p></div>';
+                            return;
+                        }
                         
                         if (coupons.length === 0) {
                             activeCouponsGrid.innerHTML = '<div class="empty-state"><p>У вас нет активных купонов</p></div>';
                             return;
                         }
                         
-                        coupons.forEach(coupon => {
+                        console.log('Creating coupon cards for', coupons.length, 'coupons');
+                        coupons.forEach((coupon, index) => {
+                            console.log('Creating card for coupon', index, coupon);
                             const couponCard = createCouponCard(coupon);
                             activeCouponsGrid.appendChild(couponCard);
                         });
+                        console.log('All coupon cards created');
+                    } else {
+                        console.error('activeCouponsGrid element not found!');
                     }
                 } catch (error) {
                     console.error('Error loading active coupons:', error);
                     if (activeCouponsGrid) {
-                        activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка загрузки купонов</p></div>';
+                        activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка загрузки купонов: ' + error.message + '</p></div>';
                     }
                 }
             }
