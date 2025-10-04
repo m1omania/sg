@@ -676,6 +676,57 @@ app.post('/api/coupons/use', (req, res) => {
   });
 });
 
+// History coupons endpoint
+app.get('/api/coupons/history/:userId', (req, res) => {
+  const { userId } = req.params;
+  
+  // Demo history coupons data
+  const historyCoupons = [
+    {
+      id: 3,
+      code: 'SPRING2024',
+      name: 'Весенняя акция',
+      description: '20% скидка на инвестиции',
+      discount: 20,
+      discount_amount: 20,
+      project_name: 'Ветровая станция "Ветер"',
+      used_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      investment_amount: 5000,
+      discount_amount: 1000,
+      status: 'used',
+      type: 'promo'
+    },
+    {
+      id: 4,
+      code: 'EXPIRED2024',
+      name: 'Просроченный купон',
+      description: '10% скидка',
+      discount: 10,
+      discount_amount: 10,
+      project_name: 'Все проекты',
+      valid_to: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      status: 'expired',
+      type: 'promo'
+    },
+    {
+      id: 5,
+      code: 'BONUS15',
+      name: 'Бонус 15%',
+      description: '15% скидка на первую инвестицию',
+      discount: 15,
+      discount_amount: 15,
+      project_name: 'Солнечные панели',
+      used_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+      investment_amount: 2000,
+      discount_amount: 300,
+      status: 'used',
+      type: 'bonus'
+    }
+  ];
+  
+  res.json(historyCoupons);
+});
+
 // Serve landing.html for root path (default for unauthenticated users)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../landing.html'));
