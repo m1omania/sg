@@ -268,16 +268,42 @@ document.addEventListener('DOMContentLoaded', function() {
     window.showCouponDetails = function(couponId) {
         console.log('Show details for coupon:', couponId);
         
+        // Check if modal exists
+        const modal = document.getElementById('couponDetailsModal');
+        if (!modal) {
+            console.error('Modal not found!');
+            alert('Модальное окно не найдено');
+            return;
+        }
+        
+        console.log('Modal found:', modal);
+        
+        // Show modal immediately with loading state
+        modal.style.display = 'block';
+        
+        const title = document.getElementById('couponDetailsTitle');
+        const body = document.getElementById('couponDetailsBody');
+        
+        title.textContent = 'Загрузка...';
+        body.innerHTML = '<p>Загружаем детали купона...</p>';
+        
         // Find coupon data
         let coupon = null;
         
         // Try to find in active coupons first
         fetch(`/api/coupons/active/1`)
-            .then(response => response.json())
+            .then(response => {
+                console.log('Active coupons response:', response.status);
+                return response.json();
+            })
             .then(coupons => {
+                console.log('Active coupons data:', coupons);
                 coupon = coupons.find(c => c.id == couponId);
+                console.log('Found coupon in active:', coupon);
+                
                 if (!coupon) {
                     // Try to find in history coupons
+                    console.log('Not found in active, searching history...');
                     return fetch(`/api/coupons/history/1`);
                 }
                 return Promise.resolve(coupons);
@@ -289,15 +315,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response;
             })
             .then(coupons => {
+                console.log('History coupons data:', coupons);
                 if (!coupon && coupons) {
                     coupon = coupons.find(c => c.id == couponId);
+                    console.log('Found coupon in history:', coupon);
                 }
                 
                 if (coupon) {
-                    // Fill modal with coupon details
-                    const modal = document.getElementById('couponDetailsModal');
-                    const title = document.getElementById('couponDetailsTitle');
-                    const body = document.getElementById('couponDetailsBody');
+                    console.log('Displaying coupon details:', coupon);
                     
                     title.textContent = coupon.name;
                     
@@ -349,16 +374,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                         </div>
                     `;
-                    
-                    // Show modal
-                    modal.style.display = 'block';
                 } else {
-                    alert('Купон не найден');
+                    console.log('Coupon not found');
+                    title.textContent = 'Ошибка';
+                    body.innerHTML = '<p>Купон не найден</p>';
                 }
             })
             .catch(error => {
                 console.error('Error loading coupon details:', error);
-                alert('Ошибка загрузки деталей купона');
+                title.textContent = 'Ошибка';
+                body.innerHTML = '<p>Ошибка загрузки деталей купона: ' + error.message + '</p>';
             });
     };
     
