@@ -380,8 +380,65 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.useCoupon = function(couponId) {
         console.log('Use coupon:', couponId);
-        // Implement coupon usage
+        
+        // Find coupon data
+        let coupon = null;
+        
+        // Try to find in active coupons first
+        fetch(`/api/coupons/active/1`)
+            .then(response => response.json())
+            .then(coupons => {
+                coupon = coupons.find(c => c.id == couponId);
+                if (!coupon) {
+                    // Try to find in history coupons
+                    return fetch(`/api/coupons/history/1`);
+                }
+                return Promise.resolve(coupons);
+            })
+            .then(response => {
+                if (response && response.json) {
+                    return response.json();
+                }
+                return response;
+            })
+            .then(coupons => {
+                if (!coupon && coupons) {
+                    coupon = coupons.find(c => c.id == couponId);
+                }
+                
+                if (coupon) {
+                    console.log('Using coupon:', coupon);
+                    
+                    // Navigate based on coupon type
+                    if (coupon.project_name === 'Любой' || coupon.project_name === 'Все проекты') {
+                        // General coupon - go to invest page
+                        window.location.href = '/invest.html';
+                    } else {
+                        // Specific project coupon - go to packages page
+                        const projectUrl = getProjectUrl(coupon.project_name);
+                        window.location.href = projectUrl;
+                    }
+                } else {
+                    alert('Купон не найден');
+                }
+            })
+            .catch(error => {
+                console.error('Error using coupon:', error);
+                alert('Ошибка при использовании купона');
+            });
     };
+    
+    // Helper function to get project URL
+    function getProjectUrl(projectName) {
+        const projectUrls = {
+            'Дирижабли': '/packages.html?project=airships',
+            'Совэлмаш': '/packages.html?project=sovelmash',
+            'Ветровая станция "Ветер"': '/packages.html?project=wind',
+            'Солнечные панели': '/packages.html?project=solar'
+        };
+        
+        return projectUrls[projectName] || '/invest.html';
+    }
     
     // Load initial data
     console.log('Starting to load active coupons...');
