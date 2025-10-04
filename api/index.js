@@ -173,17 +173,6 @@ app.get('/api/projects', (req, res) => {
       duration: 60,
       status: "active",
       created_at: "2025-10-03 10:48:32"
-    },
-    {
-      id: 3,
-      name: "Солнечные панели",
-      description: "Инвестируйте в развитие солнечной энергетики. Проект по установке солнечных панелей в жилых комплексах.",
-      image_url: "/images/solar.jpg",
-      min_investment: 250,
-      interest_rate: 10,
-      duration: 24,
-      status: "active",
-      created_at: "2025-10-03 10:48:32"
     }
   ]);
 });
@@ -210,17 +199,6 @@ app.get('/api/projects/:id', (req, res) => {
       min_investment: 1000,
       interest_rate: 15,
       duration: 60,
-      status: "active",
-      created_at: "2025-10-03 10:48:32"
-    },
-    {
-      id: 3,
-      name: "Солнечные панели",
-      description: "Инвестируйте в развитие солнечной энергетики. Проект по установке солнечных панелей в жилых комплексах.",
-      image_url: "/images/solar.jpg",
-      min_investment: 250,
-      interest_rate: 10,
-      duration: 24,
       status: "active",
       created_at: "2025-10-03 10:48:32"
     }
@@ -664,7 +642,7 @@ app.get('/api/coupons/history/:userId', (req, res) => {
       description: '20% скидка на инвестиции',
       discount: 20,
       discount_amount: 20,
-      project_name: 'Ветровая станция "Ветер"',
+      project_name: 'Дирижабли',
       used_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       investment_amount: 5000,
       discount_amount: 1000,
@@ -690,7 +668,7 @@ app.get('/api/coupons/history/:userId', (req, res) => {
       description: '15% скидка на первую инвестицию',
       discount: 15,
       discount_amount: 15,
-      project_name: 'Солнечные панели',
+      project_name: 'Совэлмаш',
       used_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
       investment_amount: 2000,
       discount_amount: 300,

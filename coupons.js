@@ -432,9 +432,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getProjectUrl(projectName) {
         const projectUrls = {
             'Дирижабли': '/packages.html?project=airships',
-            'Совэлмаш': '/packages.html?project=sovelmash',
-            'Ветровая станция "Ветер"': '/packages.html?project=wind',
-            'Солнечные панели': '/packages.html?project=solar'
+            'Совэлмаш': '/packages.html?project=sovelmash'
         };
         
         return projectUrls[projectName] || '/invest.html';

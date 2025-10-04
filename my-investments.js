@@ -69,8 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 filteredInvestments = filteredInvestments.filter(inv => {
                     const projectMap = {
                         'airships': 'Дирижабли',
-                        'sovelmash': 'Совэлмаш',
-                        'solar': 'Солнечные панели'
+                        'sovelmash': 'Совэлмаш'
                     };
                     return inv.project_name === projectMap[project];
                 });
