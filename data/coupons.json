@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "coupons": [
+    {
+      "id": 1,
+      "code": "WELCOME25",
+      "name": "Приветственный бонус",
+      "description": "25% скидка на первую инвестицию",
+      "discount": 25,
+      "discountType": "percentage",
+      "minAmount": 1000,
+      "maxDiscount": 5000,
+      "projectId": null,
+      "projectName": "Все проекты",
+      "validFrom": "2024-01-01T00:00:00.000Z",
+      "validTo": "2024-12-31T23:59:59.999Z",
+      "isUsed": false,
+      "isExpired": false,
+      "conditions": "Минимальная сумма: $1000, только для первой инвестиции",
+      "type": "welcome",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "code": "SUMMER2024",
+      "name": "Летняя акция",
+      "description": "15% скидка на инвестиции в солнечные проекты",
+      "discount": 15,
+      "discountType": "percentage",
+      "minAmount": 2000,
+      "maxDiscount": 3000,
+      "projectId": 1,
+      "projectName": "Солнечная ферма \"Энергия\"",
+      "validFrom": "2024-01-01T00:00:00.000Z",
+      "validTo": "2024-12-31T23:59:59.999Z",
+      "isUsed": false,
+      "isExpired": false,
+      "conditions": "Минимальная сумма: $2000, только для солнечных проектов",
+      "type": "promo",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ]
+}
