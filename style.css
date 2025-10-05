@@ -3130,8 +3130,7 @@ input:checked + .slider:before {
 .package-details-card,
 .payment-schedule-card,
 .bonus-banner,
-.payment-card,
-.order-summary-card {
+.payment-card {
   background: var(--color-surface);
   border: 1px solid var(--color-card-border);
   border-radius: var(--radius-lg);
@@ -3371,38 +3370,6 @@ input:checked + .slider:before {
   gap: var(--space-8);
 }
 
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-8) 0;
-  font-size: var(--font-size-sm);
-}
-
-.summary-row.total {
-  padding-top: var(--space-12);
-  border-top: 1px solid var(--color-card-border-inner);
-  font-size: var(--font-size-base);
-}
-
-.summary-divider {
-  height: 1px;
-  background: var(--color-card-border-inner);
-  margin: var(--space-12) 0;
-}
-
-.insufficient-funds-warning {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-12);
-  background: rgba(var(--color-error-rgb), 0.1);
-  border: 1px solid rgba(var(--color-error-rgb), 0.2);
-  border-radius: var(--radius-base);
-  color: var(--color-error);
-  font-size: var(--font-size-sm);
-  margin: var(--space-12) 0;
-}
 
 .btn--full {
   width: 100%;
