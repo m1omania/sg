@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Wallet page loaded, initializing...');
     
     const userId = 1; // demo user
-    const mainBalanceEl = document.getElementById('main-balance-amount');
-    const partnerBalanceEl = document.getElementById('partner-balance-amount');
+    const mainAccountCard = document.querySelector('account-card[type="main"]');
+    const partnerAccountCard = document.querySelector('account-card[type="partner"]');
     
-    console.log('Wallet elements found:', {
-        mainBalanceEl: !!mainBalanceEl,
-        partnerBalanceEl: !!partnerBalanceEl
+    console.log('Account card components found:', {
+        mainAccountCard: !!mainAccountCard,
+        partnerAccountCard: !!partnerAccountCard
     });
 
     // Load balances from API
@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const wallet = await res.json();
             console.log('Wallet API data:', wallet);
             
-            if (mainBalanceEl) {
-                mainBalanceEl.textContent = `${Number(wallet.main_balance).toFixed(2)} $`;
+            if (mainAccountCard) {
+                mainAccountCard.updateBalance(Number(wallet.main_balance).toFixed(2));
             }
-            if (partnerBalanceEl) {
-                partnerBalanceEl.textContent = `${Number(wallet.partner_balance || 0).toFixed(2)} $`;
+            if (partnerAccountCard) {
+                partnerAccountCard.updateBalance(Number(wallet.partner_balance || 0).toFixed(2));
             }
             console.log('Wallet balances updated');
         } catch (e) {

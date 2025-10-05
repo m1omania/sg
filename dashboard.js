@@ -24,14 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initLanguageSwitcher();
 
     // --- Балансы из API ---
-    const mainBalanceEl = document.getElementById('main-balance');
-    const partnerBalanceEl = document.getElementById('partner-balance');
+    const mainAccountCard = document.querySelector('account-card[type="main"]');
+    const partnerAccountCard = document.querySelector('account-card[type="partner"]');
     
-    console.log('Balance elements found:', {
-        mainBalanceEl: !!mainBalanceEl,
-        partnerBalanceEl: !!partnerBalanceEl,
-        mainBalanceElId: mainBalanceEl?.id,
-        partnerBalanceElId: partnerBalanceEl?.id
+    console.log('Account card components found:', {
+        mainAccountCard: !!mainAccountCard,
+        partnerAccountCard: !!partnerAccountCard
     });
 
     async function loadDashboardBalances() {
@@ -46,20 +44,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const w = await res.json();
             console.log('Dashboard wallet data:', w);
             
-            if (mainBalanceEl) {
-                const newText = `${Number(w.main_balance).toFixed(2)} $`;
-                mainBalanceEl.textContent = newText;
-                console.log('Updated main balance to:', newText);
+            if (mainAccountCard) {
+                mainAccountCard.updateBalance(Number(w.main_balance).toFixed(2));
+                console.log('Updated main balance to:', Number(w.main_balance).toFixed(2));
             } else {
-                console.log('mainBalanceEl not found!');
+                console.log('Main account card not found');
             }
             
-            if (partnerBalanceEl) {
-                const newText = `${Number(w.partner_balance || 0).toFixed(2)} $`;
-                partnerBalanceEl.textContent = newText;
-                console.log('Updated partner balance to:', newText);
+            if (partnerAccountCard) {
+                partnerAccountCard.updateBalance(Number(w.partner_balance || 0).toFixed(2));
+                console.log('Updated partner balance to:', Number(w.partner_balance || 0).toFixed(2));
             } else {
-                console.log('partnerBalanceEl not found!');
+                console.log('Partner account card not found');
             }
             
             console.log('Dashboard balances updated');
