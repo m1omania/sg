@@ -276,7 +276,7 @@
                         </div>
 
                         <button class="btn btn--primary btn--full" id="checkout-btn">
-                            Пополнить счёт
+                            Оформить пакет
                         </button>
                                 <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
                     </div>
@@ -315,12 +315,14 @@
                 this.availableCoupons = [];
                 this.appliedCoupon = null;
                 this.packageAmount = 0;
+                this.userBalance = 0;
                 
                 this.init();
             }
             
             init() {
                 this.loadAvailableCoupons();
+                this.loadUserBalance();
                 this.bindEvents();
                 this.updatePackageAmount();
             }
@@ -334,6 +336,22 @@
                     this.checkForRelevantCoupons();
                 } catch (error) {
                     console.error('Error loading coupons:', error);
+                }
+            }
+            
+            async loadUserBalance() {
+                try {
+                    const response = await fetch(`/api/wallet/balance?userId=${this.userId}`);
+                    const balanceData = await response.json();
+                    
+                    this.userBalance = balanceData.main_balance || 0;
+                    console.log('User balance loaded:', this.userBalance);
+                    
+                    this.updateCheckoutButton();
+                } catch (error) {
+                    console.error('Error loading user balance:', error);
+                    this.userBalance = 0;
+                    this.updateCheckoutButton();
                 }
             }
             
@@ -555,6 +573,40 @@
                 this.packageAmount = parseInt(amount);
             }
             
+            updateCheckoutButton() {
+                const checkoutBtn = document.getElementById('checkout-btn');
+                if (!checkoutBtn) return;
+                
+                let discountAmount = 0;
+                if (this.appliedCoupon) {
+                    discountAmount = this.appliedCoupon.discount_amount;
+                }
+                
+                const finalAmount = Math.max(0, this.packageAmount - discountAmount);
+                
+                if (this.userBalance < finalAmount) {
+                    // Not enough balance - show "Пополнить счёт" button
+                    checkoutBtn.textContent = 'Пополнить счёт';
+                    checkoutBtn.onclick = () => {
+                        window.location.href = 'deposit.html';
+                    };
+                    checkoutBtn.classList.add('btn--deposit');
+                } else {
+                    // Enough balance - show "Оформить пакет" button
+                    checkoutBtn.textContent = 'Оформить пакет';
+                    checkoutBtn.onclick = () => {
+                        this.processCheckout();
+                    };
+                    checkoutBtn.classList.remove('btn--deposit');
+                }
+            }
+            
+            processCheckout() {
+                console.log('Processing checkout...');
+                // Add checkout logic here
+                alert('Оформление пакета (функция в разработке)');
+            }
+            
             updatePackageSummary() {
                 const summary = document.getElementById('package-summary');
                 const mobileSummary = document.getElementById('mobile-package-summary');
@@ -605,6 +657,9 @@
                         </div>
                     `;
                 }
+                
+                // Update checkout button based on new amount
+                this.updateCheckoutButton();
             }
             
             showFeedback(type, message) {

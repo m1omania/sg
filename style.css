@@ -2691,6 +2691,21 @@ input:checked + .slider:before {
     }
 }
 
+/* Checkout Button Styles */
+.btn--deposit {
+    background: #10b981 !important;
+    color: white !important;
+}
+
+.btn--deposit:hover {
+    background: #059669 !important;
+    transform: translateY(-1px);
+}
+
+.btn--deposit:active {
+    transform: translateY(0);
+}
+
 .coupon-header-detail {
     display: flex;
     justify-content: space-between;
