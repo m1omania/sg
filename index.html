@@ -470,8 +470,9 @@
                         <div class="account-summary__controls">
                             <div></div>
                             <div class="account-summary__actions">
-                                <a class="btn btn--primary" href="deposit.html" ${isPartner ? 'disabled' : ''}>Пополнить</a>
+                                ${!isPartner ? '<a class="btn btn--primary" href="deposit.html">Пополнить</a>' : ''}
                                 <button class="btn btn--secondary" id="withdraw-${type}-btn" disabled>Вывести</button>
+                                ${isPartner ? '<button class="btn btn--secondary" id="transfer-${type}-btn" disabled>Перевести</button>' : ''}
                             </div>
                         </div>
                     </div>
@@ -479,12 +480,27 @@
             }
 
             bindEvents() {
-                const withdrawBtn = this.querySelector(`#withdraw-${this.getAttribute('type')}-btn`);
+                const type = this.getAttribute('type');
+                const withdrawBtn = this.querySelector(`#withdraw-${type}-btn`);
+                const transferBtn = this.querySelector(`#transfer-${type}-btn`);
+                
                 if (withdrawBtn) {
                     withdrawBtn.addEventListener('click', () => {
                         this.dispatchEvent(new CustomEvent('withdraw', {
                             detail: {
-                                type: this.getAttribute('type'),
+                                type: type,
+                                balance: this.getAttribute('balance')
+                            },
+                            bubbles: true
+                        }));
+                    });
+                }
+                
+                if (transferBtn) {
+                    transferBtn.addEventListener('click', () => {
+                        this.dispatchEvent(new CustomEvent('transfer', {
+                            detail: {
+                                type: type,
                                 balance: this.getAttribute('balance')
                             },
                             bubbles: true
