@@ -2432,12 +2432,7 @@ select.form-control {
 
 /* Payment Schedule Card */
 .payment-schedule-card {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
     margin: 16px 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
 }
 
 .schedule-header {
@@ -2447,6 +2442,10 @@ select.form-control {
     padding: 20px;
     cursor: pointer;
     transition: all 0.2s;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .schedule-header:hover {
