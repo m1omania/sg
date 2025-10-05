@@ -2447,14 +2447,10 @@ select.form-control {
     padding: 20px;
     cursor: pointer;
     transition: all 0.2s;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 1px solid #e5e7eb;
 }
 
 .schedule-header:hover {
-    background: #f1f5f9;
-    border-color: #d1d5db;
+    background: #f8fafc;
 }
 
 .schedule-header h3 {
