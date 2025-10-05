@@ -3418,15 +3418,6 @@ input:checked + .slider:before {
   color: var(--color-text-secondary);
 }
 
-.account-bonus {
-  background: var(--color-success);
-  color: var(--color-btn-primary-text);
-  padding: var(--space-1) var(--space-6);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  margin-left: auto;
-}
 
 .payment-options {
   margin-bottom: var(--space-20);
