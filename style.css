@@ -2583,20 +2583,33 @@ select.form-control {
     font-weight: 500;
 }
 
-/* Coupon Section Card */
-.coupon-section-card {
+/* Checkout Card */
+.checkout-card {
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     padding: 20px;
-    margin: 16px 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Coupon Section in Sidebar */
-.checkout-sidebar .coupon-section-card {
-    margin: 0 0 16px 0;
-    padding: 16px;
+.checkout-card h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Coupon Section within Checkout Card */
+.checkout-card .coupon-section {
+    margin: 20px 0;
+}
+
+.checkout-card .coupon-section .coupon-banner {
+    margin-bottom: 16px;
+}
+
+.checkout-card .coupon-section .coupon-input-section {
+    margin: 0;
 }
 
 /* Package Details Styles */
