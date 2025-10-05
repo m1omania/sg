@@ -2597,6 +2597,100 @@ select.form-control {
     }
 }
 
+/* Double Payment Switch Styles */
+.double-payment-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.switch-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    min-width: 40px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: 0.2s;
+    border-radius: 12px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.2s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input:checked + .slider {
+    background-color: #3b82f6;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.switch-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    flex: 1;
+}
+
+/* Switch hover effects */
+.switch:hover .slider {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Mobile responsive switch */
+@media (max-width: 768px) {
+    .double-payment-switch {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .switch-label {
+        font-size: 0.875rem;
+        min-width: 35px;
+    }
+    
+    .switch-text {
+        font-size: 0.8rem;
+    }
+}
+
 .coupon-header-detail {
     display: flex;
     justify-content: space-between;

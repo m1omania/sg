@@ -220,17 +220,14 @@
                         </div>
 
                         <div class="payment-options">
-                            <div class="payment-option">
-                                <input type="radio" name="payment-type" value="double" id="double-payment">
-                                <label for="double-payment">
-                                    <div class="payment-icon">💰            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                                    <div class="payment-text">Двойной платеж            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
+                            <div class="double-payment-switch">
+                                <div class="switch-label">+250</div>
+                                <label class="switch">
+                                    <input type="checkbox" id="double-payment-switch">
+                                    <span class="slider"></span>
                                 </label>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+                                <div class="switch-text">Двойной платёж</div>
                             </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
                         </div>
 
                                 <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
@@ -434,6 +431,28 @@
                     });
                 } else {
                     console.error('Required elements not found!');
+                }
+                
+                // Double payment switch
+                const doublePaymentSwitch = document.getElementById('double-payment-switch');
+                console.log('Double payment switch found:', doublePaymentSwitch);
+                if (doublePaymentSwitch) {
+                    doublePaymentSwitch.addEventListener('change', (e) => {
+                        console.log('Double payment switch changed:', e.target.checked);
+                        this.handleDoublePaymentToggle(e.target.checked);
+                    });
+                }
+            }
+            
+            handleDoublePaymentToggle(isEnabled) {
+                console.log('Double payment toggled:', isEnabled);
+                // Here you can add logic to handle double payment
+                // For example, update package amount, show additional info, etc.
+                if (isEnabled) {
+                    console.log('Double payment enabled - bonus shares activated');
+                    // Could update package summary to show bonus shares
+                } else {
+                    console.log('Double payment disabled - standard payment');
                 }
             }
             
