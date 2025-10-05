@@ -319,7 +319,7 @@ app.post('/api/auth/login', (req, res) => {
 // Note: In Vercel serverless, this will reset on each cold start
 let userBalances = {
   1: {
-    main_balance: 0.00,
+    main_balance: 1000.00, // Test balance for user 1
     partner_balance: 0.00
   }
 };

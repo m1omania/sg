@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Payment Schedule -->
                     <div class="payment-schedule-card" id="payment-schedule-card">
                         <div class="card-header">
@@ -339,16 +339,21 @@
             
             async loadUserBalance() {
                 try {
-                    const response = await fetch(`/api/wallet/balance?userId=${this.userId}`);
+                    console.log('Loading user balance for userId:', this.userId);
+                    const response = await fetch(`/api/wallet/${this.userId}`);
+                    console.log('Balance API response status:', response.status);
+                    
                     const balanceData = await response.json();
+                    console.log('Balance API response data:', balanceData);
                     
                     this.userBalance = balanceData.main_balance || 0;
-                    console.log('User balance loaded:', this.userBalance);
+                    console.log('User balance set to:', this.userBalance);
                     
                     this.updateCheckoutButton();
                 } catch (error) {
                     console.error('Error loading user balance:', error);
                     this.userBalance = 0;
+                    console.log('User balance set to 0 due to error');
                     this.updateCheckoutButton();
                 }
             }
@@ -596,8 +601,16 @@
                 
                 const finalAmount = Math.max(0, this.packageAmount - discountAmount);
                 
+                console.log('Updating checkout button:');
+                console.log('- User balance:', this.userBalance);
+                console.log('- Package amount:', this.packageAmount);
+                console.log('- Discount amount:', discountAmount);
+                console.log('- Final amount:', finalAmount);
+                console.log('- Has enough balance:', this.userBalance >= finalAmount);
+                
                 if (this.userBalance < finalAmount) {
                     // Not enough balance - show "Пополнить счёт" button
+                    console.log('Not enough balance - showing deposit button');
                     checkoutBtn.textContent = 'Пополнить счёт';
                     checkoutBtn.onclick = () => {
                         window.location.href = 'deposit.html';
@@ -605,6 +618,7 @@
                     checkoutBtn.classList.add('btn--deposit');
                 } else {
                     // Enough balance - show "Оформить пакет" button
+                    console.log('Enough balance - showing checkout button');
                     checkoutBtn.textContent = 'Оформить пакет';
                     checkoutBtn.onclick = () => {
                         this.processCheckout();
