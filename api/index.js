@@ -597,17 +597,36 @@ app.post('/api/coupons/activate', (req, res) => {
     return res.status(400).json({ error: 'User ID and code are required' });
   }
   
-  // For demo purposes, always return success
-  res.json({
-    success: true,
-    message: 'Coupon activated successfully',
-    coupon: {
-      id: 1,
+  // Demo validation logic
+  const validCoupons = ['WELCOME25', 'INVEST50'];
+  
+  if (validCoupons.includes(code)) {
+    // Find the coupon in our demo data
+    const coupon = {
+      id: code === 'WELCOME25' ? 1 : 2,
       code: code,
-      discount: 25.00,
-      type: 'bonus'
-    }
-  });
+      name: code === 'WELCOME25' ? 'Добро пожаловать' : 'Инвестиционный бонус',
+      description: code === 'WELCOME25' ? 'Скидка для новых пользователей' : 'Бонус за первую инвестицию',
+      discount: code === 'WELCOME25' ? 25 : 50,
+      discount_amount: code === 'WELCOME25' ? 25 : 50,
+      project_name: code === 'WELCOME25' ? 'Любой' : 'Дирижабли',
+      expires_at: code === 'WELCOME25' ? '2025-12-31T23:59:59.000Z' : '2025-06-30T23:59:59.000Z',
+      conditions: code === 'WELCOME25' ? 'Минимальная сумма $250' : 'Только для проекта Дирижабли',
+      used: false,
+      created_at: '2025-01-01T00:00:00.000Z'
+    };
+    
+    res.json({
+      success: true,
+      message: 'Купон найден и готов к применению',
+      coupon: coupon
+    });
+  } else {
+    res.json({
+      success: false,
+      message: 'Купон не найден или недействителен'
+    });
+  }
 });
 
 // Use coupon endpoint
