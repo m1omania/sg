@@ -447,6 +447,13 @@
                 const badgeClass = isPartner ? 'account-summary__badge--success' : '';
 
                 this.innerHTML = `
+                    <style>
+                        @media (max-width: 768px) {
+                            .account-summary__title-wrap {
+                                justify-content: flex-start !important;
+                            }
+                        }
+                    </style>
                     <div class="account-card account-summary ${isPartner ? 'account-summary--partner' : ''}">
                         <div class="account-summary__header">
                             <div class="account-summary__title-wrap">
