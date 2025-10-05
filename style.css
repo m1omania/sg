@@ -2671,63 +2671,7 @@ select.form-control {
         display: block;
     }
     
-    .mobile-package-header {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 16px;
-    }
     
-    .mobile-shares-info {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .mobile-shares-count {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #92400e;
-    }
-    
-    .mobile-bonus {
-        background: #3b82f6;
-        color: white;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-    
-    .mobile-bonus-icon {
-        font-size: 16px;
-    }
-    
-    .mobile-package-key-info {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 16px;
-    }
-    
-    .mobile-info-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        background: #f1f5f9;
-        border-radius: 6px;
-        font-size: 0.875rem;
-    }
-    
-    .mobile-info-row span:first-child {
-        color: #64748b;
-    }
-    
-    .mobile-info-row span:last-child {
-        color: #1e293b;
-        font-weight: 600;
-    }
     
     .mobile-summary-item {
         display: flex;
