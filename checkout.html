@@ -106,6 +106,21 @@
                         </div>
                     </div>
                     
+                    <!-- Payment Schedule -->
+                    <div class="payment-schedule-card" id="payment-schedule-card">
+                        <div class="card-header">
+                            <h3>График платежей</h3>
+                            <button class="btn btn--secondary btn--small" id="toggle-schedule">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="payment-schedule-content" id="payment-schedule-content" style="display: none;">
+                            <!-- Payment schedule will be generated here -->
+                        </div>
+                    </div>
+                    
                     <!-- Coupon Section -->
                     <div class="coupon-section-card">
                         <!-- Coupon Banner -->
@@ -136,23 +151,6 @@
                         </div>
                     </div>
 
-                    <!-- Payment Schedule -->
-                    <div class="payment-schedule-card" id="payment-schedule-card" style="display: none;">
-                        <div class="card-header">
-                            <h3>График платежей</h3>
-                            <button class="btn btn--secondary btn--small" id="toggle-schedule">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </button>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                        </div>
-                        <div class="payment-schedule-content" id="payment-schedule-content">
-                            <!-- Payment schedule will be generated here -->
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                        </div>
-                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                    </div>
 
                     <!-- Bonus Banner -->
                     <div class="bonus-banner" id="bonus-banner" style="display: none;">
@@ -460,6 +458,20 @@
                         this.handleDoublePaymentToggle(e.target.checked);
                     });
                 }
+                
+                // Payment schedule toggle
+                const toggleScheduleBtn = document.getElementById('toggle-schedule');
+                const scheduleContent = document.getElementById('payment-schedule-content');
+                console.log('Toggle schedule button found:', toggleScheduleBtn);
+                
+                if (toggleScheduleBtn && scheduleContent) {
+                    toggleScheduleBtn.addEventListener('click', () => {
+                        this.togglePaymentSchedule();
+                    });
+                    
+                    // Generate payment schedule data
+                    this.generatePaymentSchedule();
+                }
             }
             
             handleDoublePaymentToggle(isEnabled) {
@@ -605,6 +617,90 @@
                 console.log('Processing checkout...');
                 // Add checkout logic here
                 alert('Оформление пакета (функция в разработке)');
+            }
+            
+            togglePaymentSchedule() {
+                const scheduleContent = document.getElementById('payment-schedule-content');
+                const toggleBtn = document.getElementById('toggle-schedule');
+                
+                if (scheduleContent && toggleBtn) {
+                    const isVisible = scheduleContent.style.display !== 'none';
+                    
+                    if (isVisible) {
+                        scheduleContent.style.display = 'none';
+                        toggleBtn.classList.remove('expanded');
+                    } else {
+                        scheduleContent.style.display = 'block';
+                        toggleBtn.classList.add('expanded');
+                    }
+                }
+            }
+            
+            generatePaymentSchedule() {
+                const scheduleContent = document.getElementById('payment-schedule-content');
+                if (!scheduleContent) return;
+                
+                // Generate 10 payment entries
+                const payments = [];
+                const startDate = new Date('2025-10-05');
+                
+                for (let i = 0; i < 10; i++) {
+                    const paymentDate = new Date(startDate);
+                    paymentDate.setMonth(paymentDate.getMonth() + i);
+                    
+                    const isBonus = i === 9; // Last payment is bonus
+                    
+                    payments.push({
+                        number: String(i + 1).padStart(2, '0'),
+                        date: paymentDate.toLocaleDateString('ru-RU'),
+                        amount: '50 $',
+                        type: isBonus ? 'Бонусный' : 'Стандартный',
+                        discount: isBonus ? '111' : '21',
+                        shares: isBonus ? '5 550' : '1 050',
+                        nominal: isBonus ? '5 550 $' : '1 050 $',
+                        perShare: isBonus ? '~0,0090 $' : '~0,0476 $',
+                        bonusShares: i === 0 ? '0' : '25'
+                    });
+                }
+                
+                scheduleContent.innerHTML = `
+                    <table class="payment-schedule-table">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Дата</th>
+                                <th>Сумма</th>
+                                <th>Вид</th>
+                                <th>Дисконт</th>
+                                <th>Долей</th>
+                                <th>Номинал</th>
+                                <th>За долю</th>
+                                <th>Бонусные доли</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${payments.map(payment => `
+                                <tr>
+                                    <td class="payment-number">${payment.number}</td>
+                                    <td class="payment-date">${payment.date}</td>
+                                    <td class="payment-amount">${payment.amount}</td>
+                                    <td>
+                                        <span class="payment-type ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
+                                            ${payment.type}
+                                        </span>
+                                    </td>
+                                    <td class="payment-discount">${payment.discount}</td>
+                                    <td class="payment-shares">${payment.shares}</td>
+                                    <td class="payment-nominal">${payment.nominal}</td>
+                                    <td class="payment-per-share">${payment.perShare}</td>
+                                    <td>
+                                        <span class="bonus-shares-badge">${payment.bonusShares}</span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
             }
             
             updatePackageSummary() {
