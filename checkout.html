@@ -28,8 +28,81 @@
                     <!-- Package Details -->
                     <div class="package-details-card">
                         <h3>Детали пакета</h3>
+                        
+                        <!-- Desktop detailed view -->
+                        <div class="package-details-desktop">
                         <div class="package-summary" id="package-summary">
                             <!-- Package details will be loaded here -->
+                            </div>
+                            
+                            <div class="package-info-grid">
+                                <div class="package-info-item">
+                                    <span class="info-label">Количество долей</span>
+                                    <span class="info-value">15 000</span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Бонусные доли</span>
+                                    <span class="info-value bonus-shares">
+                                        +250
+                                        <span class="bonus-icon">🎁</span>
+                                        <span class="info-tooltip">?</span>
+                                    </span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Цена за долю</span>
+                                    <span class="info-value">~0,03333 $</span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Дисконт</span>
+                                    <span class="info-value">~30</span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Рассрочка</span>
+                                    <span class="info-value">10 мес.</span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Номинал</span>
+                                    <span class="info-value">15 000 $</span>
+                                </div>
+                                <div class="package-info-item">
+                                    <span class="info-label">Платёж</span>
+                                    <span class="info-value">50 $</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile simplified view -->
+                        <div class="package-details-mobile">
+                            <div class="mobile-package-header">
+                                <div class="mobile-shares-info">
+                                    <span class="mobile-shares-count">15 000 долей</span>
+                                    <span class="mobile-bonus">+250</span>
+                                    <span class="mobile-bonus-icon">🎁</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mobile-package-summary" id="mobile-package-summary">
+                                <!-- Mobile package summary will be loaded here -->
+                            </div>
+                            
+                            <div class="mobile-package-key-info">
+                                <div class="mobile-info-row">
+                                    <span>Цена за долю:</span>
+                                    <span>~0,03333 $</span>
+                                </div>
+                                <div class="mobile-info-row">
+                                    <span>Дисконт:</span>
+                                    <span>~30</span>
+                                </div>
+                                <div class="mobile-info-row">
+                                    <span>Рассрочка:</span>
+                                    <span>10 мес.</span>
+                                </div>
+                                <div class="mobile-info-row">
+                                    <span>Платёж:</span>
+                                    <span>50 $</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -398,7 +471,7 @@
                         setTimeout(() => {
                             this.applyCoupon(result.coupon);
                         }, 1000);
-                    } else {
+            } else {
                         this.showFeedback('error', result.message || 'Купон не найден или недействителен');
                         input.classList.remove('success');
                         input.classList.add('error');
@@ -434,7 +507,7 @@
                         <div class="applied-coupon-info">
                             <span class="applied-coupon-code">${this.appliedCoupon.code}</span>
                             <span class="applied-coupon-discount">Скидка: -${this.appliedCoupon.discount_amount}$</span>
-                        </div>
+                    </div>
                         <button class="remove-coupon-btn" onclick="checkoutCoupons.removeCoupon()">Удалить</button>
                     `;
                     
@@ -465,7 +538,7 @@
             
             updatePackageSummary() {
                 const summary = document.getElementById('package-summary');
-                if (!summary) return;
+                const mobileSummary = document.getElementById('mobile-package-summary');
                 
                 let discountAmount = 0;
                 if (this.appliedCoupon) {
@@ -474,7 +547,7 @@
                 
                 const finalAmount = Math.max(0, this.packageAmount - discountAmount);
                 
-                summary.innerHTML = `
+                const summaryHTML = `
                     <div class="package-summary-item">
                         <span>Стоимость пакета:</span>
                         <span>$${this.packageAmount}</span>
@@ -490,6 +563,29 @@
                         <span>$${finalAmount}</span>
                     </div>
                 `;
+                
+                if (summary) {
+                    summary.innerHTML = summaryHTML;
+                }
+                
+                if (mobileSummary) {
+                    mobileSummary.innerHTML = `
+                        <div class="mobile-summary-item">
+                            <span>Номинал:</span>
+                            <span>15 000 $</span>
+                        </div>
+                        ${discountAmount > 0 ? `
+                            <div class="mobile-summary-item discount">
+                                <span>Скидка:</span>
+                                <span>-$${discountAmount}</span>
+                            </div>
+                        ` : ''}
+                        <div class="mobile-summary-item total">
+                            <span>Итого:</span>
+                            <span>$${finalAmount}</span>
+                        </div>
+                    `;
+                }
             }
             
             showFeedback(type, message) {
