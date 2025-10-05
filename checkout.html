@@ -114,11 +114,11 @@
 
                     <!-- Payment Schedule -->
                     <div class="schedule-header" id="toggle-schedule">
-                        <h3>График платежей</h3>
+                            <h3>График платежей</h3>
                         <div class="chevron-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
                         </div>
                     </div>
                     <div class="payment-schedule-content" id="payment-schedule-content" style="display: none;">
@@ -624,42 +624,91 @@
                 }
                 
                 scheduleContent.innerHTML = `
-                    <table class="payment-schedule-table">
-                        <thead>
-                            <tr>
-                                <th>№</th>
-                                <th>Дата</th>
-                                <th>Сумма</th>
-                                <th>Вид</th>
-                                <th>Дисконт</th>
-                                <th>Долей</th>
-                                <th>Номинал</th>
-                                <th>За долю</th>
-                                <th>Бонусные доли</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${payments.map(payment => `
+                    <!-- Desktop Table -->
+                    <div class="payment-schedule-desktop">
+                        <table class="payment-schedule-table">
+                            <thead>
                                 <tr>
-                                    <td class="payment-number">${payment.number}</td>
-                                    <td class="payment-date">${payment.date}</td>
-                                    <td class="payment-amount">${payment.amount}</td>
-                                    <td>
-                                        <span class="payment-type ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
-                                            ${payment.type}
-                                        </span>
-                                    </td>
-                                    <td class="payment-discount">${payment.discount}</td>
-                                    <td class="payment-shares">${payment.shares}</td>
-                                    <td class="payment-nominal">${payment.nominal}</td>
-                                    <td class="payment-per-share">${payment.perShare}</td>
-                                    <td>
-                                        <span class="bonus-shares-badge">${payment.bonusShares}</span>
-                                    </td>
+                                    <th>№</th>
+                                    <th>Дата</th>
+                                    <th>Сумма</th>
+                                    <th>Вид</th>
+                                    <th>Дисконт</th>
+                                    <th>Долей</th>
+                                    <th>Номинал</th>
+                                    <th>За долю</th>
+                                    <th>Бонусные доли</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                ${payments.map(payment => `
+                                    <tr>
+                                        <td class="payment-number">${payment.number}</td>
+                                        <td class="payment-date">${payment.date}</td>
+                                        <td class="payment-amount">${payment.amount}</td>
+                                        <td>
+                                            <span class="payment-type ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
+                                                ${payment.type}
+                                            </span>
+                                        </td>
+                                        <td class="payment-discount">${payment.discount}</td>
+                                        <td class="payment-shares">${payment.shares}</td>
+                                        <td class="payment-nominal">${payment.nominal}</td>
+                                        <td class="payment-per-share">${payment.perShare}</td>
+                                        <td>
+                                            <span class="bonus-shares-badge">${payment.bonusShares}</span>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Mobile Cards -->
+                    <div class="payment-schedule-mobile">
+                        ${payments.map(payment => `
+                            <div class="payment-card-mobile">
+                                <div class="payment-card-header">
+                                    <div class="payment-number-mobile">${payment.number}</div>
+                                    <div class="payment-type-mobile ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
+                                        ${payment.type}
+                                    </div>
+                                </div>
+                                <div class="payment-card-content">
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Дата:</span>
+                                        <span class="info-value">${payment.date}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Сумма:</span>
+                                        <span class="info-value payment-amount">${payment.amount}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Дисконт:</span>
+                                        <span class="info-value payment-discount">${payment.discount}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Долей:</span>
+                                        <span class="info-value payment-shares">${payment.shares}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Номинал:</span>
+                                        <span class="info-value payment-nominal">${payment.nominal}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">За долю:</span>
+                                        <span class="info-value payment-per-share">${payment.perShare}</span>
+                                    </div>
+                                    <div class="payment-info-row">
+                                        <span class="info-label">Бонусные доли:</span>
+                                        <span class="info-value">
+                                            <span class="bonus-shares-badge">${payment.bonusShares}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
                 `;
             }
             

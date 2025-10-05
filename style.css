@@ -2485,6 +2485,15 @@ select.form-control {
     background: white;
 }
 
+/* Payment Schedule Desktop */
+.payment-schedule-desktop {
+    display: block;
+}
+
+.payment-schedule-mobile {
+    display: none;
+}
+
 /* Payment Schedule Table */
 .payment-schedule-table {
     width: 100%;
@@ -2514,6 +2523,80 @@ select.form-control {
 
 .payment-schedule-table tr:hover {
     background: #f8fafc;
+}
+
+/* Payment Schedule Mobile */
+.payment-schedule-mobile {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-card-mobile {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.payment-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.payment-number-mobile {
+    font-weight: 600;
+    color: #3b82f6;
+    font-size: 1rem;
+}
+
+.payment-type-mobile {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.payment-type-mobile.standard {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.payment-type-mobile.bonus {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.payment-card-content {
+    padding: 16px;
+}
+
+.payment-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+}
+
+.payment-info-row:last-child {
+    border-bottom: none;
+}
+
+.payment-info-row .info-label {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.payment-info-row .info-value {
+    color: #1e293b;
+    font-weight: 600;
 }
 
 .payment-number {
@@ -2676,6 +2759,16 @@ select.form-control {
     .package-details-mobile {
         display: block;
     }
+    
+    /* Payment Schedule Mobile */
+    .payment-schedule-desktop {
+        display: none;
+    }
+    
+    .payment-schedule-mobile {
+        display: flex;
+    }
+}
     
     
     
