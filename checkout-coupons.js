@@ -1,6 +1,9 @@
 // Checkout Coupons Logic
+console.log('Checkout coupons script loaded');
+
 class CheckoutCoupons {
     constructor() {
+        console.log('CheckoutCoupons constructor called');
         this.userId = 1; // Demo user ID
         this.availableCoupons = [];
         this.appliedCoupon = null;
@@ -60,10 +63,14 @@ class CheckoutCoupons {
     }
     
     bindEvents() {
+        console.log('Binding events...');
+        
         // Apply coupon from banner
         const applyBtn = document.getElementById('apply-coupon-btn');
+        console.log('Apply button found:', applyBtn);
         if (applyBtn) {
             applyBtn.addEventListener('click', () => {
+                console.log('Apply button clicked');
                 const generalCoupons = this.availableCoupons.filter(coupon => 
                     !coupon.project_name || coupon.project_name === 'Любой'
                 );
@@ -77,30 +84,45 @@ class CheckoutCoupons {
         const validateBtn = document.getElementById('validate-coupon-btn');
         const couponInput = document.getElementById('coupon-input');
         
+        console.log('Validate button found:', validateBtn);
+        console.log('Coupon input found:', couponInput);
+        
         if (validateBtn && couponInput) {
             validateBtn.addEventListener('click', () => {
+                console.log('Validate button clicked');
                 const code = couponInput.value.trim();
+                console.log('Code to validate:', code);
                 if (code) {
                     this.validateCoupon(code);
+                } else {
+                    console.log('No code entered');
                 }
             });
             
             couponInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
+                    console.log('Enter pressed in input');
                     const code = couponInput.value.trim();
                     if (code) {
                         this.validateCoupon(code);
                     }
                 }
             });
+        } else {
+            console.error('Required elements not found!');
         }
     }
     
     async validateCoupon(code) {
+        console.log('validateCoupon called with code:', code);
         const feedback = document.getElementById('coupon-feedback');
         const input = document.getElementById('coupon-input');
         
+        console.log('Feedback element:', feedback);
+        console.log('Input element:', input);
+        
         try {
+            console.log('Making API request...');
             const response = await fetch('/api/coupons/activate', {
                 method: 'POST',
                 headers: {
@@ -112,10 +134,12 @@ class CheckoutCoupons {
                 })
             });
             
+            console.log('Response status:', response.status);
             const result = await response.json();
+            console.log('API response:', result);
             
             if (result.success) {
-                this.showFeedback('success', `Купон "${code}" найден! Скидка: ${result.discount_amount}$`);
+                this.showFeedback('success', `Купон "${code}" найден! Скидка: ${result.coupon.discount_amount}$`);
                 input.classList.remove('error');
                 input.classList.add('success');
                 
@@ -218,10 +242,15 @@ class CheckoutCoupons {
     }
     
     showFeedback(type, message) {
+        console.log('showFeedback called:', type, message);
         const feedback = document.getElementById('coupon-feedback');
+        console.log('Feedback element:', feedback);
         if (feedback) {
             feedback.textContent = message;
             feedback.className = `coupon-feedback ${type}`;
+            console.log('Feedback updated');
+        } else {
+            console.error('Feedback element not found!');
         }
     }
     
@@ -235,5 +264,7 @@ class CheckoutCoupons {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing CheckoutCoupons');
     window.checkoutCoupons = new CheckoutCoupons();
+    console.log('CheckoutCoupons initialized:', window.checkoutCoupons);
 });
