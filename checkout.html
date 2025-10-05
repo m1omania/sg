@@ -321,26 +321,18 @@
             showCouponBanner(coupon) {
                 console.log('showCouponBanner called with coupon:', coupon);
                 const banner = document.getElementById('coupon-banner');
-                const codeElement = document.getElementById('coupon-banner-code');
-                const discountElement = document.getElementById('coupon-banner-discount');
-                const expiryElement = document.getElementById('coupon-banner-expiry');
-                const textElement = document.getElementById('coupon-banner-text');
+                const discountElement = banner.querySelector('.coupon-discount-large');
+                const descriptionElement = banner.querySelector('.coupon-description');
                 
                 console.log('Banner element:', banner);
-                console.log('Code element:', codeElement);
+                console.log('Discount element:', discountElement);
                 
                 if (banner && coupon) {
-                    codeElement.textContent = coupon.code;
                     discountElement.textContent = `-${coupon.discount_amount}$`;
-                    
-                    // Format expiry date
-                    const expiryDate = new Date(coupon.expires_at);
-                    expiryElement.textContent = `до ${expiryDate.toLocaleDateString('ru-RU')}`;
-                    
-                    textElement.textContent = coupon.description || 'У вас есть доступный купон на скидку';
+                    descriptionElement.textContent = coupon.description || 'Скидка на первый пакет';
                     
                     banner.style.display = 'block';
-                    console.log('Banner should now be visible');
+                    console.log('Coupon banner shown');
                 } else {
                     console.error('Banner or coupon not found!');
                 }
