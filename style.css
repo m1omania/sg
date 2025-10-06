@@ -2735,6 +2735,7 @@ select.form-control {
     height: 60px;
     background: #d1d5db;
     flex-shrink: 0;
+    align-self: center;
 }
 
 .coupon-info {
