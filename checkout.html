@@ -194,7 +194,7 @@
                             <!-- Coupon Card -->
                             <div class="coupon-card" id="coupon-card" style="display: none;">
                                 <div class="coupon-value">
-                                    <span class="coupon-percentage">25%</span>
+                                    <span class="coupon-percentage">-25$</span>
                                 </div>
                                 <div class="coupon-divider"></div>
                                 <div class="coupon-info">
@@ -331,7 +331,7 @@
                 console.log('Percentage element:', percentageElement);
                 
                 if (card && coupon) {
-                    percentageElement.textContent = `${coupon.discount_amount}%`;
+                    percentageElement.textContent = `-${coupon.discount_amount}$`;
                     titleElement.textContent = coupon.description || 'Скидка для новых пользователей';
                     
                     // Format expiry date
