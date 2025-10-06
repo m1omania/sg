@@ -191,6 +191,14 @@
                             </div>
                         </div>
 
+                        <!-- Available Coupons Section -->
+                        <div class="coupons-section">
+                            <h3 class="coupons-section-title">Доступные купоны</h3>
+                            <div class="coupons-list" id="coupons-list">
+                                <!-- Coupons will be loaded here -->
+                            </div>
+                        </div>
+
                         <!-- Coupon Section -->
                         <div class="coupon-section">
                             <!-- Coupon Card -->
@@ -242,6 +250,7 @@
         
             <script src="components/web-components/header-standalone.js"></script>
     <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/coupon-package.js"></script>
     <script src="app.js"></script>
     
     <script src="checkout.js"></script>
@@ -264,6 +273,7 @@
             init() {
                 this.loadAvailableCoupons();
                 this.loadUserBalance();
+                this.loadProjectCoupons();
                 this.bindEvents();
                 this.updatePackageAmount();
             }
@@ -298,6 +308,81 @@
                     this.userBalance = 0;
                     console.log('User balance set to 0 due to error');
                     this.updateCheckoutButton();
+                }
+            }
+
+            async loadProjectCoupons() {
+                try {
+                    const response = await fetch(`/api/coupons/active/${this.userId}`);
+                    const coupons = await response.json();
+                    
+                    console.log('All available coupons:', coupons);
+                    
+                    // Get current project from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const packageId = urlParams.get('package') || 'sov-500';
+                    
+                    // Determine project based on package
+                    let currentProject = 'Все проекты';
+                    if (packageId.startsWith('airship')) {
+                        currentProject = 'Дирижабли';
+                    } else if (packageId.startsWith('sov')) {
+                        currentProject = 'Совэлмаш';
+                    }
+                    
+                    console.log('Current project:', currentProject);
+                    
+                    // Filter coupons for current project
+                    const relevantCoupons = coupons.filter(coupon => 
+                        coupon.project_name === 'Все проекты' || 
+                        coupon.project_name === currentProject
+                    );
+                    
+                    console.log('Relevant coupons for project:', relevantCoupons);
+                    
+                    this.renderProjectCoupons(relevantCoupons);
+                } catch (error) {
+                    console.error('Error loading project coupons:', error);
+                    this.showNoCoupons();
+                }
+            }
+
+            renderProjectCoupons(coupons) {
+                const couponsList = document.getElementById('coupons-list');
+                if (!couponsList) return;
+                
+                if (coupons.length === 0) {
+                    this.showNoCoupons();
+                    return;
+                }
+                
+                couponsList.innerHTML = coupons.map(coupon => {
+                    const couponElement = document.createElement('coupon-package');
+                    couponElement.setCouponData(coupon);
+                    
+                    // Add event listener for toggle
+                    couponElement.addEventListener('coupon-toggle', (e) => {
+                        this.handleCouponToggle(e.detail.coupon, e.detail.active);
+                    });
+                    
+                    return couponElement;
+                }).map(el => el.outerHTML).join('');
+            }
+
+            showNoCoupons() {
+                const couponsList = document.getElementById('coupons-list');
+                if (couponsList) {
+                    couponsList.innerHTML = '<p class="no-coupons">Нет доступных купонов для этого проекта</p>';
+                }
+            }
+
+            handleCouponToggle(coupon, isActive) {
+                console.log('Coupon toggle:', coupon, isActive);
+                
+                if (isActive) {
+                    this.applyCoupon(coupon);
+                } else {
+                    this.removeCoupon();
                 }
             }
             
