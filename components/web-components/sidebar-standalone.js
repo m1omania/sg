@@ -124,6 +124,10 @@ class SGSidebar extends HTMLElement {
                         border-right: none !important;
                         border-left: none !important;
                     }
+
+                    .nav-link.active::before {
+                        display: none !important;
+                    }
                 }
 
                 /* Smaller mobile screens */
