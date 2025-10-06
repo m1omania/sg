@@ -2708,7 +2708,7 @@ select.form-control {
 
 .coupon-card {
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    border: 2px solid #d1d5db;
     border-radius: 12px;
     padding: var(--space-20);
     display: flex;
@@ -2716,6 +2716,7 @@ select.form-control {
     gap: var(--space-20);
     flex-wrap: nowrap;
     overflow-x: auto;
+    box-shadow: none;
 }
 
 .coupon-value {
