@@ -2793,7 +2793,7 @@ select.form-control {
 }
 
 .coupon-title {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #1f2937;
     margin-bottom: var(--space-4);
