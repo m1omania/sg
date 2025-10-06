@@ -191,19 +191,22 @@
 
                         <!-- Coupon Section -->
                         <div class="coupon-section">
-                            <!-- Coupon Banner -->
-                            <div class="coupon-banner" id="coupon-banner" style="display: none;">
-                                <div class="coupon-ticket">
-                                    <div class="coupon-left">
-                                        <div class="coupon-discount-large">-25$</div>
-                                        <div class="coupon-description">Скидка на первый пакет</div>
+                            <!-- Coupon Card -->
+                            <div class="coupon-card" id="coupon-card" style="display: none;">
+                                <div class="coupon-header">
+                                    <div class="coupon-toggle">
+                                        <input type="checkbox" id="coupon-switch" class="coupon-switch">
+                                        <label for="coupon-switch" class="coupon-switch-label"></label>
                                     </div>
-                                    <div class="coupon-divider"></div>
-                                    <div class="coupon-right">
-                                        <button class="coupon-apply-btn">Применить</button>
+                                    <div class="coupon-info">
+                                        <div class="coupon-title">Скидка 25$</div>
+                                        <div class="coupon-conditions">Действует только на товары из категории «Дирижабли»</div>
                                     </div>
-                        </div>
-                    </div>
+                                    <div class="coupon-badge">
+                                        <span class="coupon-date">до 8 окт.</span>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Coupon Input -->
                             <div class="coupon-input-section">
@@ -320,38 +323,53 @@
             
             showCouponBanner(coupon) {
                 console.log('showCouponBanner called with coupon:', coupon);
-                const banner = document.getElementById('coupon-banner');
-                const discountElement = banner.querySelector('.coupon-discount-large');
-                const descriptionElement = banner.querySelector('.coupon-description');
+                const card = document.getElementById('coupon-card');
+                const titleElement = card.querySelector('.coupon-title');
+                const conditionsElement = card.querySelector('.coupon-conditions');
+                const dateElement = card.querySelector('.coupon-date');
                 
-                console.log('Banner element:', banner);
-                console.log('Discount element:', discountElement);
+                console.log('Card element:', card);
+                console.log('Title element:', titleElement);
                 
-                if (banner && coupon) {
-                    discountElement.textContent = `-${coupon.discount_amount}$`;
-                    descriptionElement.textContent = coupon.description || 'Скидка на первый пакет';
+                if (card && coupon) {
+                    titleElement.textContent = `Скидка ${coupon.discount_amount}$`;
+                    conditionsElement.textContent = coupon.description || 'Действует только на товары из категории «Дирижабли»';
                     
-                    banner.style.display = 'block';
-                    console.log('Coupon banner shown');
+                    // Format expiry date
+                    if (coupon.expiry_date) {
+                        const date = new Date(coupon.expiry_date);
+                        const day = date.getDate();
+                        const month = date.toLocaleString('ru', { month: 'short' });
+                        dateElement.textContent = `до ${day} ${month}`;
+                    } else {
+                        dateElement.textContent = 'до 8 окт.';
+                    }
+                    
+                    card.style.display = 'block';
+                    console.log('Coupon card shown');
                 } else {
-                    console.error('Banner or coupon not found!');
+                    console.error('Card or coupon not found!');
                 }
             }
             
             bindEvents() {
                 console.log('Binding events...');
                 
-                // Apply coupon from banner
-                const applyBtn = document.getElementById('apply-coupon-btn');
-                console.log('Apply button found:', applyBtn);
-                if (applyBtn) {
-                    applyBtn.addEventListener('click', () => {
-                        console.log('Apply button clicked');
-                        const generalCoupons = this.availableCoupons.filter(coupon => 
-                            !coupon.project_name || coupon.project_name === 'Любой'
-                        );
-                        if (generalCoupons.length > 0) {
-                            this.applyCoupon(generalCoupons[0]);
+                // Coupon switch toggle
+                const couponSwitch = document.getElementById('coupon-switch');
+                console.log('Coupon switch found:', couponSwitch);
+                if (couponSwitch) {
+                    couponSwitch.addEventListener('change', (e) => {
+                        console.log('Coupon switch toggled:', e.target.checked);
+                        if (e.target.checked) {
+                            const generalCoupons = this.availableCoupons.filter(coupon => 
+                                !coupon.project_name || coupon.project_name === 'Любой'
+                            );
+                            if (generalCoupons.length > 0) {
+                                this.applyCoupon(generalCoupons[0]);
+                            }
+                        } else {
+                            this.removeCoupon();
                         }
                     });
                 }
@@ -478,6 +496,12 @@
                 this.updatePackageSummary();
                 this.hideCouponBanner();
                 this.showAppliedCoupon();
+            }
+            
+            removeCoupon() {
+                this.appliedCoupon = null;
+                this.updatePackageSummary();
+                this.hideAppliedCoupon();
             }
             
             showAppliedCoupon() {
@@ -770,9 +794,16 @@
             }
             
             hideCouponBanner() {
-                const banner = document.getElementById('coupon-banner');
-                if (banner) {
-                    banner.style.display = 'none';
+                const card = document.getElementById('coupon-card');
+                if (card) {
+                    card.style.display = 'none';
+                }
+            }
+            
+            hideAppliedCoupon() {
+                const existingApplied = document.querySelector('.applied-coupon');
+                if (existingApplied) {
+                    existingApplied.remove();
                 }
             }
         }
