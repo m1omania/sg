@@ -2802,32 +2802,6 @@ select.form-control {
     line-height: 1.4;
 }
 
-/* Mobile responsive for coupon card */
-@media (max-width: 768px) {
-    .coupon-card {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--space-16);
-    }
-    
-    .coupon-value {
-        align-self: center;
-    }
-    
-    .coupon-divider {
-        width: 100%;
-        height: 2px;
-        align-self: stretch;
-    }
-    
-    .coupon-info {
-        text-align: center;
-    }
-    
-    .coupon-toggle {
-        align-self: center;
-    }
-}
 
 .coupon-ticket {
     display: flex;
