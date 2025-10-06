@@ -79,6 +79,11 @@ class SGSidebar extends HTMLElement {
                 @media (max-width: 768px) {
                     :host {
                         width: 100%;
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        z-index: 1000;
                     }
 
                     .sidebar {
@@ -87,6 +92,9 @@ class SGSidebar extends HTMLElement {
                         width: 100%;
                         transform: none;
                         margin: 0;
+                        background: #ffffff;
+                        border-top: 1px solid #e5e7eb;
+                        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
                     }
 
                     .nav-menu {

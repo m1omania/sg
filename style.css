@@ -3128,6 +3128,7 @@ input:checked + .slider:before {
     min-height: auto;
     padding: var(--space-16);
     margin: 0;
+    padding-bottom: calc(var(--space-16) + 80px); /* Add space for fixed bottom menu */
   }
 }
 
