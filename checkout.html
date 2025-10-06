@@ -278,6 +278,7 @@
             }
 
             setCouponData(coupon) {
+                console.log('CouponPackage setCouponData called with:', coupon);
                 this.coupon = coupon;
                 this.render();
             }
@@ -292,7 +293,10 @@
             }
 
             render() {
+                console.log('CouponPackage render called with coupon:', this.coupon);
+                
                 if (!this.coupon) {
+                    console.log('No coupon data, clearing shadow root');
                     this.shadowRoot.innerHTML = '';
                     return;
                 }
@@ -533,6 +537,13 @@
                 // Create coupon elements
                 const couponElements = coupons.map(coupon => {
                     console.log('Creating coupon element for:', coupon);
+                    
+                    // Check if custom element is defined
+                    if (!customElements.get('coupon-package')) {
+                        console.error('coupon-package custom element not defined!');
+                        return null;
+                    }
+                    
                     const couponElement = document.createElement('coupon-package');
                     couponElement.setCouponData(coupon);
                     
@@ -542,7 +553,7 @@
                     });
                     
                     return couponElement;
-                });
+                }).filter(el => el !== null);
                 
                 console.log('Created coupon elements:', couponElements);
                 
