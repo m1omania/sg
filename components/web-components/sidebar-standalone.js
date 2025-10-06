@@ -87,9 +87,23 @@ class SGSidebar extends HTMLElement {
                         margin: 0;
                     }
 
+                    .nav-menu {
+                        flex-direction: row;
+                        justify-content: space-around;
+                        padding: 0.5rem 0;
+                    }
+
+                    .nav-item {
+                        flex: 1;
+                    }
+
                     .nav-link {
-                        padding: 1.25rem 2rem;
-                        font-size: 1rem;
+                        padding: 0.75rem 0.5rem;
+                        font-size: 0.875rem;
+                        text-align: center;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
                     }
                 }
 
