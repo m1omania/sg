@@ -267,9 +267,25 @@ class FullCouponCard extends HTMLElement {
                     }
                     
                     .coupon-used-overlay {
-                        font-size: 2rem;
-                        padding: 6px 12px;
+                        font-size: 1.5rem;
+                        padding: 4px 8px;
                         border-width: 2px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .coupon-used-overlay {
+                        font-size: 1.2rem;
+                        padding: 3px 6px;
+                        border-width: 1px;
+                    }
+                }
+
+                @media (max-width: 360px) {
+                    .coupon-used-overlay {
+                        font-size: 1rem;
+                        padding: 2px 4px;
+                        border-width: 1px;
                     }
                 }
             </style>
