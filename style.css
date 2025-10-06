@@ -2730,13 +2730,6 @@ select.form-control {
     justify-content: center;
 }
 
-.coupon-divider {
-    width: 1px;
-    height: 60px;
-    background: #d1d5db;
-    flex-shrink: 0;
-    align-self: center;
-}
 
 .coupon-info {
     flex: 1;
