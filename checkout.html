@@ -193,7 +193,7 @@
                         <div class="coupon-section">
                             <!-- Coupon Card -->
                             <div class="coupon-card" id="coupon-card" style="display: none;">
-                                <span class="coupon-percentage">-25$</span>
+                                <span class="coupon-value">-25$</span>
                                 <div class="coupon-divider"></div>
                                 <div class="coupon-info">
                                     <div class="coupon-title">Скидка для новых пользователей</div>
@@ -202,8 +202,8 @@
                                 <div class="coupon-toggle">
                                     <input type="checkbox" id="coupon-switch" class="coupon-switch">
                                     <label for="coupon-switch" class="coupon-switch-label"></label>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
 
                             <!-- Coupon Input -->
                             <div class="coupon-input-section">
@@ -321,7 +321,7 @@
             showCouponBanner(coupon) {
                 console.log('showCouponBanner called with coupon:', coupon);
                 const card = document.getElementById('coupon-card');
-                const percentageElement = card.querySelector('.coupon-percentage');
+                const percentageElement = card.querySelector('.coupon-value');
                 const titleElement = card.querySelector('.coupon-title');
                 const dateElement = card.querySelector('.coupon-date');
                 
