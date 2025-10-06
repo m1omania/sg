@@ -205,7 +205,6 @@ class FullCouponCard extends HTMLElement {
                     font-size: 2.5rem;
                     font-weight: 700;
                     color: #9ca3af;
-                    background: rgba(255, 255, 255, 0.9);
                     border: 3px solid #d1d5db;
                     border-radius: 8px;
                     padding: 8px 16px;
