@@ -514,14 +514,25 @@
 
             renderProjectCoupons(coupons) {
                 const couponsList = document.getElementById('coupons-list');
-                if (!couponsList) return;
+                console.log('renderProjectCoupons called with:', coupons);
+                console.log('couponsList element:', couponsList);
+                
+                if (!couponsList) {
+                    console.error('coupons-list element not found!');
+                    return;
+                }
                 
                 if (coupons.length === 0) {
+                    console.log('No coupons to render, showing no coupons message');
                     this.showNoCoupons();
                     return;
                 }
                 
-                couponsList.innerHTML = coupons.map(coupon => {
+                console.log('Rendering', coupons.length, 'coupons');
+                
+                // Create coupon elements
+                const couponElements = coupons.map(coupon => {
+                    console.log('Creating coupon element for:', coupon);
                     const couponElement = document.createElement('coupon-package');
                     couponElement.setCouponData(coupon);
                     
@@ -531,7 +542,17 @@
                     });
                     
                     return couponElement;
-                }).map(el => el.outerHTML).join('');
+                });
+                
+                console.log('Created coupon elements:', couponElements);
+                
+                // Clear and populate the list
+                couponsList.innerHTML = '';
+                couponElements.forEach(element => {
+                    couponsList.appendChild(element);
+                });
+                
+                console.log('Coupons rendered successfully');
             }
 
             showNoCoupons() {
