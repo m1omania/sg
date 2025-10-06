@@ -72,11 +72,18 @@ class FullCouponCard extends HTMLElement {
                     background: linear-gradient(135deg, #ffffff 0%, rgba(255, 84, 89, 0.05) 100%);
                 }
 
+                .coupon-header {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-bottom: 16px;
+                }
+
                 .coupon-title {
                     font-size: 1.5rem;
                     font-weight: 700;
                     color: #333333;
-                    margin: 0 0 8px 0;
+                    margin: 0;
                     line-height: 1.2;
                 }
 
@@ -84,7 +91,7 @@ class FullCouponCard extends HTMLElement {
                     font-size: 1rem;
                     font-weight: 400;
                     color: #666666;
-                    margin: 0 0 16px 0;
+                    margin: 0;
                     line-height: 1.4;
                 }
 
@@ -209,8 +216,10 @@ class FullCouponCard extends HTMLElement {
                 }
             </style>
             <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''}">
-                <h3 class="coupon-title">25$ приветственный бонус</h3>
-                <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
+                <div class="coupon-header">
+                    <h3 class="coupon-title">25$ приветственный бонус</h3>
+                    <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
+                </div>
                 
                 <div class="coupon-condition">
                     <span class="condition-label">Условие:</span>
