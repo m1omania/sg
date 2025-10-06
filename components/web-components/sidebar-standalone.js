@@ -114,6 +114,13 @@ class SGSidebar extends HTMLElement {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
+                        border-right: none;
+                        border-left: none;
+                    }
+
+                    .nav-link.active {
+                        background: transparent;
+                        color: #3b82f6;
                     }
                 }
 
