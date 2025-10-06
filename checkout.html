@@ -494,14 +494,20 @@
             applyCoupon(coupon) {
                 this.appliedCoupon = coupon;
                 this.updatePackageSummary();
-                this.hideCouponBanner();
                 this.showAppliedCoupon();
+                // Don't hide the coupon card - keep it visible
             }
             
             removeCoupon() {
                 this.appliedCoupon = null;
                 this.updatePackageSummary();
                 this.hideAppliedCoupon();
+                
+                // Reset the switch to off position
+                const couponSwitch = document.getElementById('coupon-switch');
+                if (couponSwitch) {
+                    couponSwitch.checked = false;
+                }
             }
             
             showAppliedCoupon() {
