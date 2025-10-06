@@ -193,14 +193,13 @@
                         <div class="coupon-section">
                             <!-- Coupon Card -->
                             <div class="coupon-card" id="coupon-card" style="display: none;">
-                                <div class="coupon-header">
-                                    <div class="coupon-info">
-                                        <div class="coupon-title">Скидка 25$</div>
-                                        <div class="coupon-conditions">Действует только на товары из категории «Дирижабли»</div>
-                                    </div>
-                                    <div class="coupon-badge">
-                                        <span class="coupon-date">до 8 окт.</span>
-                                    </div>
+                                <div class="coupon-value">
+                                    <span class="coupon-percentage">25%</span>
+                                </div>
+                                <div class="coupon-divider"></div>
+                                <div class="coupon-info">
+                                    <div class="coupon-title">Скидка для новых пользователей</div>
+                                    <div class="coupon-date">до 8 окт.</div>
                                 </div>
                                 <div class="coupon-toggle">
                                     <input type="checkbox" id="coupon-switch" class="coupon-switch">
@@ -324,16 +323,16 @@
             showCouponBanner(coupon) {
                 console.log('showCouponBanner called with coupon:', coupon);
                 const card = document.getElementById('coupon-card');
+                const percentageElement = card.querySelector('.coupon-percentage');
                 const titleElement = card.querySelector('.coupon-title');
-                const conditionsElement = card.querySelector('.coupon-conditions');
                 const dateElement = card.querySelector('.coupon-date');
                 
                 console.log('Card element:', card);
-                console.log('Title element:', titleElement);
+                console.log('Percentage element:', percentageElement);
                 
                 if (card && coupon) {
-                    titleElement.textContent = `Скидка ${coupon.discount_amount}$`;
-                    conditionsElement.textContent = coupon.description || 'Действует только на товары из категории «Дирижабли»';
+                    percentageElement.textContent = `${coupon.discount_amount}%`;
+                    titleElement.textContent = coupon.description || 'Скидка для новых пользователей';
                     
                     // Format expiry date
                     if (coupon.expiry_date) {
@@ -345,7 +344,7 @@
                         dateElement.textContent = 'до 8 окт.';
                     }
                     
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                     console.log('Coupon card shown');
                 } else {
                     console.error('Card or coupon not found!');
