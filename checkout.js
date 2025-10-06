@@ -74,26 +74,26 @@ function initializeCheckoutPage(packageId) {
 async function loadCheckoutBalances() {
     try {
         console.log('Loading checkout balances...');
-        const res = await fetch('/api/wallet/1');
-        console.log('Checkout wallet response status:', res.status);
-        if (!res.ok) {
-            console.log('Checkout wallet response not ok:', res.status);
-            return;
-        }
-        const wallet = await res.json();
-        console.log('Checkout wallet data:', wallet);
+        
+        // Mock data for local testing
+        const mockWalletData = {
+            main_balance: 1250.75,
+            partner_balance: 850.25
+        };
+        
+        console.log('Using mock wallet data for checkout:', mockWalletData);
         
         // Update balance displays
         const mainBalanceEl = document.querySelector('.main-balance-amount');
         const partnerBalanceEl = document.querySelector('.partner-balance-amount');
         
         if (mainBalanceEl) {
-            mainBalanceEl.textContent = `${Number(wallet.main_balance).toFixed(2)} $`;
+            mainBalanceEl.textContent = `${Number(mockWalletData.main_balance).toFixed(2)} $`;
             console.log('Updated main balance in checkout');
         }
         
         if (partnerBalanceEl) {
-            partnerBalanceEl.textContent = `${Number(wallet.partner_balance || 0).toFixed(2)} $`;
+            partnerBalanceEl.textContent = `${Number(mockWalletData.partner_balance).toFixed(2)} $`;
             console.log('Updated partner balance in checkout');
         }
         

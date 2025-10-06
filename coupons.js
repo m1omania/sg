@@ -23,51 +23,55 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Loading active coupons...');
             console.log('activeCouponsGrid element:', activeCouponsGrid);
             
-            const response = await fetch(`/api/coupons/active/${userId}`);
-            console.log('Active coupons response status:', response.status);
-            console.log('Response headers:', response.headers);
-            
-            if (!response.ok) {
-                console.log('Active coupons response not ok:', response.status);
-                if (activeCouponsGrid) {
-                    activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка загрузки: ' + response.status + '</p></div>';
+            // Mock data for local testing
+            const mockCoupons = [
+                {
+                    id: 1,
+                    code: 'Bonus 25$',
+                    name: 'приветственный бонус',
+                    description: 'Специальное предложение для новых клиентов',
+                    discount_amount: 25,
+                    discount_type: 'dollar',
+                    project_name: 'Все проекты',
+                    conditions: 'Регистрация',
+                    expires_at: '2025-11-15T23:59:59Z'
+                },
+                {
+                    id: 2,
+                    code: 'Loyalty 50$',
+                    name: 'бонус за лояльность',
+                    description: 'Специальное предложение для постоянных клиентов',
+                    discount_amount: 50,
+                    discount_type: 'dollar',
+                    project_name: 'Совэлмаш',
+                    conditions: 'Действует только на первый пакет',
+                    expires_at: '2024-12-31T23:59:59Z'
+                },
+                {
+                    id: 3,
+                    code: 'Summer 30%',
+                    name: 'летняя акция',
+                    description: 'Ограниченное предложение до конца лета',
+                    discount_amount: 30,
+                    discount_type: 'percentage',
+                    project_name: 'Дирижабли',
+                    conditions: 'Минимальная сумма 500$',
+                    expires_at: '2024-09-30T23:59:59Z'
                 }
-                return;
-            }
+            ];
             
-            const responseText = await response.text();
-            console.log('Raw response text:', responseText);
-            
-            let coupons;
-            try {
-                coupons = JSON.parse(responseText);
-            } catch (parseError) {
-                console.error('JSON parse error:', parseError);
-                console.log('Response was not valid JSON:', responseText);
-                if (activeCouponsGrid) {
-                    activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Ошибка парсинга JSON</p></div>';
-                }
-                return;
-            }
-            
-            console.log('Active coupons data:', coupons);
+            console.log('Using mock coupons data:', mockCoupons);
             
             if (activeCouponsGrid) {
                 activeCouponsGrid.innerHTML = '';
                 
-                if (!Array.isArray(coupons)) {
-                    console.error('Coupons is not an array:', coupons);
-                    activeCouponsGrid.innerHTML = '<div class="empty-state"><p>Неверный формат данных</p></div>';
-                    return;
-                }
-                
-                if (coupons.length === 0) {
+                if (mockCoupons.length === 0) {
                     activeCouponsGrid.innerHTML = '<div class="empty-state"><p>У вас нет активных купонов</p></div>';
                     return;
                 }
                 
-                console.log('Creating coupon cards for', coupons.length, 'coupons');
-                coupons.forEach((coupon, index) => {
+                console.log('Creating coupon cards for', mockCoupons.length, 'coupons');
+                mockCoupons.forEach((coupon, index) => {
                     console.log('Creating card for coupon', index, coupon);
                     const couponCard = createCouponCard(coupon);
                     activeCouponsGrid.appendChild(couponCard);
@@ -88,26 +92,44 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadHistoryCoupons() {
         try {
             console.log('Loading history coupons...');
-            const response = await fetch(`/api/coupons/history/${userId}`);
-            console.log('History coupons response status:', response.status);
             
-            if (!response.ok) {
-                console.log('History coupons response not ok:', response.status);
-                return;
-            }
+            // Mock data for local testing
+            const mockHistoryCoupons = [
+                {
+                    id: 4,
+                    code: 'Winter 20$',
+                    name: 'зимняя акция 2023',
+                    description: 'Скидка на зимние инвестиции',
+                    discount_amount: 20,
+                    discount_type: 'dollar',
+                    project_name: 'Дирижабли',
+                    conditions: 'Использован 15.01.2024',
+                    expires_at: '2024-01-31T23:59:59Z'
+                },
+                {
+                    id: 5,
+                    code: 'NewYear 40$',
+                    name: 'новогодний бонус',
+                    description: 'Праздничное предложение',
+                    discount_amount: 40,
+                    discount_type: 'dollar',
+                    project_name: 'Совэлмаш',
+                    conditions: 'Использован 05.02.2024',
+                    expires_at: '2024-02-29T23:59:59Z'
+                }
+            ];
             
-            const coupons = await response.json();
-            console.log('History coupons data:', coupons);
+            console.log('Using mock history coupons data:', mockHistoryCoupons);
             
             if (historyCouponsGrid) {
                 historyCouponsGrid.innerHTML = '';
                 
-                if (coupons.length === 0) {
-                    historyCouponsGrid.innerHTML = '<div class="empty-state"><p>История купонов пуста</p></div>';
+                if (mockHistoryCoupons.length === 0) {
+                    historyCouponsGrid.innerHTML = '<div class="empty-state"><p>У вас нет использованных купонов</p></div>';
                     return;
                 }
                 
-                coupons.forEach(coupon => {
+                mockHistoryCoupons.forEach(coupon => {
                     const couponCard = createCouponCard(coupon, true);
                     historyCouponsGrid.appendChild(couponCard);
                 });

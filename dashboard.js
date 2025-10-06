@@ -35,25 +35,25 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadDashboardBalances() {
         try {
             console.log('Loading dashboard balances...');
-            const res = await fetch('/api/wallet/1');
-            console.log('Dashboard wallet response status:', res.status);
-            if (!res.ok) {
-                console.log('Dashboard wallet response not ok:', res.status);
-                return;
-            }
-            const w = await res.json();
-            console.log('Dashboard wallet data:', w);
+            
+            // Mock data for local testing
+            const mockWalletData = {
+                main_balance: 1250.75,
+                partner_balance: 850.25
+            };
+            
+            console.log('Using mock wallet data:', mockWalletData);
             
             if (mainAccountCard) {
-                mainAccountCard.updateBalance(Number(w.main_balance).toFixed(2));
-                console.log('Updated main balance to:', Number(w.main_balance).toFixed(2));
+                mainAccountCard.updateBalance(Number(mockWalletData.main_balance).toFixed(2));
+                console.log('Updated main balance to:', Number(mockWalletData.main_balance).toFixed(2));
             } else {
                 console.log('Main account card not found');
             }
             
             if (partnerAccountCard) {
-                partnerAccountCard.updateBalance(Number(w.partner_balance || 0).toFixed(2));
-                console.log('Updated partner balance to:', Number(w.partner_balance || 0).toFixed(2));
+                partnerAccountCard.updateBalance(Number(mockWalletData.partner_balance).toFixed(2));
+                console.log('Updated partner balance to:', Number(mockWalletData.partner_balance).toFixed(2));
             } else {
                 console.log('Partner account card not found');
             }
