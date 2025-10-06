@@ -59,6 +59,8 @@ class FullCouponCard extends HTMLElement {
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                     max-width: 400px;
                     margin: 0 auto;
+                    height: 100%;
+                    min-height: 320px;
                 }
 
                 .coupon-card:hover {
@@ -137,7 +139,8 @@ class FullCouponCard extends HTMLElement {
                     display: flex;
                     flex-direction: column;
                     gap: 8px;
-                    margin-top: 20px;
+                    margin-top: auto;
+                    padding-top: 20px;
                 }
 
                 .coupon-code-block {
