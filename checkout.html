@@ -629,6 +629,17 @@
                     });
                 }
                 
+                // Double payment switch
+                const doublePaymentSwitch = document.getElementById('double-payment-switch');
+                if (doublePaymentSwitch) {
+                    console.log('Double payment switch found:', doublePaymentSwitch);
+                    doublePaymentSwitch.addEventListener('change', (e) => {
+                        console.log('Double payment toggled:', e.target.checked);
+                        this.updatePackageSummary();
+                        this.updateCheckoutButton();
+                    });
+                }
+                
                 // Validate coupon input
                 const validateBtn = document.getElementById('validate-coupon-btn');
                 const couponInput = document.getElementById('coupon-input');
@@ -804,10 +815,24 @@
             }
             
             updatePackageAmount() {
-                // Get package amount from URL or page content
+                // Get package amount from URL parameter
                 const urlParams = new URLSearchParams(window.location.search);
-                const amount = urlParams.get('amount') || 500; // Default amount
-                this.packageAmount = parseInt(amount);
+                const packageId = urlParams.get('package') || 'sov-500';
+                
+                // Package data mapping
+                const packageData = {
+                    'sov-500': { total: 50.00, name: 'Пакет 500 $' },
+                    'sov-1000': { total: 100.00, name: 'Пакет 1000 $' },
+                    'sov-2000': { total: 200.00, name: 'Пакет 2000 $' },
+                    'airship-250': { total: 25.00, name: 'Пакет 250 $' },
+                    'airship-500': { total: 50.00, name: 'Пакет 500 $' },
+                    'airship-1000': { total: 100.00, name: 'Пакет 1000 $' }
+                };
+                
+                const package = packageData[packageId] || packageData['sov-500'];
+                this.packageAmount = package.total;
+                
+                console.log('Package amount updated:', this.packageAmount, 'for package:', packageId);
             }
             
             updateCheckoutButton() {
@@ -819,11 +844,19 @@
                     discountAmount = this.appliedCoupon.discount_amount;
                 }
                 
-                const finalAmount = Math.max(0, this.packageAmount - discountAmount);
+                // Check if double payment is enabled
+                const doublePaymentSwitch = document.getElementById('double-payment-switch');
+                const isDoublePayment = doublePaymentSwitch ? doublePaymentSwitch.checked : false;
+                
+                // Calculate base amount (package amount * 2 if double payment is enabled)
+                const baseAmount = isDoublePayment ? this.packageAmount * 2 : this.packageAmount;
+                const finalAmount = Math.max(0, baseAmount - discountAmount);
                 
                 console.log('Updating checkout button:');
                 console.log('- User balance:', this.userBalance);
                 console.log('- Package amount:', this.packageAmount);
+                console.log('- Double payment enabled:', isDoublePayment);
+                console.log('- Base amount:', baseAmount);
                 console.log('- Discount amount:', discountAmount);
                 console.log('- Final amount:', finalAmount);
                 console.log('- Has enough balance:', this.userBalance >= finalAmount);
@@ -995,13 +1028,25 @@
                     discountAmount = this.appliedCoupon.discount_amount;
                 }
                 
-                const finalAmount = Math.max(0, this.packageAmount - discountAmount);
+                // Check if double payment is enabled
+                const doublePaymentSwitch = document.getElementById('double-payment-switch');
+                const isDoublePayment = doublePaymentSwitch ? doublePaymentSwitch.checked : false;
+                
+                // Calculate base amount (package amount * 2 if double payment is enabled)
+                const baseAmount = isDoublePayment ? this.packageAmount * 2 : this.packageAmount;
+                const finalAmount = Math.max(0, baseAmount - discountAmount);
                 
                 const summaryHTML = `
                     <div class="package-summary-item">
                         <span>Стоимость пакета:</span>
                         <span>$${this.packageAmount}</span>
                     </div>
+                    ${isDoublePayment ? `
+                        <div class="package-summary-item">
+                            <span>Двойной платёж:</span>
+                            <span>$${this.packageAmount}</span>
+                        </div>
+                    ` : ''}
                     ${discountAmount > 0 ? `
                         <div class="package-summary-item discount">
                             <span>Скидка по купону:</span>
