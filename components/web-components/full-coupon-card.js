@@ -204,13 +204,16 @@ class FullCouponCard extends HTMLElement {
                     transform: translate(-50%, -50%) rotate(-15deg);
                     font-size: 2.5rem;
                     font-weight: 700;
-                    color: transparent;
-                    -webkit-text-stroke: 2px #d1d5db;
-                    text-stroke: 2px #d1d5db;
+                    color: #9ca3af;
+                    background: rgba(255, 255, 255, 0.9);
+                    border: 3px solid #d1d5db;
+                    border-radius: 8px;
+                    padding: 8px 16px;
                     pointer-events: none;
                     z-index: 10;
                     user-select: none;
-                    opacity: 0.8;
+                    opacity: 0.9;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                 }
 
                 /* Responsive adjustments */
@@ -236,6 +239,8 @@ class FullCouponCard extends HTMLElement {
                     
                     .coupon-used-overlay {
                         font-size: 2rem;
+                        padding: 6px 12px;
+                        border-width: 2px;
                     }
                 }
             </style>
