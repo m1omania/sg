@@ -56,7 +56,6 @@ class FullCouponCard extends HTMLElement {
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
-                    cursor: pointer;
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
                     max-width: 400px;
                     margin: 0 auto;
