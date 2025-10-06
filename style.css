@@ -1594,8 +1594,8 @@ select.form-control {
 
 /* Coupons Grid */
 .coupons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-20);
   align-items: stretch;
 }
@@ -1607,6 +1607,8 @@ select.form-control {
   padding: var(--space-20);
   transition: all var(--duration-normal) var(--ease-standard);
   position: relative;
+  flex: 1 1 350px;
+  max-width: 400px;
 }
 
 .coupon-card:hover {
@@ -2007,8 +2009,8 @@ select.form-control {
 
 
 .coupons-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
     align-items: stretch;
@@ -3346,7 +3348,7 @@ input:checked + .slider:before {
   }
   
   .coupons-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     align-items: stretch;
   }
   
@@ -5012,8 +5014,8 @@ body:not(.landing-page) sg-header-landing {
 
 /* Coupons Page Styles */
 .coupons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-24);
   margin-top: var(--space-24);
   align-items: stretch;
