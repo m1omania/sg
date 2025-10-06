@@ -117,6 +117,22 @@ class SGSidebar extends HTMLElement {
                     }
                 }
 
+                /* Smaller mobile screens */
+                @media (max-width: 480px) {
+                    .nav-link {
+                        font-size: 0.75rem;
+                        padding: 0.5rem 0.25rem;
+                    }
+                }
+
+                /* Very small screens */
+                @media (max-width: 360px) {
+                    .nav-link {
+                        font-size: 0.6875rem;
+                        padding: 0.375rem 0.125rem;
+                    }
+                }
+
                 /* Scrollbar styling */
                 .sidebar::-webkit-scrollbar {
                     width: 4px;
