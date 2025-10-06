@@ -141,12 +141,18 @@ class FullCouponCard extends HTMLElement {
                     color: #333333;
                 }
 
+                .coupon-actions-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    margin-top: 20px;
+                }
+
                 .coupon-code-block {
                     background: #f0f9ff;
                     border: 1px solid #bae6fd;
                     border-radius: 8px;
                     padding: 12px 16px;
-                    margin: 20px 0;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -181,7 +187,6 @@ class FullCouponCard extends HTMLElement {
                     cursor: pointer;
                     transition: all 0.2s ease;
                     width: 100%;
-                    margin-top: 8px;
                 }
 
                 .coupon-use-btn:hover {
@@ -237,17 +242,19 @@ class FullCouponCard extends HTMLElement {
                     <div class="coupon-detail-value">15.11.2025</div>
                 </div>
                 
-                <div class="coupon-code-block">
-                    <span class="coupon-code-text">Код: Bonus 25$</span>
-                    <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
+                <div class="coupon-actions-container">
+                    <div class="coupon-code-block">
+                        <span class="coupon-code-text">Код: Bonus 25$</span>
+                        <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </div>
+                    
+                    ${!this.isHistory ? `<button class="coupon-use-btn" id="use-btn">
+                        Использовать
+                    </button>` : ''}
                 </div>
-                
-                ${!this.isHistory ? `<button class="coupon-use-btn" id="use-btn">
-                    Использовать
-                </button>` : ''}
             </div>
         `;
 
