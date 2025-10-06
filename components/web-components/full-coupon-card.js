@@ -360,21 +360,18 @@ class FullCouponCard extends HTMLElement {
         if (!this.isHistory) {
             this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
                 e.stopPropagation();
-                navigator.clipboard.writeText('Bonus 25$').then(() => {
-                    // Change icon to checkmark
-                    const icon = e.target;
-                    const originalHTML = icon.innerHTML;
-                    const originalColor = icon.style.color;
+                navigator.clipboard.writeText(this.coupon.code).then(() => {
+                    // Change text to "Скопировано"
+                    const codeText = this.shadowRoot.querySelector('.coupon-code-text');
+                    const originalText = codeText.textContent;
                     
-                    icon.innerHTML = `
-                        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    `;
-                    icon.style.color = '#10b981';
+                    codeText.textContent = 'Скопировано';
+                    codeText.style.color = '#10b981';
                     
-                    // Change back to copy icon after 2 seconds
+                    // Change back to original text after 2 seconds
                     setTimeout(() => {
-                        icon.innerHTML = originalHTML;
-                        icon.style.color = originalColor;
+                        codeText.textContent = originalText;
+                        codeText.style.color = '#333333';
                     }, 2000);
                 });
             });
