@@ -89,10 +89,14 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-condition {
+                    background: #f0f0f0;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    padding: 12px 16px;
+                    margin-bottom: 20px;
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    margin-bottom: 20px;
                 }
 
                 .condition-label {
@@ -102,11 +106,11 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .condition-badge {
-                    background: #f0f0f0;
+                    background: transparent;
                     color: #333333;
-                    padding: 4px 8px;
-                    border-radius: 6px;
-                    font-size: 0.85rem;
+                    padding: 0;
+                    border-radius: 0;
+                    font-size: 0.9rem;
                     font-weight: 500;
                 }
 
