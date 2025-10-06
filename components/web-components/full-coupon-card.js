@@ -30,6 +30,33 @@ class FullCouponCard extends HTMLElement {
         this.render();
     }
 
+    calculateProgress() {
+        if (!this.coupon || !this.coupon.expires_at) return 0;
+        
+        const now = new Date();
+        const expiresAt = new Date(this.coupon.expires_at);
+        const created = new Date(this.coupon.created_at || new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)); // 30 days ago if no created_at
+        
+        const totalDuration = expiresAt.getTime() - created.getTime();
+        const elapsed = now.getTime() - created.getTime();
+        
+        const progress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
+        return Math.round(progress);
+    }
+
+    getBadgeColor() {
+        if (!this.coupon || !this.coupon.project_name) return '#8DA9E0';
+        
+        const projectColors = {
+            'Дирижабли': '#8DA9E0',
+            'Совэлмаш': '#66C2A4',
+            'Все проекты': '#F59E0B',
+            'default': '#8DA9E0'
+        };
+        
+        return projectColors[this.coupon.project_name] || projectColors.default;
+    }
+
     connectedCallback() {
         this.render();
     }
@@ -74,7 +101,6 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-project-badge {
-                    background: #8DA9E0;
                     color: white;
                     padding: 6px 12px;
                     border-radius: 12px;
@@ -82,6 +108,7 @@ class FullCouponCard extends HTMLElement {
                     font-weight: 500;
                     display: inline-block;
                     margin-bottom: 12px;
+                    width: fit-content;
                 }
 
                 .coupon-header {
@@ -173,20 +200,20 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-use-btn {
-                    background: #66C2A4;
+                    background: #3b82f6;
                     color: white;
                     border: none;
                     border-radius: 8px;
-                    padding: 14px 24px;
-                    font-size: 1rem;
-                    font-weight: 500;
+                    padding: 12px 20px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
                     cursor: pointer;
                     transition: all 0.2s ease;
                     width: 100%;
                 }
 
                 .coupon-use-btn:hover {
-                    background: #5AB394;
+                    background: #2563eb;
                     transform: translateY(-1px);
                 }
 
@@ -289,7 +316,7 @@ class FullCouponCard extends HTMLElement {
             <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
                 ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
                 
-                <div class="coupon-project-badge">${this.coupon.project_name}</div>
+                <div class="coupon-project-badge" style="background: ${this.getBadgeColor()}">${this.coupon.project_name}</div>
                 
                 <div class="coupon-header">
                     <h3 class="coupon-title">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</h3>
@@ -299,7 +326,7 @@ class FullCouponCard extends HTMLElement {
                 <div class="coupon-progress-section">
                     <div class="coupon-progress-text">До ${new Date(this.coupon.expires_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</div>
                     <div class="coupon-progress-bar">
-                        <div class="coupon-progress-fill"></div>
+                        <div class="coupon-progress-fill" style="width: ${this.calculateProgress()}%"></div>
                     </div>
                 </div>
                 

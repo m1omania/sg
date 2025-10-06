@@ -82,14 +82,41 @@
                 this.render();
             }
 
-            setHistory(isHistory) {
-                this.isHistory = isHistory;
-                this.render();
-            }
+                setHistory(isHistory) {
+                    this.isHistory = isHistory;
+                    this.render();
+                }
 
-            connectedCallback() {
-                this.render();
-            }
+                calculateProgress() {
+                    if (!this.coupon || !this.coupon.expires_at) return 0;
+                    
+                    const now = new Date();
+                    const expiresAt = new Date(this.coupon.expires_at);
+                    const created = new Date(this.coupon.created_at || new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)); // 30 days ago if no created_at
+                    
+                    const totalDuration = expiresAt.getTime() - created.getTime();
+                    const elapsed = now.getTime() - created.getTime();
+                    
+                    const progress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
+                    return Math.round(progress);
+                }
+
+                getBadgeColor() {
+                    if (!this.coupon || !this.coupon.project_name) return '#8DA9E0';
+                    
+                    const projectColors = {
+                        'Дирижабли': '#8DA9E0',
+                        'Совэлмаш': '#66C2A4',
+                        'Все проекты': '#F59E0B',
+                        'default': '#8DA9E0'
+                    };
+                    
+                    return projectColors[this.coupon.project_name] || projectColors.default;
+                }
+
+                connectedCallback() {
+                    this.render();
+                }
 
             render() {
                 if (!this.coupon) {
@@ -131,7 +158,6 @@
                         }
 
                         .coupon-project-badge {
-                            background: #8DA9E0;
                             color: white;
                             padding: 6px 12px;
                             border-radius: 12px;
@@ -139,6 +165,7 @@
                             font-weight: 500;
                             display: inline-block;
                             margin-bottom: 12px;
+                            width: fit-content;
                         }
 
                         .coupon-header {
@@ -229,20 +256,20 @@
                         }
 
                         .coupon-use-btn {
-                            background: #66C2A4;
+                            background: #3b82f6;
                             color: white;
                             border: none;
                             border-radius: 8px;
-                            padding: 14px 24px;
-                            font-size: 1rem;
-                            font-weight: 500;
+                            padding: 12px 20px;
+                            font-size: 0.9rem;
+                            font-weight: 600;
                             cursor: pointer;
                             transition: all 0.2s ease;
                             width: 100%;
                         }
 
                         .coupon-use-btn:hover {
-                            background: #5AB394;
+                            background: #2563eb;
                             transform: translateY(-1px);
                         }
 
@@ -345,7 +372,7 @@
                     <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
                         ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
                         
-                        <div class="coupon-project-badge">${this.coupon.project_name}</div>
+                        <div class="coupon-project-badge" style="background: ${this.getBadgeColor()}">${this.coupon.project_name}</div>
                         
                         <div class="coupon-header">
                             <h3 class="coupon-title">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</h3>
@@ -355,9 +382,9 @@
                         <div class="coupon-progress-section">
                             <div class="coupon-progress-text">До ${new Date(this.coupon.expires_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</div>
                             <div class="coupon-progress-bar">
-                                <div class="coupon-progress-fill"></div>
-        </div>
-    </div>
+                                <div class="coupon-progress-fill" style="width: ${this.calculateProgress()}%"></div>
+                    </div>
+                </div>
 
                         <div class="coupon-actions-container">
                             <div class="coupon-code-block">
@@ -366,8 +393,8 @@
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                 </svg>
-                            </div>
-                            
+    </div>
+
                             ${!this.isHistory ? `<button class="coupon-use-btn" id="use-btn">
                                 Использовать
                             </button>` : ''}
