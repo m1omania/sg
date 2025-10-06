@@ -34,6 +34,8 @@ class SGSidebar extends HTMLElement {
                     list-style: none;
                     margin: 0;
                     padding: 2rem 0;
+                    display: flex;
+                    flex-direction: column;
                 }
 
                 .nav-item {
