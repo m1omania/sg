@@ -114,18 +114,6 @@ class FullCouponCard extends HTMLElement {
                     font-weight: 500;
                 }
 
-                .coupon-divider {
-                    width: 100%;
-                    height: 1px;
-                    background: repeating-linear-gradient(
-                        to right,
-                        #333333 0px,
-                        #333333 4px,
-                        transparent 4px,
-                        transparent 8px
-                    );
-                    margin: 0 0 20px 0;
-                }
 
                 .coupon-details {
                     display: grid;
@@ -228,8 +216,6 @@ class FullCouponCard extends HTMLElement {
                     <span class="condition-label">Условие:</span>
                     <span class="condition-badge">Регистрация</span>
                 </div>
-                
-                <div class="coupon-divider"></div>
                 
                 <div class="coupon-details">
                     <div class="coupon-detail-label">Бонус:</div>
