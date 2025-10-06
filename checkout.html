@@ -843,8 +843,8 @@
                     'airship-1000': { total: 100.00, name: 'Пакет 1000 $' }
                 };
                 
-                const package = packageData[packageId] || packageData['sov-500'];
-                this.packageAmount = package.total;
+                const packageInfo = packageData[packageId] || packageData['sov-500'];
+                this.packageAmount = packageInfo.total;
                 
                 console.log('Package amount updated:', this.packageAmount, 'for package:', packageId);
             }
