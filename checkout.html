@@ -687,10 +687,10 @@
                 }
                 
                 // Double payment switch
-                const doublePaymentSwitch = document.getElementById('double-payment-switch');
-                console.log('Double payment switch found:', doublePaymentSwitch);
-                if (doublePaymentSwitch) {
-                    doublePaymentSwitch.addEventListener('change', (e) => {
+                const doublePaymentSwitch2 = document.getElementById('double-payment-switch');
+                console.log('Double payment switch found:', doublePaymentSwitch2);
+                if (doublePaymentSwitch2) {
+                    doublePaymentSwitch2.addEventListener('change', (e) => {
                         console.log('Double payment switch changed:', e.target.checked);
                         this.handleDoublePaymentToggle(e.target.checked);
                     });
