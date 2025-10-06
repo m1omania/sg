@@ -197,6 +197,22 @@ class FullCouponCard extends HTMLElement {
                     transform: translateY(0);
                 }
 
+                .coupon-used-overlay {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotate(-15deg);
+                    font-size: 2.5rem;
+                    font-weight: 700;
+                    color: transparent;
+                    -webkit-text-stroke: 2px #d1d5db;
+                    text-stroke: 2px #d1d5db;
+                    pointer-events: none;
+                    z-index: 10;
+                    user-select: none;
+                    opacity: 0.8;
+                }
+
                 /* Responsive adjustments */
                 @media (max-width: 768px) {
                     .coupon-card {
@@ -217,9 +233,14 @@ class FullCouponCard extends HTMLElement {
                         gap: 8px 12px;
                         font-size: 0.85rem;
                     }
+                    
+                    .coupon-used-overlay {
+                        font-size: 2rem;
+                    }
                 }
             </style>
             <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''}">
+                ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
                 <div class="coupon-header">
                     <h3 class="coupon-title">25$ приветственный бонус</h3>
                     <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
