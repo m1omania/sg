@@ -2733,7 +2733,13 @@ select.form-control {
 .coupon-divider {
     width: 2px !important;
     height: 60px !important;
-    background: #d1d5db;
+    background: repeating-linear-gradient(
+        to bottom,
+        #d1d5db 0px,
+        #d1d5db 8px,
+        transparent 8px,
+        transparent 16px
+    );
     flex-shrink: 0;
     align-self: center;
     min-width: 2px;
