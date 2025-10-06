@@ -2714,6 +2714,8 @@ select.form-control {
     display: flex;
     align-items: center;
     gap: var(--space-20);
+    flex-wrap: nowrap;
+    overflow-x: auto;
 }
 
 .coupon-value {
@@ -2731,11 +2733,13 @@ select.form-control {
 }
 
 .coupon-divider {
-    width: 2px;
-    height: 60px;
+    width: 2px !important;
+    height: 60px !important;
     background: #d1d5db;
     flex-shrink: 0;
     align-self: center;
+    min-width: 2px;
+    min-height: 60px;
 }
 
 .coupon-info {
