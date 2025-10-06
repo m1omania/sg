@@ -214,6 +214,37 @@ class FullCouponCard extends HTMLElement {
                     opacity: 0.9;
                 }
 
+                .coupon-card.used {
+                    opacity: 0.6;
+                    filter: grayscale(0.3);
+                }
+
+                .coupon-card.used .coupon-use-btn {
+                    background: #9ca3af;
+                    cursor: not-allowed;
+                    opacity: 0.5;
+                }
+
+                .coupon-card.used .coupon-use-btn:hover {
+                    background: #9ca3af;
+                    transform: none;
+                }
+
+                .coupon-card.used .coupon-code-block {
+                    background: #f9fafb;
+                    border-color: #e5e7eb;
+                    opacity: 0.7;
+                }
+
+                .coupon-card.used .coupon-code-text {
+                    color: #9ca3af;
+                }
+
+                .coupon-card.used .coupon-copy-icon {
+                    color: #9ca3af;
+                    cursor: not-allowed;
+                }
+
                 /* Responsive adjustments */
                 @media (max-width: 768px) {
                     .coupon-card {
@@ -242,7 +273,7 @@ class FullCouponCard extends HTMLElement {
                     }
                 }
             </style>
-            <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''}">
+            <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
                 ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
                 <div class="coupon-header">
                     <h3 class="coupon-title">25$ приветственный бонус</h3>
@@ -293,27 +324,29 @@ class FullCouponCard extends HTMLElement {
             });
         }
 
-        // Copy code functionality
-        this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
-            e.stopPropagation();
-            navigator.clipboard.writeText('Bonus 25$').then(() => {
-                // Change icon to checkmark
-                const icon = e.target;
-                const originalHTML = icon.innerHTML;
-                const originalColor = icon.style.color;
-                
-                icon.innerHTML = `
-                    <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                `;
-                icon.style.color = '#10b981';
-                
-                // Change back to copy icon after 2 seconds
-                setTimeout(() => {
-                    icon.innerHTML = originalHTML;
-                    icon.style.color = originalColor;
-                }, 2000);
+        // Copy code functionality (only for active coupons)
+        if (!this.isHistory) {
+            this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText('Bonus 25$').then(() => {
+                    // Change icon to checkmark
+                    const icon = e.target;
+                    const originalHTML = icon.innerHTML;
+                    const originalColor = icon.style.color;
+                    
+                    icon.innerHTML = `
+                        <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    `;
+                    icon.style.color = '#10b981';
+                    
+                    // Change back to copy icon after 2 seconds
+                    setTimeout(() => {
+                        icon.innerHTML = originalHTML;
+                        icon.style.color = originalColor;
+                    }, 2000);
+                });
             });
-        });
+        }
 
     }
 }
