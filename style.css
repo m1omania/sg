@@ -1601,7 +1601,7 @@ select.form-control {
 
 .coupon-card {
   background: var(--color-surface);
-  border: 2px solid #d1d5db;
+  border: 1px solid #d1d5db;
   border-radius: var(--radius-lg);
   padding: var(--space-20);
   transition: all var(--duration-normal) var(--ease-standard);
@@ -2708,7 +2708,7 @@ select.form-control {
 
 .coupon-card {
     background: #f8fafc;
-    border: 2px solid #d1d5db;
+    border: 1px solid #d1d5db;
     border-radius: 12px;
     padding: var(--space-20);
     display: flex;
@@ -2795,10 +2795,10 @@ select.form-control {
     line-height: 1.4;
 }
 
-/* Double Payment Card Styles */
+/* Double Payment Card Styles - Copy of Coupon Card */
 .double-payment-card {
     background: #f8fafc;
-    border: 2px solid #d1d5db;
+    border: 1px solid #d1d5db;
     border-radius: 12px;
     padding: var(--space-20);
     display: flex;
@@ -2830,6 +2830,7 @@ select.form-control {
     font-size: 1rem;
     font-weight: 600;
     color: #1f2937;
+    margin-bottom: var(--space-4);
     line-height: 1.3;
 }
 
