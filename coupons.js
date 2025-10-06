@@ -122,39 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create coupon card
     function createCouponCard(coupon, isHistory = false) {
-        const card = document.createElement('div');
-        card.className = 'coupon-card';
+        const card = document.createElement('full-coupon-card');
+        card.setCouponData(coupon);
+        card.setHistory(isHistory);
         
-        const statusClass = isHistory ? 'used' : 'active';
-        const statusText = isHistory ? 'Использован' : 'Активен';
+        // Add event listeners for the Web Component
+        card.addEventListener('coupon-details', (e) => {
+            showCouponDetails(e.detail.coupon.id);
+        });
         
-        card.innerHTML = `
-            <div class="coupon-header">
-                <div class="coupon-code">${coupon.code}</div>
-                <div class="coupon-status ${statusClass}">${statusText}</div>
-            </div>
-            <div class="coupon-body">
-                <h3 class="coupon-name">${coupon.name}</h3>
-                <p class="coupon-description">${coupon.description}</p>
-                <div class="coupon-discount">
-                    <span class="discount-amount">${coupon.discount}%</span>
-                    <span class="discount-text">скидка</span>
-                </div>
-                <div class="coupon-details">
-                    <p><strong>Проект:</strong> ${coupon.project_name}</p>
-                    <p><strong>Условия:</strong> ${coupon.conditions}</p>
-                    <p><strong>Действует до:</strong> ${new Date(coupon.expires_at).toLocaleDateString()}</p>
-                </div>
-            </div>
-            <div class="coupon-actions">
-                <button class="btn btn--small" onclick="showCouponDetails(${coupon.id})">
-                    Подробнее
-                </button>
-                ${!isHistory ? `<button class="btn btn--small btn--primary" onclick="useCoupon(${coupon.id})">
-                    Использовать
-                </button>` : ''}
-            </div>
-        `;
+        card.addEventListener('coupon-use', (e) => {
+            useCoupon(e.detail.coupon.id);
+        });
         
         return card;
     }
