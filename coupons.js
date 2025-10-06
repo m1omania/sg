@@ -338,7 +338,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = '/invest.html';
                     } else {
                         // Specific project coupon - go to packages page
+                        console.log('Specific project coupon, project_name:', coupon.project_name);
                         const projectUrl = getProjectUrl(coupon.project_name);
+                        console.log('Redirecting to:', projectUrl);
                         window.location.href = projectUrl;
                     }
                 } else {
@@ -353,12 +355,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to get project URL
     function getProjectUrl(projectName) {
+        console.log('Getting URL for project:', projectName);
+        
         const projectUrls = {
             'Дирижабли': '/packages.html?project=airships',
             'Совэлмаш': '/packages.html?project=sovelmash'
         };
         
-        return projectUrls[projectName] || '/invest.html';
+        const url = projectUrls[projectName] || '/invest.html';
+        console.log('Generated URL:', url);
+        
+        return url;
     }
     
     // Load initial data
