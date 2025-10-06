@@ -292,14 +292,6 @@ class FullCouponCard extends HTMLElement {
             });
         });
 
-        // Card click for details
-        this.shadowRoot.querySelector('.coupon-card').addEventListener('click', () => {
-            this.dispatchEvent(new CustomEvent('coupon-details', {
-                detail: { coupon: this.coupon },
-                bubbles: true,
-                composed: true
-            }));
-        });
     }
 }
 

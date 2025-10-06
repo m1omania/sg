@@ -149,10 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
         card.setHistory(isHistory);
         
         // Add event listeners for the Web Component
-        card.addEventListener('coupon-details', (e) => {
-            showCouponDetails(e.detail.coupon.id);
-        });
-        
         card.addEventListener('coupon-use', (e) => {
             useCoupon(e.detail.coupon.id);
         });
@@ -186,26 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Modal functionality
-    
-    // Coupon details modal functionality
-    const couponDetailsModal = document.getElementById('couponDetailsModal');
-    const closeCouponDetailsModal = document.getElementById('closeCouponDetailsModal');
-    
-    if (closeCouponDetailsModal) {
-        closeCouponDetailsModal.addEventListener('click', () => {
-            couponDetailsModal.style.display = 'none';
-        });
-    }
-    
-    // Close modal when clicking outside
-    if (couponDetailsModal) {
-        couponDetailsModal.addEventListener('click', (e) => {
-            if (e.target === couponDetailsModal) {
-                couponDetailsModal.style.display = 'none';
-            }
-        });
-    }
     
     
     // Global functions for coupon actions
