@@ -119,8 +119,10 @@ class SGSidebar extends HTMLElement {
                     }
 
                     .nav-link.active {
-                        background: transparent;
-                        color: #3b82f6;
+                        background: transparent !important;
+                        color: #3b82f6 !important;
+                        border-right: none !important;
+                        border-left: none !important;
                     }
                 }
 
