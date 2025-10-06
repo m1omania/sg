@@ -566,7 +566,7 @@ app.get('/api/coupons/active/:userId', (req, res) => {
       description: 'Скидка для новых пользователей',
       discount: 25,
       discount_amount: 25,
-      project_name: 'Любой',
+      project_name: 'Все проекты',
       expires_at: '2025-12-31T23:59:59.000Z',
       conditions: 'Минимальная сумма $250',
       used: false,
@@ -584,6 +584,19 @@ app.get('/api/coupons/active/:userId', (req, res) => {
       conditions: 'Только для проекта Дирижабли',
       used: false,
       created_at: '2025-01-15T00:00:00.000Z'
+    },
+    {
+      id: 3,
+      code: 'SOVELMASH20',
+      name: 'Совэлмаш бонус',
+      description: 'Эксклюзивное предложение для проекта Совэлмаш',
+      discount: 20,
+      discount_amount: 20,
+      project_name: 'Совэлмаш',
+      expires_at: '2025-01-31T23:59:59.000Z',
+      conditions: 'Только для проекта Совэлмаш',
+      used: false,
+      created_at: '2024-12-01T00:00:00.000Z'
     }
   ];
   
@@ -598,20 +611,20 @@ app.post('/api/coupons/activate', (req, res) => {
   }
   
   // Demo validation logic
-  const validCoupons = ['WELCOME25', 'INVEST50'];
+  const validCoupons = ['WELCOME25', 'INVEST50', 'SOVELMASH20'];
   
   if (validCoupons.includes(code)) {
     // Find the coupon in our demo data
     const coupon = {
-      id: code === 'WELCOME25' ? 1 : 2,
+      id: code === 'WELCOME25' ? 1 : (code === 'INVEST50' ? 2 : 3),
       code: code,
-      name: code === 'WELCOME25' ? 'Добро пожаловать' : 'Инвестиционный бонус',
-      description: code === 'WELCOME25' ? 'Скидка для новых пользователей' : 'Бонус за первую инвестицию',
-      discount: code === 'WELCOME25' ? 25 : 50,
-      discount_amount: code === 'WELCOME25' ? 25 : 50,
-      project_name: code === 'WELCOME25' ? 'Любой' : 'Дирижабли',
-      expires_at: code === 'WELCOME25' ? '2025-12-31T23:59:59.000Z' : '2025-06-30T23:59:59.000Z',
-      conditions: code === 'WELCOME25' ? 'Минимальная сумма $250' : 'Только для проекта Дирижабли',
+      name: code === 'WELCOME25' ? 'Добро пожаловать' : (code === 'INVEST50' ? 'Инвестиционный бонус' : 'Совэлмаш бонус'),
+      description: code === 'WELCOME25' ? 'Скидка для новых пользователей' : (code === 'INVEST50' ? 'Бонус за первую инвестицию' : 'Эксклюзивное предложение для проекта Совэлмаш'),
+      discount: code === 'WELCOME25' ? 25 : (code === 'INVEST50' ? 50 : 20),
+      discount_amount: code === 'WELCOME25' ? 25 : (code === 'INVEST50' ? 50 : 20),
+      project_name: code === 'WELCOME25' ? 'Все проекты' : (code === 'INVEST50' ? 'Дирижабли' : 'Совэлмаш'),
+      expires_at: code === 'WELCOME25' ? '2025-12-31T23:59:59.000Z' : (code === 'INVEST50' ? '2025-06-30T23:59:59.000Z' : '2025-01-31T23:59:59.000Z'),
+      conditions: code === 'WELCOME25' ? 'Минимальная сумма $250' : (code === 'INVEST50' ? 'Только для проекта Дирижабли' : 'Только для проекта Совэлмаш'),
       used: false,
       created_at: '2025-01-01T00:00:00.000Z'
     };
