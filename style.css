@@ -1608,8 +1608,8 @@ select.form-control {
   padding: var(--space-20);
   transition: all var(--duration-normal) var(--ease-standard);
   position: relative;
-  flex: 1 1 350px;
-  max-width: 400px;
+  width: 350px;
+  flex-shrink: 0;
 }
 
 .coupon-card:hover {
@@ -2025,6 +2025,8 @@ select.form-control {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 350px;
+    flex-shrink: 0;
 }
 
 .coupon-card:hover {
@@ -2723,6 +2725,8 @@ select.form-control {
     flex-wrap: nowrap;
     overflow-x: auto;
     box-shadow: none;
+    width: 350px;
+    flex-shrink: 0;
 }
 
 .coupon-value {
@@ -3353,6 +3357,11 @@ input:checked + .slider:before {
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
+  }
+  
+  .coupon-card {
+    width: 100%;
+    max-width: none;
   }
   
   .modal-content {
@@ -5031,6 +5040,8 @@ body:not(.landing-page) sg-header-landing {
   border-radius: var(--radius-lg);
   padding: var(--space-24);
   transition: all 0.2s ease;
+  width: 350px;
+  flex-shrink: 0;
 }
 
 .coupon-card:hover {
