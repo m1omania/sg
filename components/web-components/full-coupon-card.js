@@ -202,7 +202,7 @@ class FullCouponCard extends HTMLElement {
                 @media (max-width: 768px) {
                     .coupon-card {
                         padding: 20px;
-                        gap: 16px;
+                        gap: 2px;
                         margin: 0 16px;
                     }
                     
@@ -273,14 +273,22 @@ class FullCouponCard extends HTMLElement {
         // Copy code functionality
         this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
             e.stopPropagation();
-            navigator.clipboard.writeText(this.coupon.code).then(() => {
-                // Visual feedback
+            navigator.clipboard.writeText('Bonus 25$').then(() => {
+                // Change icon to checkmark
                 const icon = e.target;
+                const originalHTML = icon.innerHTML;
                 const originalColor = icon.style.color;
-                icon.style.color = '#4ECDC4';
+                
+                icon.innerHTML = `
+                    <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+                icon.style.color = '#10b981';
+                
+                // Change back to copy icon after 2 seconds
                 setTimeout(() => {
+                    icon.innerHTML = originalHTML;
                     icon.style.color = originalColor;
-                }, 200);
+                }, 2000);
             });
         });
 
