@@ -84,8 +84,30 @@ class FullCouponCard extends HTMLElement {
                     font-size: 1rem;
                     font-weight: 400;
                     color: #666666;
-                    margin: 0 0 20px 0;
+                    margin: 0 0 16px 0;
                     line-height: 1.4;
+                }
+
+                .coupon-condition {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                }
+
+                .condition-label {
+                    font-size: 0.9rem;
+                    color: #333333;
+                    font-weight: 400;
+                }
+
+                .condition-badge {
+                    background: #f0f0f0;
+                    color: #333333;
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                    font-size: 0.85rem;
+                    font-weight: 500;
                 }
 
                 .coupon-divider {
@@ -121,8 +143,8 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-code-block {
-                    background: #f0f0f0;
-                    border: 1px solid #e0e0e0;
+                    background: #f0f9ff;
+                    border: 1px solid #bae6fd;
                     border-radius: 8px;
                     padding: 12px 16px;
                     margin: 20px 0;
@@ -150,7 +172,7 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-use-btn {
-                    background: #4ECDC4;
+                    background: #3b82f6;
                     color: white;
                     border: none;
                     border-radius: 8px;
@@ -164,7 +186,7 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-use-btn:hover {
-                    background: #45b8b0;
+                    background: #2563eb;
                     transform: translateY(-1px);
                 }
 
@@ -195,27 +217,29 @@ class FullCouponCard extends HTMLElement {
                 }
             </style>
             <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''}">
-                <h3 class="coupon-title">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</h3>
-                <p class="coupon-subtitle">${this.coupon.description}</p>
+                <h3 class="coupon-title">25$ приветственный бонус</h3>
+                <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
+                
+                <div class="coupon-condition">
+                    <span class="condition-label">Условие:</span>
+                    <span class="condition-badge">Регистрация</span>
+                </div>
                 
                 <div class="coupon-divider"></div>
                 
                 <div class="coupon-details">
                     <div class="coupon-detail-label">Бонус:</div>
-                    <div class="coupon-detail-value">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'}</div>
+                    <div class="coupon-detail-value">25$</div>
                     
                     <div class="coupon-detail-label">Проект:</div>
-                    <div class="coupon-detail-value">${this.coupon.project_name || 'Все проекты'}</div>
-                    
-                    <div class="coupon-detail-label">Условие:</div>
-                    <div class="coupon-detail-value">${this.coupon.conditions || 'Регистрация'}</div>
+                    <div class="coupon-detail-value">Все проекты</div>
                     
                     <div class="coupon-detail-label">Действует до:</div>
-                    <div class="coupon-detail-value">${expiresAt}</div>
+                    <div class="coupon-detail-value">15.11.2025</div>
                 </div>
                 
                 <div class="coupon-code-block">
-                    <span class="coupon-code-text">Код: ${this.coupon.code}</span>
+                    <span class="coupon-code-text">Код: Bonus 25$</span>
                     <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
