@@ -2713,12 +2713,17 @@ select.form-control {
     padding: var(--space-20);
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: var(--space-16);
+    margin-bottom: var(--space-16);
 }
 
 .coupon-toggle {
     flex-shrink: 0;
     margin-top: 2px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .coupon-switch {
