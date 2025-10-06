@@ -23,14 +23,14 @@
 
             <!-- Coupons Content -->
             <div class="coupons-container">
-                <!-- Tabs -->
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="active">Активные купоны</button>
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="active">Активные купоны</button>
                     <button class="tab-btn" data-tab="history">История купонов</button>
-                </div>
+            </div>
 
 
-                <!-- Active Coupons Tab -->
+            <!-- Active Coupons Tab -->
                 <div class="tab-content active" id="activeTab">
                     <div class="coupons-grid" id="activeCouponsGrid">
                         <!-- Coupons will be loaded here -->
@@ -348,39 +348,39 @@
                     <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
                         ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
                         <div class="coupon-header">
-                            <h3 class="coupon-title">25$ приветственный бонус</h3>
-                            <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
+                            <h3 class="coupon-title">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</h3>
+                            <p class="coupon-subtitle">${this.coupon.description}</p>
                         </div>
                         
                         <div class="coupon-condition">
                             <span class="condition-label">Условие:</span>
-                            <span class="condition-badge">Регистрация</span>
+                            <span class="condition-badge">${this.coupon.conditions}</span>
                         </div>
                         
                         <div class="coupon-details">
                             <div class="coupon-detail-label">Бонус:</div>
-                            <div class="coupon-detail-value">25$</div>
+                            <div class="coupon-detail-value">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'}</div>
                             
                             <div class="coupon-detail-label">Проект:</div>
-                            <div class="coupon-detail-value">Все проекты</div>
+                            <div class="coupon-detail-value">${this.coupon.project_name}</div>
                             
                             <div class="coupon-detail-label">Действует до:</div>
-                            <div class="coupon-detail-value">15.11.2025</div>
+                            <div class="coupon-detail-value">${expiresAt}</div>
                         </div>
                         
                         <div class="coupon-actions-container">
                             <div class="coupon-code-block">
-                                <span class="coupon-code-text">Код: Bonus 25$</span>
+                                <span class="coupon-code-text">Код: ${this.coupon.code}</span>
                                 <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                 </svg>
-                            </div>
-                            
+    </div>
+
                             ${!this.isHistory ? `<button class="coupon-use-btn" id="use-btn">
                                 Использовать
                             </button>` : ''}
-                        </div>
+            </div>
                     </div>
                 `;
 
@@ -400,7 +400,7 @@
                 if (!this.isHistory) {
                     this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
                         e.stopPropagation();
-                        navigator.clipboard.writeText('Bonus 25$').then(() => {
+                        navigator.clipboard.writeText(this.coupon.code).then(() => {
                             // Change icon to checkmark
                             const icon = e.target;
                             const originalHTML = icon.innerHTML;

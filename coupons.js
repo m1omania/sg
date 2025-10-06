@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const mockCoupons = [
                 {
                     id: 1,
-                    code: 'Bonus 25$',
+                    code: 'Welcome 25$',
                     name: 'приветственный бонус',
                     description: 'Специальное предложение для новых клиентов',
                     discount_amount: 25,
@@ -38,25 +38,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 {
                     id: 2,
-                    code: 'Loyalty 50$',
-                    name: 'бонус за лояльность',
-                    description: 'Специальное предложение для постоянных клиентов',
-                    discount_amount: 50,
-                    discount_type: 'dollar',
-                    project_name: 'Совэлмаш',
-                    conditions: 'Действует только на первый пакет',
+                    code: 'Dirigible 15%',
+                    name: 'скидка на дирижабли',
+                    description: 'Специальное предложение для проекта Дирижабли',
+                    discount_amount: 15,
+                    discount_type: 'percentage',
+                    project_name: 'Дирижабли',
+                    conditions: 'Минимальная сумма 1000$',
                     expires_at: '2024-12-31T23:59:59Z'
                 },
                 {
                     id: 3,
-                    code: 'Summer 30%',
-                    name: 'летняя акция',
-                    description: 'Ограниченное предложение до конца лета',
-                    discount_amount: 30,
+                    code: 'Sovelmash 20%',
+                    name: 'скидка совэлмаш',
+                    description: 'Эксклюзивное предложение для проекта Совэлмаш',
+                    discount_amount: 20,
                     discount_type: 'percentage',
-                    project_name: 'Дирижабли',
-                    conditions: 'Минимальная сумма 500$',
-                    expires_at: '2024-09-30T23:59:59Z'
+                    project_name: 'Совэлмаш',
+                    conditions: 'Только для новых инвесторов',
+                    expires_at: '2025-01-31T23:59:59Z'
                 }
             ];
             
@@ -97,10 +97,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const mockHistoryCoupons = [
                 {
                     id: 4,
-                    code: 'Winter 20$',
-                    name: 'зимняя акция 2023',
-                    description: 'Скидка на зимние инвестиции',
-                    discount_amount: 20,
+                    code: 'Early 30$',
+                    name: 'раннее предложение',
+                    description: 'Скидка для первых инвесторов',
+                    discount_amount: 30,
                     discount_type: 'dollar',
                     project_name: 'Дирижабли',
                     conditions: 'Использован 15.01.2024',
@@ -108,11 +108,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 {
                     id: 5,
-                    code: 'NewYear 40$',
-                    name: 'новогодний бонус',
-                    description: 'Праздничное предложение',
-                    discount_amount: 40,
-                    discount_type: 'dollar',
+                    code: 'Launch 25%',
+                    name: 'запуск проекта',
+                    description: 'Специальное предложение при запуске',
+                    discount_amount: 25,
+                    discount_type: 'percentage',
                     project_name: 'Совэлмаш',
                     conditions: 'Использован 05.02.2024',
                     expires_at: '2024-02-29T23:59:59Z'
