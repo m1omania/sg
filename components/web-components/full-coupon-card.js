@@ -71,6 +71,17 @@ class FullCouponCard extends HTMLElement {
                     background: linear-gradient(135deg, #ffffff 0%, rgba(255, 84, 89, 0.05) 100%);
                 }
 
+                .coupon-project-badge {
+                    background: #8DA9E0;
+                    color: white;
+                    padding: 6px 12px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    font-weight: 500;
+                    display: inline-block;
+                    margin-bottom: 12px;
+                }
+
                 .coupon-header {
                     display: flex;
                     flex-direction: column;
@@ -94,38 +105,33 @@ class FullCouponCard extends HTMLElement {
                     line-height: 1.4;
                 }
 
-                .coupon-divider {
-                    width: 100%;
-                    height: 1px;
-                    background: repeating-linear-gradient(
-                        to right,
-                        #d1d5db 0px,
-                        #d1d5db 4px,
-                        transparent 4px,
-                        transparent 8px
-                    );
-                    margin: 0 0 20px 0;
+                .coupon-progress-section {
+                    margin: 16px 0;
                 }
 
-
-                .coupon-details {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 12px 16px;
+                .coupon-progress-text {
                     font-size: 0.9rem;
                     color: #333333;
+                    margin-bottom: 8px;
                 }
 
-                .coupon-detail-label {
-                    font-weight: 400;
-                    text-align: left;
+                .coupon-progress-bar {
+                    width: 100%;
+                    height: 4px;
+                    background: #e5e7eb;
+                    border-radius: 2px;
+                    overflow: hidden;
                 }
 
-                .coupon-detail-value {
-                    font-weight: 400;
-                    text-align: right;
-                    color: #333333;
+                .coupon-progress-fill {
+                    height: 100%;
+                    background: #333333;
+                    border-radius: 2px;
+                    width: 45%;
+                    transition: width 0.3s ease;
                 }
+
+
 
                 .coupon-actions-container {
                     display: flex;
@@ -135,13 +141,14 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-code-block {
-                    background: #f0f9ff;
-                    border: 1px solid #bae6fd;
+                    background: white;
+                    border: 1px solid #C0D0F0;
                     border-radius: 8px;
                     padding: 12px 16px;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    margin-bottom: 12px;
                 }
 
                 .coupon-code-text {
@@ -163,20 +170,20 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 .coupon-use-btn {
-                    background: #3b82f6;
+                    background: #66C2A4;
                     color: white;
                     border: none;
                     border-radius: 8px;
                     padding: 14px 24px;
                     font-size: 1rem;
-                    font-weight: 600;
+                    font-weight: 500;
                     cursor: pointer;
                     transition: all 0.2s ease;
                     width: 100%;
                 }
 
                 .coupon-use-btn:hover {
-                    background: #2563eb;
+                    background: #5AB394;
                     transform: translateY(-1px);
                 }
 
@@ -278,27 +285,24 @@ class FullCouponCard extends HTMLElement {
             </style>
             <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
                 ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
+                
+                <div class="coupon-project-badge">${this.coupon.project_name}</div>
+                
                 <div class="coupon-header">
-                    <h3 class="coupon-title">25$ приветственный бонус</h3>
-                    <p class="coupon-subtitle">Специальное предложение для новых клиентов</p>
+                    <h3 class="coupon-title">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</h3>
+                    <p class="coupon-subtitle">${this.coupon.description}</p>
                 </div>
                 
-                <div class="coupon-divider"></div>
-                
-                <div class="coupon-details">
-                    <div class="coupon-detail-label">Бонус:</div>
-                    <div class="coupon-detail-value">25$</div>
-                    
-                    <div class="coupon-detail-label">Проект:</div>
-                    <div class="coupon-detail-value">Все проекты</div>
-                    
-                    <div class="coupon-detail-label">Действует до:</div>
-                    <div class="coupon-detail-value">15.11.2025</div>
+                <div class="coupon-progress-section">
+                    <div class="coupon-progress-text">До ${new Date(this.coupon.expires_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</div>
+                    <div class="coupon-progress-bar">
+                        <div class="coupon-progress-fill"></div>
+                    </div>
                 </div>
                 
                 <div class="coupon-actions-container">
                     <div class="coupon-code-block">
-                        <span class="coupon-code-text">Код: Bonus 25$</span>
+                        <span class="coupon-code-text">Код: ${this.coupon.code}</span>
                         <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
