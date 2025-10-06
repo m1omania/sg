@@ -84,7 +84,7 @@ class FullCouponCard extends HTMLElement {
                     font-size: 1rem;
                     font-weight: 400;
                     color: #666666;
-                    margin: 0 0 16px 0;
+                    margin: 0 0 8px 0;
                     line-height: 1.4;
                 }
 
