@@ -30,9 +30,22 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Fetch real data from API
             const response = await fetch(`/api/coupons/active/${userId}`);
-            const coupons = await response.json();
+            const result = await response.json();
             
-            console.log('Received coupons from API:', coupons);
+            console.log('Received response from API:', result);
+            
+            // Handle different response structures
+            let coupons;
+            if (Array.isArray(result)) {
+                coupons = result;
+            } else if (result && Array.isArray(result.data)) {
+                coupons = result.data;
+            } else {
+                console.error('Invalid coupons data structure:', result);
+                coupons = [];
+            }
+            
+            console.log('Processed coupons array:', coupons);
             
             if (activeCouponsGrid) {
                 activeCouponsGrid.innerHTML = '';
@@ -67,9 +80,22 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Fetch real data from API
             const response = await fetch(`/api/coupons/history/${userId}`);
-            const coupons = await response.json();
+            const result = await response.json();
             
-            console.log('Received history coupons from API:', coupons);
+            console.log('Received history response from API:', result);
+            
+            // Handle different response structures
+            let coupons;
+            if (Array.isArray(result)) {
+                coupons = result;
+            } else if (result && Array.isArray(result.data)) {
+                coupons = result.data;
+            } else {
+                console.error('Invalid history coupons data structure:', result);
+                coupons = [];
+            }
+            
+            console.log('Processed history coupons array:', coupons);
             console.log('History coupons count:', coupons.length);
             
             if (historyCouponsGrid) {
