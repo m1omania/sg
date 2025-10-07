@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест localStorage API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #2563eb;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        pre {
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Тест localStorage API</h1>
+    
+    <div class="test-section">
+        <h2>📊 Статистика данных</h2>
+        <button class="test-button" onclick="testStats()">Получить статистику</button>
+        <div id="stats-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>👤 Пользователь</h2>
+        <button class="test-button" onclick="testUserBalance()">Получить баланс</button>
+        <button class="test-button" onclick="testUpdateBalance()">Обновить баланс</button>
+        <div id="user-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎫 Купоны</h2>
+        <button class="test-button" onclick="testActiveCoupons()">Активные купоны</button>
+        <button class="test-button" onclick="testUsedCoupons()">Использованные купоны</button>
+        <button class="test-button" onclick="testUseCoupon()">Использовать купон</button>
+        <div id="coupons-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💼 Проекты</h2>
+        <button class="test-button" onclick="testProjects()">Все проекты</button>
+        <button class="test-button" onclick="testProject(1)">Проект 1 (Дирижабли)</button>
+        <button class="test-button" onclick="testProject(2)">Проект 2 (Совэлмаш)</button>
+        <div id="projects-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💾 Управление данными</h2>
+        <button class="test-button" onclick="testExportData()">Экспорт данных</button>
+        <button class="test-button" onclick="testClearData()">Очистить данные</button>
+        <div id="data-result" class="result"></div>
+    </div>
+
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+
+    <script>
+        function displayResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            element.className = isError ? 'result error' : 'result';
+        }
+
+        async function testStats() {
+            try {
+                const response = await window.localStorageAPI.getStats();
+                displayResult('stats-result', response.data);
+            } catch (error) {
+                displayResult('stats-result', { error: error.message }, true);
+            }
+        }
+
+        async function testUserBalance() {
+            try {
+                const response = await window.localStorageAPI.getUserBalance(1);
+                displayResult('user-result', response.data);
+            } catch (error) {
+                displayResult('user-result', { error: error.message }, true);
+            }
+        }
+
+        async function testUpdateBalance() {
+            try {
+                const response = await window.localStorageAPI.updateUserBalance(1, 1500, 750);
+                displayResult('user-result', response.data);
+            } catch (error) {
+                displayResult('user-result', { error: error.message }, true);
+            }
+        }
+
+        async function testActiveCoupons() {
+            try {
+                const response = await window.localStorageAPI.getActiveCoupons(1);
+                displayResult('coupons-result', response.data);
+            } catch (error) {
+                displayResult('coupons-result', { error: error.message }, true);
+            }
+        }
+
+        async function testUsedCoupons() {
+            try {
+                const response = await window.localStorageAPI.getUsedCoupons(1);
+                displayResult('coupons-result', response.data);
+            } catch (error) {
+                displayResult('coupons-result', { error: error.message }, true);
+            }
+        }
+
+        async function testUseCoupon() {
+            try {
+                const response = await window.localStorageAPI.useCoupon(1, 1);
+                displayResult('coupons-result', response.data);
+            } catch (error) {
+                displayResult('coupons-result', { error: error.message }, true);
+            }
+        }
+
+        async function testProjects() {
+            try {
+                const response = await window.localStorageAPI.getProjects();
+                displayResult('projects-result', response.data);
+            } catch (error) {
+                displayResult('projects-result', { error: error.message }, true);
+            }
+        }
+
+        async function testProject(id) {
+            try {
+                const response = await window.localStorageAPI.getProject(id);
+                displayResult('projects-result', response.data);
+            } catch (error) {
+                displayResult('projects-result', { error: error.message }, true);
+            }
+        }
+
+        async function testExportData() {
+            try {
+                const response = await window.localStorageAPI.exportData();
+                displayResult('data-result', response.data);
+            } catch (error) {
+                displayResult('data-result', { error: error.message }, true);
+            }
+        }
+
+        async function testClearData() {
+            try {
+                const response = await window.localStorageAPI.clearAllData();
+                displayResult('data-result', response.data);
+            } catch (error) {
+                displayResult('data-result', { error: error.message }, true);
+            }
+        }
+
+        // Auto-load stats on page load
+        window.addEventListener('load', testStats);
+    </script>
+</body>
+</html>

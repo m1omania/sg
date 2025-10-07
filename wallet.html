@@ -158,8 +158,14 @@
     </div>
 
     
-            <script src="components/web-components/header-standalone.js"></script>
-    <script src="components/web-components/sidebar-standalone.js"></script>
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+                <script src="components/web-components/header-standalone.js"></script>
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+        <script src="components/web-components/sidebar-standalone.js"></script>
     <script>
         // Account Card Component
         class AccountCard extends HTMLElement {
@@ -271,8 +277,14 @@
 
         customElements.define('account-card', AccountCard);
     </script>
-    <script src="app.js"></script>
-    <script src="wallet.js"></script>
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+        <script src="app.js"></script>
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+        <script src="wallet.js"></script>
     
     
 </body>
