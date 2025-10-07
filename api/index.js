@@ -553,6 +553,9 @@ function getProjectName(packageId) {
   return projectMap[packageId] || 'Неизвестный проект';
 }
 
+// In-memory storage for used coupons (in real app, this would be in database)
+const usedCoupons = new Set();
+
 // Coupons endpoints
 app.get('/api/coupons/active/:userId', (req, res) => {
   const { userId } = req.params;
@@ -600,7 +603,12 @@ app.get('/api/coupons/active/:userId', (req, res) => {
     }
   ];
   
-  res.json(demoCoupons);
+  // Filter out used coupons
+  const activeCoupons = demoCoupons.filter(coupon => !usedCoupons.has(coupon.id));
+  console.log('Active coupons for user', userId, ':', activeCoupons.length);
+  console.log('Used coupons:', Array.from(usedCoupons));
+  
+  res.json(activeCoupons);
 });
 
 app.post('/api/coupons/activate', (req, res) => {
@@ -646,11 +654,17 @@ app.post('/api/coupons/activate', (req, res) => {
 app.post('/api/coupons/use', (req, res) => {
   const { couponId, userId } = req.body;
   
+  console.log('Coupon use request:', { couponId, userId });
+  
   if (!couponId || !userId) {
     return res.status(400).json({ error: 'Coupon ID and User ID are required' });
   }
   
-  // For demo purposes, always return success
+  // Add coupon to used coupons set
+  usedCoupons.add(parseInt(couponId));
+  console.log('Coupon marked as used:', couponId);
+  console.log('Used coupons now:', Array.from(usedCoupons));
+  
   res.json({ 
     success: true, 
     message: 'Купон успешно использован',

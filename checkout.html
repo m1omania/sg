@@ -754,26 +754,34 @@
                 
                 try {
                     // Send request to mark each coupon as used
-                    const promises = this.appliedCoupons.map(coupon => 
-                        fetch('/api/coupons/use', {
-                    method: 'POST',
-                    headers: {
+                    const promises = this.appliedCoupons.map(async (coupon) => {
+                        console.log('Sending request for coupon:', coupon.id);
+                        const response = await fetch('/api/coupons/use', {
+                            method: 'POST',
+                            headers: {
                                 'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
+                            },
+                            body: JSON.stringify({
                                 couponId: coupon.id,
                                 userId: this.userId
                             })
-                        })
-                    );
+                        });
+                        
+                        const result = await response.json();
+                        console.log('Coupon use response:', result);
+                        return result;
+                    });
                     
-                    await Promise.all(promises);
-                    console.log('All coupons marked as used successfully');
+                    const results = await Promise.all(promises);
+                    console.log('All coupons marked as used successfully:', results);
                     
                     // Clear applied coupons from UI
                     this.appliedCoupons = [];
                     this.updatePackageSummary();
                     this.showAppliedCoupons();
+                    
+                    // Reload coupons to update the list (remove used ones)
+                    await this.loadProjectCoupons();
                     
                     // Show success message
                     this.showCheckoutSuccess();
