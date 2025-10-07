@@ -1526,6 +1526,54 @@ select.form-control {
   margin: 0;
 }
 
+.page-header .btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.page-header .btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.page-header .btn:hover svg {
+  transform: rotate(180deg);
+}
+
+.page-header .btn:active svg {
+  transform: rotate(360deg);
+}
+
+.page-header .btn.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Loading and Empty States */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-32);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-32);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
 .activate-promo-btn {
   background: #fd7e14;
   border: none;

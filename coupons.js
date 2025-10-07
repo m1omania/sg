@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Loading active coupons from API...');
             console.log('activeCouponsGrid element:', activeCouponsGrid);
             
+            // Show loading state
+            if (activeCouponsGrid) {
+                activeCouponsGrid.innerHTML = '<div class="loading-state"><p>Загрузка купонов...</p></div>';
+            }
+            
             // Fetch real data from API
             const response = await fetch(`/api/coupons/active/${userId}`);
             const coupons = await response.json();
@@ -310,7 +315,62 @@ document.addEventListener('DOMContentLoaded', function() {
         return url;
     }
     
+    // Setup refresh button
+    function setupRefreshButton() {
+        const refreshBtn = document.getElementById('refresh-coupons-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                console.log('Refresh button clicked');
+                refreshAllCoupons();
+            });
+        }
+    }
+    
+    // Setup auto refresh
+    function setupAutoRefresh() {
+        // Refresh every 30 seconds
+        setInterval(() => {
+            console.log('Auto-refreshing coupons...');
+            refreshAllCoupons();
+        }, 30000);
+        
+        // Refresh when page becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('Page became visible, refreshing coupons...');
+                refreshAllCoupons();
+            }
+        });
+    }
+    
+    // Refresh all coupons
+    async function refreshAllCoupons() {
+        console.log('Refreshing all coupons...');
+        
+        // Add loading state to refresh button
+        const refreshBtn = document.getElementById('refresh-coupons-btn');
+        if (refreshBtn) {
+            refreshBtn.classList.add('loading');
+            refreshBtn.disabled = true;
+        }
+        
+        try {
+            await loadActiveCoupons();
+            await loadHistoryCoupons();
+            console.log('All coupons refreshed');
+        } finally {
+            // Remove loading state
+            if (refreshBtn) {
+                refreshBtn.classList.remove('loading');
+                refreshBtn.disabled = false;
+            }
+        }
+    }
+    
     // Load initial data
     console.log('Starting to load active coupons...');
     loadActiveCoupons();
+    loadHistoryCoupons();
+    setupRefreshButton();
+    setupAutoRefresh();
 });
