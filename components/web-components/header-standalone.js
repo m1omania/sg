@@ -130,7 +130,7 @@ class SGHeader extends HTMLElement {
                     background: #f1f5f9;
                 }
 
-                .notification-btn {
+                .notification-btn, .reset-btn {
                     position: relative;
                     padding: 0.5rem;
                     background: #f8fafc;
@@ -138,11 +138,24 @@ class SGHeader extends HTMLElement {
                     border-radius: 0.5rem;
                     cursor: pointer;
                     transition: all 0.2s;
+                    margin-left: 0.5rem;
                 }
 
-                .notification-btn:hover {
+                .notification-btn:hover, .reset-btn:hover {
                     background: #e2e8f0;
                     border-color: #cbd5e1;
+                }
+
+                .reset-btn {
+                    background: #fef2f2;
+                    border-color: #fecaca;
+                    color: #dc2626;
+                }
+
+                .reset-btn:hover {
+                    background: #fee2e2;
+                    border-color: #fca5a5;
+                    color: #b91c1c;
                 }
 
                 .notification-count {
@@ -306,6 +319,14 @@ class SGHeader extends HTMLElement {
                         </svg>
                         <span class="notification-count">2</span>
                     </button>
+                    <button class="reset-btn" id="resetDataBtn" title="Сбросить все данные (для разработки)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                            <path d="M21 3v5h-5"></path>
+                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                            <path d="M3 21v-5h5"></path>
+                        </svg>
+                    </button>
                     <div class="user-dropdown" id="userDropdown">
                         <div class="user-profile">
                             <div class="user-avatar">К</div>
@@ -378,6 +399,14 @@ class SGHeader extends HTMLElement {
             this.handleLogout();
         });
 
+        // Reset data button
+        const resetDataBtn = this.shadowRoot.getElementById('resetDataBtn');
+        resetDataBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.resetAllData();
+        });
+
         // Close dropdowns when clicking outside
         document.addEventListener('click', () => {
             languageDropdown?.classList.remove('show');
@@ -422,6 +451,33 @@ class SGHeader extends HTMLElement {
         
         // Redirect to landing page
         window.location.href = 'landing.html';
+    }
+
+    resetAllData() {
+        if (confirm('⚠️ Сбросить все данные?\n\nЭто действие удалит:\n• Все купоны\n• Баланс пользователя\n• Историю транзакций\n• Настройки\n\nДанные будут восстановлены к исходному состоянию.')) {
+            try {
+                // Clear localStorage
+                localStorage.clear();
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                
+                // Reset API data if available
+                if (window.localStorageAPI) {
+                    window.localStorageAPI.clearAllData();
+                }
+                
+                // Show success message
+                alert('✅ Все данные сброшены!\n\nСтраница будет перезагружена.');
+                
+                // Reload page to reset everything
+                window.location.reload();
+                
+            } catch (error) {
+                console.error('Error resetting data:', error);
+                alert('❌ Ошибка при сбросе данных:\n' + error.message);
+            }
+        }
     }
 
     connectedCallback() {
