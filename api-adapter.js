@@ -6,37 +6,6 @@ class APIAdapter {
     constructor() {
         this.baseURL = '/api';
         this.localStorageAPI = window.localStorageAPI;
-        this.localAPIServer = 'http://localhost:3001';
-    }
-
-    // XMLHttpRequest method to avoid fetch recursion
-    makeRequest(url, options = {}) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open(options.method || 'GET', url);
-            
-            // Set headers
-            if (options.headers) {
-                Object.keys(options.headers).forEach(key => {
-                    xhr.setRequestHeader(key, options.headers[key]);
-                });
-            }
-            
-            xhr.onload = () => {
-                resolve({
-                    ok: xhr.status >= 200 && xhr.status < 300,
-                    status: xhr.status,
-                    json: () => Promise.resolve(JSON.parse(xhr.responseText)),
-                    text: () => Promise.resolve(xhr.responseText)
-                });
-            };
-            
-            xhr.onerror = () => {
-                reject(new Error('Network error'));
-            };
-            
-            xhr.send(options.body || null);
-        });
     }
 
     async request(endpoint, options = {}) {
