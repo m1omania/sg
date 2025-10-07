@@ -122,7 +122,7 @@
                         </div>
                     </div>
                     <div class="payment-schedule-content" id="payment-schedule-content" style="display: none;">
-                        <!-- Payment schedule will be generated here -->
+                            <!-- Payment schedule will be generated here -->
                     </div>
                     
 
@@ -183,20 +183,20 @@
                                 <span class="double-payment-value">+250</span>
                                 <div class="double-payment-info">
                                     <div class="double-payment-title">Двойной платёж</div>
-                                </div>
+                            </div>
                                 <div class="double-payment-toggle">
                                     <input type="checkbox" id="double-payment-switch" class="double-payment-switch">
                                     <label for="double-payment-switch" class="double-payment-switch-label"></label>
-                                </div>
-                            </div>
                         </div>
+                        </div>
+                    </div>
 
                         <!-- Available Coupons Section -->
                         <div class="coupons-section">
                             <h3 class="coupons-section-title">Доступные купоны</h3>
                             <div class="coupons-list" id="coupons-list">
                                 <!-- Coupons will be loaded here -->
-                            </div>
+                        </div>
                         </div>
 
                         <!-- Coupon Section -->
@@ -207,12 +207,12 @@
                                 <div class="coupon-info">
                                     <div class="coupon-title">Скидка для новых пользователей</div>
                                     <div class="coupon-date">до 8 окт.</div>
-                                </div>
+                        </div>
                                 <div class="coupon-toggle">
                                     <input type="checkbox" id="coupon-switch" class="coupon-switch">
                                     <label for="coupon-switch" class="coupon-switch-label"></label>
                         </div>
-                    </div>
+                        </div>
 
                             <!-- Coupon Input -->
                             <div class="coupon-input-section">
@@ -224,7 +224,7 @@
                                 <div class="coupon-feedback" id="coupon-feedback"></div>
                         </div>
                         </div>
-                        
+
                         <!-- Checkout Button -->
                         <button class="btn btn--primary btn--full" id="checkout-btn">
                             Оформить пакет
@@ -386,8 +386,8 @@
                             <input type="checkbox" ${this.isActive ? 'checked' : ''}>
                             <span class="coupon-slider"></span>
                         </label>
-                    </div>
-                `;
+                </div>
+            `;
 
                 // Add event listeners
                 const checkbox = this.shadowRoot.querySelector('input[type="checkbox"]');
@@ -469,7 +469,7 @@
                     console.log('User balance set to:', this.userBalance);
                     
                     this.updateCheckoutButton();
-                } catch (error) {
+            } catch (error) {
                     console.error('Error loading user balance:', error);
                     this.userBalance = 0;
                     console.log('User balance set to 0 due to error');
@@ -570,7 +570,7 @@
                 
                 if (isActive) {
                     this.addCoupon(coupon);
-                } else {
+            } else {
                     this.removeCoupon(coupon);
                 }
             }
@@ -701,7 +701,7 @@
                 
                 // Payment schedule toggle
                 const toggleScheduleBtn = document.getElementById('toggle-schedule');
-                const scheduleContent = document.getElementById('payment-schedule-content');
+            const scheduleContent = document.getElementById('payment-schedule-content');
                 console.log('Toggle schedule button found:', toggleScheduleBtn);
                 
                 if (toggleScheduleBtn && scheduleContent) {
@@ -711,6 +711,15 @@
                     
                     // Generate payment schedule data
                     this.generatePaymentSchedule();
+                }
+                
+                // Checkout button
+                const checkoutBtn = document.getElementById('checkout-btn');
+                if (checkoutBtn) {
+                    console.log('Checkout button found:', checkoutBtn);
+                    checkoutBtn.addEventListener('click', () => {
+                        this.handleCheckout();
+                    });
                 }
                 
             }
@@ -725,6 +734,73 @@
                 } else {
                     console.log('Double payment disabled - standard payment');
                 }
+            }
+            
+            async handleCheckout() {
+                console.log('Checkout button clicked');
+                console.log('Applied coupons:', this.appliedCoupons);
+                
+                if (this.appliedCoupons.length > 0) {
+                    // Mark all applied coupons as used
+                    await this.markCouponsAsUsed();
+                }
+                
+                // Proceed with checkout logic
+                this.processCheckout();
+            }
+            
+            async markCouponsAsUsed() {
+                console.log('Marking coupons as used:', this.appliedCoupons);
+                
+                try {
+                    // Send request to mark each coupon as used
+                    const promises = this.appliedCoupons.map(coupon => 
+                        fetch('/api/coupons/use', {
+                    method: 'POST',
+                    headers: {
+                                'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                                couponId: coupon.id,
+                                userId: this.userId
+                            })
+                        })
+                    );
+                    
+                    await Promise.all(promises);
+                    console.log('All coupons marked as used successfully');
+                    
+                    // Clear applied coupons from UI
+                    this.appliedCoupons = [];
+                    this.updatePackageSummary();
+                    this.showAppliedCoupons();
+                    
+                    // Show success message
+                    this.showCheckoutSuccess();
+                    
+                } catch (error) {
+                    console.error('Error marking coupons as used:', error);
+                    // Still proceed with checkout even if coupon marking fails
+                    this.processCheckout();
+                }
+            }
+            
+            processCheckout() {
+                console.log('Processing checkout...');
+                // Add your checkout logic here
+                // For example: redirect to payment page, show confirmation, etc.
+                
+                // For demo purposes, show success message
+                alert('Пакет успешно оформлен!');
+            }
+            
+            showCheckoutSuccess() {
+                // Show success message for used coupons
+                const message = `Купоны успешно использованы!`;
+                console.log(message);
+                
+                // You can show this in a toast notification or modal
+                // For now, just log to console
             }
             
             async validateCoupon(code) {
@@ -745,11 +821,11 @@
                         body: JSON.stringify({
                             code: code,
                             userId: this.userId
-                        })
-                    });
-                    
+                    })
+                });
+
                     console.log('Response status:', response.status);
-                    const result = await response.json();
+                const result = await response.json();
                     console.log('API response:', result);
                     
                     if (result.success) {
@@ -758,15 +834,15 @@
                         input.classList.add('success');
                         
                         // Auto-apply the coupon
-                        setTimeout(() => {
+                    setTimeout(() => {
                             this.applyCoupon(result.coupon);
                         }, 1000);
-            } else {
+                } else {
                         this.showFeedback('error', result.message || 'Купон не найден или недействителен');
                         input.classList.remove('success');
                         input.classList.add('error');
-                    }
-                } catch (error) {
+                }
+            } catch (error) {
                     console.error('Error validating coupon:', error);
                     this.showFeedback('error', 'Ошибка при проверке купона');
                     input.classList.remove('success');
