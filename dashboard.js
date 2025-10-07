@@ -37,25 +37,29 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Loading dashboard balances...');
             
             // Mock data for local testing
-            const mockWalletData = {
-                main_balance: 1250.75,
-                partner_balance: 850.25
-            };
-            
-            console.log('Using mock wallet data:', mockWalletData);
-            
-            if (mainAccountCard) {
-                mainAccountCard.updateBalance(Number(mockWalletData.main_balance).toFixed(2));
-                console.log('Updated main balance to:', Number(mockWalletData.main_balance).toFixed(2));
-            } else {
-                console.log('Main account card not found');
-            }
-            
-            if (partnerAccountCard) {
-                partnerAccountCard.updateBalance(Number(mockWalletData.partner_balance).toFixed(2));
-                console.log('Updated partner balance to:', Number(mockWalletData.partner_balance).toFixed(2));
-            } else {
-                console.log('Partner account card not found');
+            // Load real wallet data from API
+            try {
+                const response = await fetch('/api/wallet/1');
+                const walletData = await response.json();
+                
+                console.log('Loaded wallet data:', walletData);
+                
+                if (mainAccountCard) {
+                    mainAccountCard.updateBalance(Number(walletData.main_balance).toFixed(2));
+                    console.log('Updated main balance to:', Number(walletData.main_balance).toFixed(2));
+                } else {
+                    console.log('Main account card not found');
+                }
+                
+                if (partnerAccountCard) {
+                    partnerAccountCard.updateBalance(Number(walletData.partner_balance).toFixed(2));
+                    console.log('Updated partner balance to:', Number(walletData.partner_balance).toFixed(2));
+                } else {
+                    console.log('Partner account card not found');
+                }
+            } catch (error) {
+                console.error('Error loading wallet data:', error);
+                // Keep loading state if API fails
             }
             
             console.log('Dashboard balances updated');
