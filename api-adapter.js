@@ -1,10 +1,12 @@
 // API Adapter for localStorage
 // Provides fetch-like interface for localStorage API
 
+if (typeof APIAdapter === 'undefined') {
 class APIAdapter {
     constructor() {
         this.baseURL = '/api';
         this.localStorageAPI = window.localStorageAPI;
+        this.localAPIServer = 'http://localhost:3001';
     }
 
     async request(endpoint, options = {}) {
@@ -13,6 +15,32 @@ class APIAdapter {
         const body = options.body ? JSON.parse(options.body) : null;
 
         try {
+            // Try local API server first
+            try {
+                const localUrl = `${this.localAPIServer}${endpoint}`;
+                const localResponse = await fetch(localUrl, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    body: options.body
+                });
+                
+                if (localResponse.ok) {
+                    const data = await localResponse.json();
+                    return {
+                        ok: true,
+                        status: localResponse.status,
+                        json: () => Promise.resolve(data),
+                        text: () => Promise.resolve(JSON.stringify(data))
+                    };
+                }
+            } catch (localError) {
+                console.log('Local API server not available, falling back to localStorage');
+            }
+
+            // Fallback to localStorage API
             let result;
 
             // Route to appropriate localStorage method
@@ -117,3 +145,4 @@ window.fetch = async (url, options) => {
 
 // Store original fetch
 const originalFetch = window.fetch;
+}

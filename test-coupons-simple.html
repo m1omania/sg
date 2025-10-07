@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Простой тест купонов</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Простой тест купонов</h1>
+    
+    <div id="test-results"></div>
+    
+    <button onclick="testLocalStorageAPI()">Тест localStorage API</button>
+    <button onclick="testFetchAPI()">Тест Fetch API</button>
+    <button onclick="testCouponsDisplay()">Тест отображения купонов</button>
+    <button onclick="clearResults()">Очистить результаты</button>
+
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+
+    <script>
+        function addResult(message, isSuccess = true) {
+            const div = document.createElement('div');
+            div.className = `test-result ${isSuccess ? 'success' : 'error'}`;
+            div.innerHTML = `<pre>${message}</pre>`;
+            document.getElementById('test-results').appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+
+        async function testLocalStorageAPI() {
+            try {
+                addResult('🔄 Тестируем localStorage API...');
+                
+                // Проверяем, что API загружен
+                if (!window.localStorageAPI) {
+                    throw new Error('localStorageAPI не загружен');
+                }
+                addResult('✅ localStorageAPI загружен');
+
+                // Тестируем получение активных купонов
+                const result = await window.localStorageAPI.getActiveCoupons(1);
+                addResult(`📊 Результат getActiveCoupons:\n${JSON.stringify(result, null, 2)}`);
+
+                if (result.status === 200 && Array.isArray(result.data)) {
+                    addResult(`✅ Получено ${result.data.length} активных купонов`);
+                    result.data.forEach((coupon, index) => {
+                        addResult(`🎫 Купон ${index + 1}: ${coupon.name} (${coupon.code})`);
+                    });
+                } else {
+                    addResult('❌ Неверный формат данных', false);
+                }
+
+            } catch (error) {
+                addResult(`❌ Ошибка: ${error.message}`, false);
+            }
+        }
+
+        async function testFetchAPI() {
+            try {
+                addResult('🔄 Тестируем Fetch API...');
+                
+                const response = await fetch('/api/coupons/active/1');
+                addResult(`📡 Статус ответа: ${response.status} ${response.ok ? 'OK' : 'ERROR'}`);
+                
+                const data = await response.json();
+                addResult(`📊 Данные ответа:\n${JSON.stringify(data, null, 2)}`);
+                
+                if (Array.isArray(data)) {
+                    addResult(`✅ Получен массив из ${data.length} элементов`);
+                } else if (data && Array.isArray(data.data)) {
+                    addResult(`✅ Получен объект с массивом из ${data.data.length} элементов`);
+                } else {
+                    addResult('❌ Неверный формат данных', false);
+                }
+
+            } catch (error) {
+                addResult(`❌ Ошибка Fetch: ${error.message}`, false);
+            }
+        }
+
+        async function testCouponsDisplay() {
+            try {
+                addResult('🔄 Тестируем отображение купонов...');
+                
+                // Создаем тестовый контейнер
+                const container = document.createElement('div');
+                container.id = 'testCouponsContainer';
+                container.style.cssText = 'border: 1px solid #ccc; padding: 10px; margin: 10px 0;';
+                document.body.appendChild(container);
+
+                // Получаем купоны
+                const response = await fetch('/api/coupons/active/1');
+                const result = await response.json();
+                
+                let coupons;
+                if (Array.isArray(result)) {
+                    coupons = result;
+                } else if (result && Array.isArray(result.data)) {
+                    coupons = result.data;
+                } else {
+                    throw new Error('Неверный формат данных');
+                }
+
+                addResult(`📊 Обработано ${coupons.length} купонов`);
+
+                // Создаем простые карточки купонов
+                coupons.forEach((coupon, index) => {
+                    const card = document.createElement('div');
+                    card.style.cssText = 'border: 1px solid #ddd; padding: 10px; margin: 5px 0; background: #f9f9f9;';
+                    card.innerHTML = `
+                        <h3>${coupon.name}</h3>
+                        <p><strong>Код:</strong> ${coupon.code}</p>
+                        <p><strong>Скидка:</strong> ${coupon.discount_amount}$</p>
+                        <p><strong>Проект:</strong> ${coupon.project_name}</p>
+                        <p><strong>Условия:</strong> ${coupon.conditions}</p>
+                    `;
+                    container.appendChild(card);
+                });
+
+                addResult('✅ Купоны отображены в тестовом контейнере');
+
+            } catch (error) {
+                addResult(`❌ Ошибка отображения: ${error.message}`, false);
+            }
+        }
+
+        // Автоматически запускаем тест при загрузке
+        window.addEventListener('load', () => {
+            addResult('🚀 Страница загружена, готов к тестированию');
+        });
+    </script>
+</body>
+</html>

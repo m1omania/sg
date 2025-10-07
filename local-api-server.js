@@ -1,29 +1,37 @@
-// localStorage API Adapter
-// Replaces server API with browser localStorage
+// Simple API server for local development
+// Serves localStorage API through HTTP endpoints
 
-if (typeof LocalStorageAPI === 'undefined') {
+const http = require('http');
+const url = require('url');
+const fs = require('fs');
+const path = require('path');
+
+// Load localStorage API (simplified version for Node.js)
 class LocalStorageAPI {
     constructor() {
-        this.storageKey = 'solargroup_prototype_db';
         this.data = this.loadData();
         this.initDefaultData();
     }
 
     loadData() {
         try {
-            const data = localStorage.getItem(this.storageKey);
-            return data ? JSON.parse(data) : {};
+            const dataPath = path.join(__dirname, 'localStorage-data.json');
+            if (fs.existsSync(dataPath)) {
+                const data = fs.readFileSync(dataPath, 'utf8');
+                return JSON.parse(data);
+            }
         } catch (e) {
-            console.error("Error loading data from localStorage:", e);
-            return {};
+            console.error("Error loading data:", e);
         }
+        return {};
     }
 
     saveData() {
         try {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+            const dataPath = path.join(__dirname, 'localStorage-data.json');
+            fs.writeFileSync(dataPath, JSON.stringify(this.data, null, 2));
         } catch (e) {
-            console.error("Error saving data to localStorage:", e);
+            console.error("Error saving data:", e);
         }
     }
 
@@ -136,48 +144,6 @@ class LocalStorageAPI {
         this.saveData();
     }
 
-    // User endpoints
-    async getUserBalance(userId) {
-        try {
-            const user = this.data.users.find(u => u.id === userId);
-            if (!user) {
-                return { status: 404, data: { error: 'User not found' } };
-            }
-            
-            return {
-                status: 200,
-                data: {
-                    id: user.id,
-                    main_balance: user.main_balance,
-                    partner_balance: user.partner_balance,
-                    currency: user.currency,
-                    lastUpdated: user.updated_at
-                }
-            };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    async updateUserBalance(userId, mainBalance, partnerBalance) {
-        try {
-            const user = this.data.users.find(u => u.id === userId);
-            if (!user) {
-                return { status: 404, data: { error: 'User not found' } };
-            }
-            
-            user.main_balance = mainBalance;
-            user.partner_balance = partnerBalance;
-            user.updated_at = new Date().toISOString();
-            this.saveData();
-            
-            return { status: 200, data: { success: true } };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    // Coupon endpoints
     async getActiveCoupons(userId) {
         try {
             const coupons = this.data.coupons.filter(c => !c.used);
@@ -242,35 +208,28 @@ class LocalStorageAPI {
         }
     }
 
-    // Investment endpoints
-    async getInvestments(userId) {
+    async getUserBalance(userId) {
         try {
-            const investments = this.data.investments.filter(i => i.user_id === userId);
-            return { status: 200, data: investments };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    async createInvestment(investmentData) {
-        try {
-            const investment = {
-                id: Date.now(),
-                ...investmentData,
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
+            const user = this.data.users.find(u => u.id === userId);
+            if (!user) {
+                return { status: 404, data: { error: 'User not found' } };
+            }
+            
+            return {
+                status: 200,
+                data: {
+                    id: user.id,
+                    main_balance: user.main_balance,
+                    partner_balance: user.partner_balance,
+                    currency: user.currency,
+                    lastUpdated: user.updated_at
+                }
             };
-            
-            this.data.investments.push(investment);
-            this.saveData();
-            
-            return { status: 200, data: investment };
         } catch (error) {
             return { status: 500, data: { error: error.message } };
         }
     }
 
-    // Project endpoints
     async getProjects() {
         try {
             return { status: 200, data: this.data.projects };
@@ -278,61 +237,81 @@ class LocalStorageAPI {
             return { status: 500, data: { error: error.message } };
         }
     }
+}
 
-    async getProject(projectId) {
-        try {
-            const project = this.data.projects.find(p => p.id === projectId);
-            if (!project) {
-                return { status: 404, data: { error: 'Project not found' } };
+// Create API instance
+const api = new LocalStorageAPI();
+
+// Create HTTP server
+const server = http.createServer((req, res) => {
+    const parsedUrl = url.parse(req.url, true);
+    const path = parsedUrl.pathname;
+    const method = req.method;
+
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Content-Type', 'application/json');
+
+    // Handle preflight requests
+    if (method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+        return;
+    }
+
+    // Route handling
+    if (path === '/api/coupons/active/1') {
+        api.getActiveCoupons(1).then(result => {
+            res.writeHead(result.status);
+            res.end(JSON.stringify(result.data));
+        });
+    } else if (path === '/api/coupons/history/1') {
+        api.getUsedCoupons(1).then(result => {
+            res.writeHead(result.status);
+            res.end(JSON.stringify(result.data));
+        });
+    } else if (path === '/api/coupons/use' && method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(body);
+                api.useCoupon(data.couponId, data.userId).then(result => {
+                    res.writeHead(result.status);
+                    res.end(JSON.stringify(result.data));
+                });
+            } catch (error) {
+                res.writeHead(400);
+                res.end(JSON.stringify({ error: 'Invalid JSON' }));
             }
-            return { status: 200, data: project };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
+        });
+    } else if (path === '/api/wallet/balance/1') {
+        api.getUserBalance(1).then(result => {
+            res.writeHead(result.status);
+            res.end(JSON.stringify(result.data));
+        });
+    } else if (path === '/api/projects') {
+        api.getProjects().then(result => {
+            res.writeHead(result.status);
+            res.end(JSON.stringify(result.data));
+        });
+    } else {
+        res.writeHead(404);
+        res.end(JSON.stringify({ error: 'Not found' }));
     }
+});
 
-    // Utility methods
-    async getStats() {
-        try {
-            const stats = {};
-            Object.keys(this.data).forEach(key => {
-                stats[key] = this.data[key].length;
-            });
-            return { status: 200, data: stats };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    async clearAllData() {
-        try {
-            this.data = {};
-            this.initDefaultData();
-            return { status: 200, data: { success: true } };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    async exportData() {
-        try {
-            return { status: 200, data: this.data };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-
-    async importData(data) {
-        try {
-            this.data = data;
-            this.saveData();
-            return { status: 200, data: { success: true } };
-        } catch (error) {
-            return { status: 500, data: { error: error.message } };
-        }
-    }
-}
-
-// Create global instance
-window.localStorageAPI = new LocalStorageAPI();
-}
+const PORT = 3001;
+server.listen(PORT, () => {
+    console.log(`🚀 Local API server running on http://localhost:${PORT}`);
+    console.log(`📊 Available endpoints:`);
+    console.log(`   GET  /api/coupons/active/1`);
+    console.log(`   GET  /api/coupons/history/1`);
+    console.log(`   POST /api/coupons/use`);
+    console.log(`   GET  /api/wallet/balance/1`);
+    console.log(`   GET  /api/projects`);
+});

@@ -38,10 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let coupons;
             if (Array.isArray(result)) {
                 coupons = result;
+                console.log('✅ Received direct array from API');
             } else if (result && Array.isArray(result.data)) {
                 coupons = result.data;
+                console.log('✅ Received object with data array from API');
             } else {
-                console.error('Invalid coupons data structure:', result);
+                console.error('❌ Invalid coupons data structure:', result);
                 coupons = [];
             }
             
