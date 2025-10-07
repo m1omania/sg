@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const code = document.getElementById('verification-code').value;
         
         try {
-            const response = await fetch('/api/auth/verify-code', {
+            const response = await fetch('/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
