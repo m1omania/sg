@@ -20,61 +20,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load active coupons
     async function loadActiveCoupons() {
         try {
-            console.log('Loading active coupons...');
+            console.log('Loading active coupons from API...');
             console.log('activeCouponsGrid element:', activeCouponsGrid);
             
-            // Mock data for local testing
-            const mockCoupons = [
-        {
-            id: 1,
-            code: 'Welcome 25$',
-            name: 'приветственный бонус',
-            description: 'Специальное предложение для новых клиентов',
-            discount_amount: 25,
-            discount_type: 'dollar',
-            project_name: 'Все проекты',
-            conditions: 'Регистрация',
-            created_at: '2024-10-01T00:00:00Z',
-            expires_at: '2025-11-15T23:59:59Z'
-        },
-        {
-            id: 2,
-            code: 'Dirigible 15%',
-            name: 'скидка на дирижабли',
-            description: 'Специальное предложение для проекта Дирижабли',
-            discount_amount: 15,
-            discount_type: 'percentage',
-            project_name: 'Дирижабли',
-            conditions: 'Минимальная сумма 1000$',
-            created_at: '2024-11-01T00:00:00Z',
-            expires_at: '2024-12-31T23:59:59Z'
-        },
-        {
-            id: 3,
-            code: 'Sovelmash 20%',
-            name: 'скидка совэлмаш',
-            description: 'Эксклюзивное предложение для проекта Совэлмаш',
-            discount_amount: 20,
-            discount_type: 'percentage',
-            project_name: 'Совэлмаш',
-            conditions: 'Только для новых инвесторов',
-            created_at: '2024-12-01T00:00:00Z',
-            expires_at: '2025-01-31T23:59:59Z'
-        }
-            ];
+            // Fetch real data from API
+            const response = await fetch(`/api/coupons/active/${userId}`);
+            const coupons = await response.json();
             
-            console.log('Using mock coupons data:', mockCoupons);
+            console.log('Received coupons from API:', coupons);
             
             if (activeCouponsGrid) {
                 activeCouponsGrid.innerHTML = '';
                 
-                if (mockCoupons.length === 0) {
+                if (coupons.length === 0) {
                     activeCouponsGrid.innerHTML = '<div class="empty-state"><p>У вас нет активных купонов</p></div>';
                     return;
                 }
                 
-                console.log('Creating coupon cards for', mockCoupons.length, 'coupons');
-                mockCoupons.forEach((coupon, index) => {
+                console.log('Creating coupon cards for', coupons.length, 'coupons');
+                coupons.forEach((coupon, index) => {
                     console.log('Creating card for coupon', index, coupon);
                     const couponCard = createCouponCard(coupon);
                     activeCouponsGrid.appendChild(couponCard);
@@ -94,45 +58,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load history coupons
     async function loadHistoryCoupons() {
         try {
-            console.log('Loading history coupons...');
+            console.log('Loading history coupons from API...');
             
-            // Mock data for local testing
-            const mockHistoryCoupons = [
-                {
-                    id: 4,
-                    code: 'Early 30$',
-                    name: 'раннее предложение',
-                    description: 'Скидка для первых инвесторов',
-                    discount_amount: 30,
-                    discount_type: 'dollar',
-                    project_name: 'Дирижабли',
-                    conditions: 'Использован 15.01.2024',
-                    expires_at: '2024-01-31T23:59:59Z'
-                },
-                {
-                    id: 5,
-                    code: 'Launch 25%',
-                    name: 'запуск проекта',
-                    description: 'Специальное предложение при запуске',
-                    discount_amount: 25,
-                    discount_type: 'percentage',
-                    project_name: 'Совэлмаш',
-                    conditions: 'Использован 05.02.2024',
-                    expires_at: '2024-02-29T23:59:59Z'
-                }
-            ];
+            // Fetch real data from API
+            const response = await fetch(`/api/coupons/history/${userId}`);
+            const coupons = await response.json();
             
-            console.log('Using mock history coupons data:', mockHistoryCoupons);
+            console.log('Received history coupons from API:', coupons);
             
             if (historyCouponsGrid) {
                 historyCouponsGrid.innerHTML = '';
                 
-                if (mockHistoryCoupons.length === 0) {
+                if (coupons.length === 0) {
                     historyCouponsGrid.innerHTML = '<div class="empty-state"><p>У вас нет использованных купонов</p></div>';
                     return;
                 }
                 
-                mockHistoryCoupons.forEach(coupon => {
+                coupons.forEach(coupon => {
                     const couponCard = createCouponCard(coupon, true);
                     historyCouponsGrid.appendChild(couponCard);
                 });

@@ -680,7 +680,7 @@ app.get('/api/coupons/history/:userId', (req, res) => {
   const { userId } = req.params;
   
   // Demo history coupons data
-  const historyCoupons = [
+  const allHistoryCoupons = [
     {
       id: 3,
       code: 'SPRING2024',
@@ -691,7 +691,6 @@ app.get('/api/coupons/history/:userId', (req, res) => {
       project_name: 'Дирижабли',
       used_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       investment_amount: 5000,
-      discount_amount: 1000,
       status: 'used',
       type: 'promo'
     },
@@ -717,11 +716,42 @@ app.get('/api/coupons/history/:userId', (req, res) => {
       project_name: 'Совэлмаш',
       used_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
       investment_amount: 2000,
-      discount_amount: 300,
       status: 'used',
       type: 'bonus'
     }
   ];
+  
+  // Add used coupons from active coupons to history
+  const usedActiveCoupons = Array.from(usedCoupons).map(couponId => {
+    // Find the original coupon data
+    const originalCoupon = {
+      1: { code: 'WELCOME25', name: 'Добро пожаловать', description: 'Скидка для новых пользователей', discount_amount: 25, project_name: 'Все проекты' },
+      2: { code: 'INVEST50', name: 'Инвестиционный бонус', description: 'Бонус за первую инвестицию', discount_amount: 50, project_name: 'Дирижабли' },
+      3: { code: 'SOVELMASH20', name: 'Совэлмаш бонус', description: 'Эксклюзивное предложение для проекта Совэлмаш', discount_amount: 20, project_name: 'Совэлмаш' }
+    }[couponId];
+    
+    if (originalCoupon) {
+      return {
+        id: couponId,
+        code: originalCoupon.code,
+        name: originalCoupon.name,
+        description: originalCoupon.description,
+        discount: originalCoupon.discount_amount,
+        discount_amount: originalCoupon.discount_amount,
+        project_name: originalCoupon.project_name,
+        used_at: new Date().toISOString(),
+        status: 'used',
+        type: 'bonus'
+      };
+    }
+    return null;
+  }).filter(Boolean);
+  
+  // Combine static history with used active coupons
+  const historyCoupons = [...allHistoryCoupons, ...usedActiveCoupons];
+  
+  console.log('History coupons for user', userId, ':', historyCoupons.length);
+  console.log('Used active coupons:', usedActiveCoupons.length);
   
   res.json(historyCoupons);
 });
