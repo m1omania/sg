@@ -237,6 +237,56 @@ class LocalStorageAPI {
             return { status: 500, data: { error: error.message } };
         }
     }
+
+    async processDeposit(depositData) {
+        try {
+            const { userId, amount, paymentMethod } = depositData;
+            
+            if (!userId || !amount || !paymentMethod) {
+                return { status: 400, data: { error: 'Missing required fields' } };
+            }
+
+            const user = this.data.users.find(u => u.id === userId);
+            if (!user) {
+                return { status: 404, data: { error: 'User not found' } };
+            }
+
+            // Update user balance
+            user.main_balance += parseFloat(amount);
+            user.updated_at = new Date().toISOString();
+
+            // Create transaction record
+            const transaction = {
+                id: Date.now(),
+                user_id: userId,
+                type: 'deposit',
+                amount: parseFloat(amount),
+                payment_method: paymentMethod,
+                status: 'completed',
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+
+            if (!this.data.transactions) {
+                this.data.transactions = [];
+            }
+            this.data.transactions.push(transaction);
+
+            this.saveData();
+
+            return {
+                status: 200,
+                data: {
+                    success: true,
+                    message: 'Пополнение успешно выполнено',
+                    transaction: transaction,
+                    new_balance: user.main_balance
+                }
+            };
+        } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
 }
 
 // Create API instance
@@ -289,10 +339,27 @@ const server = http.createServer((req, res) => {
                 res.end(JSON.stringify({ error: 'Invalid JSON' }));
             }
         });
-    } else if (path === '/api/wallet/balance/1') {
+    } else if (path === '/api/wallet/balance/1' || path === '/api/wallet/1') {
         api.getUserBalance(1).then(result => {
             res.writeHead(result.status);
             res.end(JSON.stringify(result.data));
+        });
+    } else if (path === '/api/transactions/deposit' && method === 'POST') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(body);
+                api.processDeposit(data).then(result => {
+                    res.writeHead(result.status);
+                    res.end(JSON.stringify(result.data));
+                });
+            } catch (error) {
+                res.writeHead(400);
+                res.end(JSON.stringify({ error: 'Invalid JSON' }));
+            }
         });
     } else if (path === '/api/projects') {
         api.getProjects().then(result => {
