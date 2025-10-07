@@ -40,46 +40,11 @@ class APIAdapter {
     }
 
     async request(endpoint, options = {}) {
-        const url = `${this.baseURL}${endpoint}`;
         const method = options.method || 'GET';
         const body = options.body ? JSON.parse(options.body) : null;
 
         try {
-            // Try local API server first
-            try {
-                const localUrl = `${this.localAPIServer}${endpoint}`;
-                console.log('🔄 Trying local API server:', localUrl);
-                
-                // Use XMLHttpRequest to avoid fetch recursion
-                const localResponse = await this.makeRequest(localUrl, {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    body: options.body
-                });
-                
-                console.log('📡 Local API response status:', localResponse.status);
-                
-                if (localResponse.ok) {
-                    const data = await localResponse.json();
-                    console.log('✅ Local API success, data:', data);
-                    return {
-                        ok: true,
-                        status: localResponse.status,
-                        json: () => Promise.resolve(data),
-                        text: () => Promise.resolve(JSON.stringify(data))
-                    };
-                } else {
-                    console.log('❌ Local API failed with status:', localResponse.status);
-                }
-            } catch (localError) {
-                console.log('❌ Local API server error:', localError.message);
-                console.log('🔄 Falling back to localStorage');
-            }
-
-            // Fallback to localStorage API
+            // Use localStorage API directly (no server)
             let result;
 
             // Route to appropriate localStorage method
@@ -98,6 +63,10 @@ class APIAdapter {
                 
                 case '/coupons/use':
                     result = await this.localStorageAPI.useCoupon(body.couponId, body.userId);
+                    break;
+                
+                case '/transactions/deposit':
+                    result = await this.localStorageAPI.processDeposit(body);
                     break;
                 
                 case '/investments/1':

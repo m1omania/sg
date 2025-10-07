@@ -467,24 +467,6 @@ class SGHeader extends HTMLElement {
                     window.localStorageAPI.clearAllData();
                 }
                 
-                // Reset API server data
-                try {
-                    const response = await fetch('http://localhost:3001/api/reset', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        console.log('✅ API server data reset successfully');
-                    } else {
-                        console.warn('⚠️ API server reset failed, but continuing...');
-                    }
-                } catch (apiError) {
-                    console.warn('⚠️ Could not reset API server:', apiError.message);
-                }
-                
                 // Show success message
                 alert('✅ Все данные сброшены!\n\nСтраница будет перезагружена.');
                 
