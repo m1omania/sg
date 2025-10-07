@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const coupons = await response.json();
             
             console.log('Received history coupons from API:', coupons);
+            console.log('History coupons count:', coupons.length);
             
             if (historyCouponsGrid) {
                 historyCouponsGrid.innerHTML = '';

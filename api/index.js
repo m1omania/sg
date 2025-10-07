@@ -554,7 +554,12 @@ function getProjectName(packageId) {
 }
 
 // In-memory storage for used coupons (in real app, this would be in database)
-const usedCoupons = new Set();
+// Note: This will reset on Vercel serverless functions, so we'll use a different approach
+let usedCoupons = new Set();
+
+// For demo purposes, we'll simulate persistent storage
+// In a real app, this would be stored in a database
+const DEMO_USED_COUPONS = new Set();
 
 // Coupons endpoints
 app.get('/api/coupons/active/:userId', (req, res) => {
@@ -604,9 +609,9 @@ app.get('/api/coupons/active/:userId', (req, res) => {
   ];
   
   // Filter out used coupons
-  const activeCoupons = demoCoupons.filter(coupon => !usedCoupons.has(coupon.id));
+  const activeCoupons = demoCoupons.filter(coupon => !DEMO_USED_COUPONS.has(coupon.id));
   console.log('Active coupons for user', userId, ':', activeCoupons.length);
-  console.log('Used coupons:', Array.from(usedCoupons));
+  console.log('Used coupons:', Array.from(DEMO_USED_COUPONS));
   
   res.json(activeCoupons);
 });
@@ -661,9 +666,9 @@ app.post('/api/coupons/use', (req, res) => {
   }
   
   // Add coupon to used coupons set
-  usedCoupons.add(parseInt(couponId));
+  DEMO_USED_COUPONS.add(parseInt(couponId));
   console.log('Coupon marked as used:', couponId);
-  console.log('Used coupons now:', Array.from(usedCoupons));
+  console.log('Used coupons now:', Array.from(DEMO_USED_COUPONS));
   
   res.json({ 
     success: true, 
@@ -722,7 +727,9 @@ app.get('/api/coupons/history/:userId', (req, res) => {
   ];
   
   // Add used coupons from active coupons to history
-  const usedActiveCoupons = Array.from(usedCoupons).map(couponId => {
+  console.log('Used coupons set:', Array.from(DEMO_USED_COUPONS));
+  const usedActiveCoupons = Array.from(DEMO_USED_COUPONS).map(couponId => {
+    console.log('Processing used coupon ID:', couponId);
     // Find the original coupon data
     const originalCoupon = {
       1: { code: 'WELCOME25', name: 'Добро пожаловать', description: 'Скидка для новых пользователей', discount_amount: 25, project_name: 'Все проекты' },
@@ -730,8 +737,10 @@ app.get('/api/coupons/history/:userId', (req, res) => {
       3: { code: 'SOVELMASH20', name: 'Совэлмаш бонус', description: 'Эксклюзивное предложение для проекта Совэлмаш', discount_amount: 20, project_name: 'Совэлмаш' }
     }[couponId];
     
+    console.log('Original coupon data for ID', couponId, ':', originalCoupon);
+    
     if (originalCoupon) {
-      return {
+      const historyCoupon = {
         id: couponId,
         code: originalCoupon.code,
         name: originalCoupon.name,
@@ -743,9 +752,13 @@ app.get('/api/coupons/history/:userId', (req, res) => {
         status: 'used',
         type: 'bonus'
       };
+      console.log('Created history coupon:', historyCoupon);
+      return historyCoupon;
     }
     return null;
   }).filter(Boolean);
+  
+  console.log('Used active coupons for history:', usedActiveCoupons);
   
   // Combine static history with used active coupons
   const historyCoupons = [...allHistoryCoupons, ...usedActiveCoupons];
