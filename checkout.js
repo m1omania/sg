@@ -69,6 +69,11 @@ function initializeCheckoutPage(packageId) {
     
     // Setup checkout button
     setupCheckoutButton(package);
+    
+    // Update package summary if CheckoutCoupons is available
+    if (window.checkoutCoupons) {
+        window.checkoutCoupons.updatePackageSummary();
+    }
 }
 
 async function loadCheckoutBalances() {
