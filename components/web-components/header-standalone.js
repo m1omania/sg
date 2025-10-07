@@ -453,7 +453,7 @@ class SGHeader extends HTMLElement {
         window.location.href = 'landing.html';
     }
 
-    resetAllData() {
+    async resetAllData() {
         if (confirm('⚠️ Сбросить все данные?\n\nЭто действие удалит:\n• Все купоны\n• Баланс пользователя\n• Историю транзакций\n• Настройки\n\nДанные будут восстановлены к исходному состоянию.')) {
             try {
                 // Clear localStorage
@@ -465,6 +465,24 @@ class SGHeader extends HTMLElement {
                 // Reset API data if available
                 if (window.localStorageAPI) {
                     window.localStorageAPI.clearAllData();
+                }
+                
+                // Reset API server data
+                try {
+                    const response = await fetch('http://localhost:3001/api/reset', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log('✅ API server data reset successfully');
+                    } else {
+                        console.warn('⚠️ API server reset failed, but continuing...');
+                    }
+                } catch (apiError) {
+                    console.warn('⚠️ Could not reset API server:', apiError.message);
                 }
                 
                 // Show success message

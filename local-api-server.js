@@ -287,6 +287,24 @@ class LocalStorageAPI {
             return { status: 500, data: { error: error.message } };
         }
     }
+
+    async clearAllData() {
+        try {
+            // Reset to default data
+            this.data = {};
+            this.initDefaultData();
+            
+            return {
+                status: 200,
+                data: {
+                    success: true,
+                    message: 'Все данные сброшены к исходному состоянию'
+                }
+            };
+        } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
 }
 
 // Create API instance
@@ -363,6 +381,11 @@ const server = http.createServer((req, res) => {
         });
     } else if (path === '/api/projects') {
         api.getProjects().then(result => {
+            res.writeHead(result.status);
+            res.end(JSON.stringify(result.data));
+        });
+    } else if (path === '/api/reset' && method === 'POST') {
+        api.clearAllData().then(result => {
             res.writeHead(result.status);
             res.end(JSON.stringify(result.data));
         });
