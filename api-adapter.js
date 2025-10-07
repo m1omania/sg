@@ -34,6 +34,7 @@ class APIAdapter {
 
             // Route to appropriate localStorage method
             switch (cleanEndpoint) {
+                case '/wallet/1':
                 case '/wallet/balance/1':
                     result = await this.localStorageAPI.getUserBalance(1);
                     break;
