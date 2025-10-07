@@ -565,6 +565,8 @@
 
             handleCouponToggle(coupon, isActive) {
                 console.log('Coupon toggle:', coupon, isActive);
+                console.log('Coupon discount_amount:', coupon.discount_amount);
+                console.log('Coupon project_name:', coupon.project_name);
                 
                 if (isActive) {
                     this.applyCoupon(coupon);
