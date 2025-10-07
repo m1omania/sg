@@ -428,7 +428,7 @@
                 console.log('CheckoutCoupons constructor called');
                 this.userId = 1; // Demo user ID
                 this.availableCoupons = [];
-                this.appliedCoupon = null;
+                this.appliedCoupons = []; // Changed to array to support multiple coupons
                 this.packageAmount = 0;
                 this.userBalance = 0;
                 
@@ -569,9 +569,9 @@
                 console.log('Coupon project_name:', coupon.project_name);
                 
                 if (isActive) {
-                    this.applyCoupon(coupon);
+                    this.addCoupon(coupon);
                 } else {
-                    this.removeCoupon();
+                    this.removeCoupon(coupon);
                 }
             }
             
@@ -774,15 +774,31 @@
                 }
             }
             
-            applyCoupon(coupon) {
-                this.appliedCoupon = coupon;
+            addCoupon(coupon) {
+                // Check if coupon is already applied
+                const existingCoupon = this.appliedCoupons.find(c => c.id === coupon.id);
+                if (!existingCoupon) {
+                    this.appliedCoupons.push(coupon);
+                    console.log('Coupon added:', coupon.name, 'Total applied coupons:', this.appliedCoupons.length);
+                    this.updatePackageSummary();
+                    this.showAppliedCoupons();
+                }
+            }
+            
+            removeCoupon(coupon) {
+                this.appliedCoupons = this.appliedCoupons.filter(c => c.id !== coupon.id);
+                console.log('Coupon removed:', coupon.name, 'Remaining coupons:', this.appliedCoupons.length);
                 this.updatePackageSummary();
-                this.showAppliedCoupon();
-                // Don't hide the coupon card - keep it visible
+                this.showAppliedCoupons();
+            }
+            
+            // Keep old methods for backward compatibility
+            applyCoupon(coupon) {
+                this.addCoupon(coupon);
             }
             
             removeCoupon() {
-                this.appliedCoupon = null;
+                this.appliedCoupons = [];
                 this.updatePackageSummary();
                 this.hideAppliedCoupon();
                 
@@ -793,28 +809,33 @@
                 }
             }
             
-            showAppliedCoupon() {
-                // Remove existing applied coupon display
-                const existingApplied = document.querySelector('.applied-coupon');
-                if (existingApplied) {
-                    existingApplied.remove();
-                }
+            showAppliedCoupons() {
+                // Remove existing applied coupons display
+                const existingApplied = document.querySelectorAll('.applied-coupon');
+                existingApplied.forEach(el => el.remove());
                 
-                // Create applied coupon display
-                const packageSummary = document.getElementById('package-summary');
-                if (packageSummary && this.appliedCoupon) {
-                    const appliedDiv = document.createElement('div');
-                    appliedDiv.className = 'applied-coupon';
-                    appliedDiv.innerHTML = `
-                        <div class="applied-coupon-info">
-                            <span class="applied-coupon-code">${this.appliedCoupon.code}</span>
-                            <span class="applied-coupon-discount">Скидка: -${this.appliedCoupon.discount_amount}$</span>
-                    </div>
-                        <button class="remove-coupon-btn" onclick="checkoutCoupons.removeCoupon()">Удалить</button>
-                    `;
-                    
-                    packageSummary.appendChild(appliedDiv);
+                if (this.appliedCoupons.length > 0) {
+                    const packageSummary = document.getElementById('package-summary');
+                    if (packageSummary) {
+                        this.appliedCoupons.forEach(coupon => {
+                            const appliedDiv = document.createElement('div');
+                            appliedDiv.className = 'applied-coupon';
+                            appliedDiv.innerHTML = `
+                                <div class="applied-coupon-info">
+                                    <span class="applied-coupon-code">${coupon.code}</span>
+                                    <span class="applied-coupon-discount">Скидка: -$${coupon.discount_amount}</span>
+                                </div>
+                                <button class="remove-coupon-btn" onclick="checkoutCoupons.removeCoupon(${JSON.stringify(coupon).replace(/"/g, '&quot;')})">Удалить</button>
+                            `;
+                            packageSummary.appendChild(appliedDiv);
+                        });
+                    }
                 }
+            }
+            
+            // Keep old method for backward compatibility
+            showAppliedCoupon() {
+                this.showAppliedCoupons();
             }
             
             removeCoupon() {
@@ -856,10 +877,11 @@
                 const checkoutBtn = document.getElementById('checkout-btn');
                 if (!checkoutBtn) return;
                 
+                // Calculate total discount from all applied coupons
                 let discountAmount = 0;
-                if (this.appliedCoupon) {
-                    discountAmount = this.appliedCoupon.discount_amount;
-                }
+                this.appliedCoupons.forEach(coupon => {
+                    discountAmount += coupon.discount_amount;
+                });
                 
                 // Check if double payment is enabled
                 const doublePaymentSwitch = document.getElementById('double-payment-switch');
@@ -1040,10 +1062,11 @@
                 const summary = document.getElementById('package-summary');
                 const mobileSummary = document.getElementById('mobile-package-summary');
                 
+                // Calculate total discount from all applied coupons
                 let discountAmount = 0;
-                if (this.appliedCoupon) {
-                    discountAmount = this.appliedCoupon.discount_amount;
-                }
+                this.appliedCoupons.forEach(coupon => {
+                    discountAmount += coupon.discount_amount;
+                });
                 
                 // Check if double payment is enabled
                 const doublePaymentSwitch = document.getElementById('double-payment-switch');
