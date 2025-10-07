@@ -441,6 +441,7 @@
                 this.loadProjectCoupons();
                 this.bindEvents();
                 this.updatePackageAmount();
+                this.updatePackageSummary();
             }
             
             async loadAvailableCoupons() {
@@ -1049,6 +1050,13 @@
                 // Calculate base amount (package amount * 2 if double payment is enabled)
                 const baseAmount = isDoublePayment ? this.packageAmount * 2 : this.packageAmount;
                 const finalAmount = Math.max(0, baseAmount - discountAmount);
+                
+                console.log('updatePackageSummary called:');
+                console.log('- Package amount:', this.packageAmount);
+                console.log('- Double payment enabled:', isDoublePayment);
+                console.log('- Base amount:', baseAmount);
+                console.log('- Discount amount:', discountAmount);
+                console.log('- Final amount:', finalAmount);
                 
                 const summaryHTML = `
                     <div class="package-summary-item">
