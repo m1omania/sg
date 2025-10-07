@@ -6,6 +6,14 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
+// CORS headers
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '86400'
+};
+
 // Load localStorage API (simplified version for Node.js)
 class LocalStorageAPI {
     constructor() {
@@ -312,22 +320,24 @@ const api = new LocalStorageAPI();
 
 // Create HTTP server
 const server = http.createServer((req, res) => {
+    // Handle CORS preflight requests
+    if (req.method === 'OPTIONS') {
+        res.writeHead(200, corsHeaders);
+        res.end();
+        return;
+    }
+
+    // Add CORS headers to all responses
+    Object.keys(corsHeaders).forEach(key => {
+        res.setHeader(key, corsHeaders[key]);
+    });
+
     const parsedUrl = url.parse(req.url, true);
     const path = parsedUrl.pathname;
     const method = req.method;
 
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Content-Type', 'application/json');
 
-    // Handle preflight requests
-    if (method === 'OPTIONS') {
-        res.writeHead(200);
-        res.end();
-        return;
-    }
 
     // Route handling
     if (path === '/api/coupons/active/1') {
