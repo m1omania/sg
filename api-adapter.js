@@ -12,7 +12,19 @@ class APIAdapter {
         const method = options.method || 'GET';
         const body = options.body ? JSON.parse(options.body) : null;
 
+        console.log('🔍 API Adapter: request called for endpoint', endpoint);
+
         try {
+            // Check if localStorage API is available
+            if (!this.localStorageAPI) {
+                console.error('❌ API Adapter: localStorageAPI not available');
+                return {
+                    ok: false,
+                    status: 500,
+                    json: () => Promise.resolve({ error: 'localStorage API not available' })
+                };
+            }
+
             // Use localStorage API directly (no server)
             let result;
 
@@ -23,7 +35,9 @@ class APIAdapter {
                     break;
                 
                 case '/coupons/active/1':
+                    console.log('🔍 API Adapter: calling getActiveCoupons');
                     result = await this.localStorageAPI.getActiveCoupons(1);
+                    console.log('🔍 API Adapter: getActiveCoupons result', result);
                     break;
                 
                 case '/coupons/history/1':
@@ -55,12 +69,15 @@ class APIAdapter {
                     break;
                 
                 default:
+                    console.log('❌ API Adapter: endpoint not found', endpoint);
                     return {
                         ok: false,
                         status: 404,
                         json: () => Promise.resolve({ error: 'Endpoint not found' })
                     };
             }
+
+            console.log('🔍 API Adapter: final result', result);
 
             // Convert to fetch-like response
             return {
@@ -71,6 +88,7 @@ class APIAdapter {
             };
 
         } catch (error) {
+            console.error('❌ API Adapter: request error', error);
             return {
                 ok: false,
                 status: 500,

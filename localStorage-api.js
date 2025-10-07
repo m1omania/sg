@@ -180,9 +180,13 @@ class LocalStorageAPI {
     // Coupon endpoints
     async getActiveCoupons(userId) {
         try {
+            console.log('🔍 localStorage API: getActiveCoupons called for user', userId);
+            console.log('🔍 localStorage API: data.coupons', this.data.coupons);
             const coupons = this.data.coupons.filter(c => !c.used);
+            console.log('🔍 localStorage API: filtered coupons', coupons);
             return { status: 200, data: coupons };
         } catch (error) {
+            console.error('❌ localStorage API: getActiveCoupons error', error);
             return { status: 500, data: { error: error.message } };
         }
     }
