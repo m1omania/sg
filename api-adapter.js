@@ -9,6 +9,36 @@ class APIAdapter {
         this.localAPIServer = 'http://localhost:3001';
     }
 
+    // XMLHttpRequest method to avoid fetch recursion
+    makeRequest(url, options = {}) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open(options.method || 'GET', url);
+            
+            // Set headers
+            if (options.headers) {
+                Object.keys(options.headers).forEach(key => {
+                    xhr.setRequestHeader(key, options.headers[key]);
+                });
+            }
+            
+            xhr.onload = () => {
+                resolve({
+                    ok: xhr.status >= 200 && xhr.status < 300,
+                    status: xhr.status,
+                    json: () => Promise.resolve(JSON.parse(xhr.responseText)),
+                    text: () => Promise.resolve(xhr.responseText)
+                });
+            };
+            
+            xhr.onerror = () => {
+                reject(new Error('Network error'));
+            };
+            
+            xhr.send(options.body || null);
+        });
+    }
+
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
         const method = options.method || 'GET';
@@ -18,7 +48,10 @@ class APIAdapter {
             // Try local API server first
             try {
                 const localUrl = `${this.localAPIServer}${endpoint}`;
-                const localResponse = await fetch(localUrl, {
+                console.log('🔄 Trying local API server:', localUrl);
+                
+                // Use XMLHttpRequest to avoid fetch recursion
+                const localResponse = await this.makeRequest(localUrl, {
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
@@ -27,17 +60,23 @@ class APIAdapter {
                     body: options.body
                 });
                 
+                console.log('📡 Local API response status:', localResponse.status);
+                
                 if (localResponse.ok) {
                     const data = await localResponse.json();
+                    console.log('✅ Local API success, data:', data);
                     return {
                         ok: true,
                         status: localResponse.status,
                         json: () => Promise.resolve(data),
                         text: () => Promise.resolve(JSON.stringify(data))
                     };
+                } else {
+                    console.log('❌ Local API failed with status:', localResponse.status);
                 }
             } catch (localError) {
-                console.log('Local API server not available, falling back to localStorage');
+                console.log('❌ Local API server error:', localError.message);
+                console.log('🔄 Falling back to localStorage');
             }
 
             // Fallback to localStorage API
