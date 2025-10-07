@@ -25,11 +25,15 @@ class APIAdapter {
                 };
             }
 
+            // Remove /api prefix if present
+            const cleanEndpoint = endpoint.startsWith('/api') ? endpoint.substring(4) : endpoint;
+            console.log('🔍 API Adapter: cleaned endpoint', cleanEndpoint);
+
             // Use localStorage API directly (no server)
             let result;
 
             // Route to appropriate localStorage method
-            switch (endpoint) {
+            switch (cleanEndpoint) {
                 case '/wallet/balance/1':
                     result = await this.localStorageAPI.getUserBalance(1);
                     break;
@@ -69,7 +73,7 @@ class APIAdapter {
                     break;
                 
                 default:
-                    console.log('❌ API Adapter: endpoint not found', endpoint);
+                    console.log('❌ API Adapter: endpoint not found', cleanEndpoint);
                     return {
                         ok: false,
                         status: 404,
