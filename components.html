@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Компоненты - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .components-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .component-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .component-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .component-tag {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .component-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .component-usage {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .usage-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .usage-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .usage-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .usage-item:last-child {
+            border-bottom: none;
+        }
+        
+        .usage-icon {
+            width: 16px;
+            height: 16px;
+            color: #10b981;
+        }
+        
+        .usage-page {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .usage-purpose {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .component-code {
+            background: #1f2937;
+            color: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        
+        .code-title {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .component-stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .component-demo {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .demo-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .demo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 400px;
+        }
+        
+        .demo-container account-card {
+            margin-bottom: 0.5rem;
+        }
+        
+        .demo-container project-card,
+        .demo-container package-card {
+            max-width: 300px;
+        }
+        
+        @media (max-width: 768px) {
+            .components-page {
+                padding: 1rem;
+            }
+            
+            .components-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .component-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .component-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Web Component Header -->
+    <sg-header></sg-header>
+
+    <div class="app-layout">
+        <!-- Web Component Sidebar -->
+        <sg-sidebar></sg-sidebar>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="components-page">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Компоненты системы</h1>
+                    <p class="page-subtitle">
+                        Документация всех Web Components, используемых в проекте SolarGroup
+                    </p>
+                </div>
+
+                <!-- Stats -->
+                <div class="component-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-components">0</div>
+                        <div class="stat-label">Всего компонентов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="active-components">0</div>
+                        <div class="stat-label">Активных</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="pages-using">0</div>
+                        <div class="stat-label">Страниц используют</div>
+                    </div>
+                </div>
+
+                <!-- Components Grid -->
+                <div class="components-grid" id="components-grid">
+                    <!-- Components will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Coupons Data -->
+    <script src="data/coupons-data.js"></script>
+    <!-- localStorage API -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+    
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/account-card.js"></script>
+    <script src="components/web-components/coupon-package.js"></script>
+    <script src="components/web-components/full-coupon-card.js"></script>
+    <script src="components/web-components/mini-coupon.js"></script>
+    <script src="components/web-components/project-card.js"></script>
+    <script src="components/web-components/package-card.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+    <script src="components.js"></script>
+</body>
+</html>

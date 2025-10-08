@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="project-name">${investment.project_name}</div>
                     </div>
                 </td>
-                <td>$${investment.final_amount.toFixed(2)}</td>
+                <td>$${investment.amount.toFixed(2)}</td>
                 <td>${formatDate(investment.created_at)}</td>
                 <td>${getInterestRate(investment.project_name)}</td>
                 <td>
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (investmentDetailModal) {
             document.getElementById('detail-project-name').textContent = investment.project_name;
-            document.getElementById('detail-amount').textContent = `$${investment.final_amount.toFixed(2)}`;
+            document.getElementById('detail-amount').textContent = `$${investment.amount.toFixed(2)}`;
             document.getElementById('detail-date').textContent = formatDate(investment.created_at);
             document.getElementById('detail-interest').textContent = getInterestRate(investment.project_name);
             document.getElementById('detail-status').textContent = investment.status === 'active' ? 'Активна' : 'Завершена';

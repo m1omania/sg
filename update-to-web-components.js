@@ -12,7 +12,6 @@ const htmlFiles = [
     'deposit.html',
     'checkout.html',
     'packages.html',
-    'projects.html',
     'landing.html',
     'register.html',
     'coupons.html'

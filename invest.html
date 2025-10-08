@@ -7,168 +7,75 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-            <!-- Web Component Header -->
+    <!-- Web Component Header -->
     <sg-header></sg-header>
+
     <div class="app-layout">
-                        <!-- Web Component Sidebar -->
+        <!-- Web Component Sidebar -->
         <sg-sidebar></sg-sidebar>
+
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1>Инвестировать</h1>
             </div>
+
             <!-- Investment Projects -->
-            <div class="investment-projects">
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://picsum.photos/400/200?random=1" alt="Дирижабли" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkRpcmVjdGlvbmVzPC90ZXh0Pjwvc3ZnPg==';" />
-                        <div class="project-overlay">
-                        <span class="project-status active">Активный</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h2>Дирижабли</h2>
-                            <div class="project-category">Транспорт
-        </div>
-                    </div>
-                    <div class="project-body">
-                        <p class="project-description">
-                            Инвестируйте в инновационные проекты воздушных дирижаблей. 
-                            Современные технологии и экологичный транспорт будущего.
-                        </p>
-                        <div class="project-stats">
-                            <div class="stat">
-                                <span class="stat-label">Доходность</span>
-                                <span class="stat-value">12% годовых</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Срок</span>
-                                <span class="stat-value">3 года</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Мин. сумма</span>
-                                    <span class="stat-value project-min-amount">$500</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-footer">
-                            <button class="btn btn--primary">Смотреть пакеты</button>
-        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="https://picsum.photos/400/200?random=2" alt="Совэлмаш" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlNvdmV0bWFzaDwvdGV4dD48L3N2Zz4=';" />
-                        <div class="project-overlay">
-                        <span class="project-status active">Активный</span>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h2>Совэлмаш</h2>
-                            <div class="project-category">Машиностроение
-        </div>
-                    </div>
-                    <div class="project-body">
-                        <p class="project-description">
-                            Инвестируйте в развитие современного машиностроительного завода.
-                            Перспективный проект с высокой отдачей.
-                        </p>
-                        <div class="project-stats">
-                            <div class="stat">
-                                <span class="stat-label">Доходность</span>
-                                <span class="stat-value">15% годовых</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Срок</span>
-                                <span class="stat-value">5 лет</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-label">Мин. сумма</span>
-                                    <span class="stat-value project-min-amount">$1000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-footer">
-                            <button class="btn btn--primary">Смотреть пакеты</button>
-        </div>
-                    </div>
-                </div>
+            <div class="investment-projects" id="projects-container">
+                <!-- Project cards will be loaded here -->
             </div>
+
             <!-- Investment Form Modal -->
-            <div class="modal hidden" id="investment-modal">
+            <div class="modal" id="investmentModal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3>Инвестировать в проект</h3>
-                        <button class="modal-close">&times;</button>
+                        <h2>Инвестировать в проект</h2>
+                        <button class="modal-close" id="modalClose">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <form id="investment-form">
+                        <form id="investmentForm">
                             <div class="form-group">
-                                <label class="form-label">Проект:</label>
-                                <select class="form-control" id="project-select" required>
-                                    <option value="">Выберите проект</option>
-                                    <option value="Дирижабли">Дирижабли</option>
-                                    <option value="Совэлмаш">Совэлмаш</option>
+                                <label for="investmentAmount">Сумма инвестиции ($)</label>
+                                <input type="number" id="investmentAmount" name="amount" min="500" step="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="investmentPeriod">Период инвестиции</label>
+                                <select id="investmentPeriod" name="period" required>
+                                    <option value="12">1 год</option>
+                                    <option value="24">2 года</option>
+                                    <option value="36">3 года</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Сумма инвестиции ($):</label>
-                                <input type="number" class="form-control" id="amount-input" min="1" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Применить купон (если есть):</label>
-                                <input type="text" class="form-control" id="coupon-input" placeholder="Введите код купона">
-                            </div>
-                            <div class="investment-summary">
-                                <div class="summary-row">
-                                    <span>Базовая сумма:</span>
-                                    <span id="base-amount">$0.00</span>
-                                </div>
-                                <div class="summary-row discount">
-                                    <span>Скидка по купону:</span>
-                                    <span id="discount-amount">$0.00</span>
-                                </div>
-                                <div class="summary-row total">
-                                    <strong>Итого к оплате:</strong>
-                                    <strong id="total-amount">$0.00</strong>
-                                </div>
+                                <label for="paymentMethod">Способ оплаты</label>
+                                <select id="paymentMethod" name="paymentMethod" required>
+                                    <option value="main">Основной счёт</option>
+                                    <option value="partner">Партнёрский счёт</option>
+                                </select>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn--primary" id="confirm-investment-btn">Подтвердить инвестицию</button>
-                        <button class="btn btn--secondary modal-close">Отмена</button>
+                        <button type="button" class="btn btn--secondary" id="cancelInvestment">Отмена</button>
+                        <button type="submit" class="btn btn--primary" id="confirmInvestment">Инвестировать</button>
                     </div>
-                </div>
-            </div>
-            <!-- Success Notification -->
-            <div class="notification hidden" id="success-notification">
-                <div class="notification-content">
-                    <span id="notification-text">Операция выполнена успешно!</span>
-                    <button class="notification-close">&times;</button>
                 </div>
             </div>
         </main>
     </div>
-        
+
+    <!-- Scripts -->
     <!-- localStorage API -->
     <script src="localStorage-api.js"></script>
     <script src="api-adapter.js"></script>
-                <script src="components/web-components/header-standalone.js"></script>
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="components/web-components/sidebar-standalone.js"></script>
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="app.js"></script>
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="invest.js"></script>
     
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/project-card.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+    <script src="invest.js"></script>
 </body>
 </html>

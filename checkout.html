@@ -7,20 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-            <!-- Web Component Header -->
+    <!-- Web Component Header -->
     <sg-header></sg-header>
 
     <div class="app-layout">
-                        <!-- Web Component Sidebar -->
+        <!-- Web Component Sidebar -->
         <sg-sidebar></sg-sidebar>
 
         <!-- Main Content -->
         <main class="main-content">
             <div class="page-header">
                 <h1 id="package-title">Пакет 500 $</h1>
-                <div class="package-stage-badge" id="package-stage">20 этап            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+                <div class="package-stage-badge" id="package-stage">20 этап</div>
             </div>
 
             <div class="checkout-container">
@@ -31,8 +29,8 @@
                         
                         <!-- Desktop detailed view -->
                         <div class="package-details-desktop">
-                        <div class="package-summary" id="package-summary">
-                            <!-- Package details will be loaded here -->
+                            <div class="package-summary" id="package-summary">
+                                <!-- Package details will be loaded here -->
                             </div>
                             
                             <div class="package-info-compact">
@@ -48,1221 +46,140 @@
                                     </span>
                                 </div>
                                 <div class="info-row">
-                                    <span class="info-label">Цена за долю:</span>
-                                    <span class="info-value">~0,03333 $</span>
+                                    <span class="info-label">Стоимость доли:</span>
+                                    <span class="info-value">$0.033</span>
                                 </div>
                                 <div class="info-row">
-                                    <span class="info-label">Дисконт:</span>
-                                    <span class="info-value">~30</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Рассрочка:</span>
-                                    <span class="info-value">10 мес.</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Номинал:</span>
-                                    <span class="info-value">15 000 $</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Платёж:</span>
-                                    <span class="info-value">50 $</span>
+                                    <span class="info-label">Общая стоимость:</span>
+                                    <span class="info-value total-cost">$500.00</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Mobile simplified view -->
                         <div class="package-details-mobile">
-                            <div class="mobile-package-summary" id="mobile-package-summary">
-                                <!-- Mobile package summary will be loaded here -->
-                            </div>
-                            
-                            <div class="package-info-compact">
-                                <div class="info-row">
-                                    <span class="info-label">Количество долей:</span>
-                                    <span class="info-value">15 000</span>
+                            <div class="mobile-package-info">
+                                <div class="mobile-info-item">
+                                    <span class="mobile-label">Доли:</span>
+                                    <span class="mobile-value">15 000</span>
                                 </div>
-                                <div class="info-row">
-                                    <span class="info-label">Бонусные доли:</span>
-                                    <span class="info-value bonus-shares">
-                                        +250
-                                        <span class="bonus-icon">🎁</span>
-                                    </span>
+                                <div class="mobile-info-item">
+                                    <span class="mobile-label">Бонус:</span>
+                                    <span class="mobile-value">+250 🎁</span>
                                 </div>
-                                <div class="info-row">
-                                    <span class="info-label">Цена за долю:</span>
-                                    <span class="info-value">~0,03333 $</span>
+                                <div class="mobile-info-item">
+                                    <span class="mobile-label">Цена доли:</span>
+                                    <span class="mobile-value">$0.033</span>
                                 </div>
-                                <div class="info-row">
-                                    <span class="info-label">Дисконт:</span>
-                                    <span class="info-value">~30</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Рассрочка:</span>
-                                    <span class="info-value">10 мес.</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Номинал:</span>
-                                    <span class="info-value">15 000 $</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Платёж:</span>
-                                    <span class="info-value">50 $</span>
+                                <div class="mobile-info-item total">
+                                    <span class="mobile-label">Итого:</span>
+                                    <span class="mobile-value">$500.00</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Payment Schedule -->
-                    <div class="schedule-header" id="toggle-schedule">
+                    <div class="payment-schedule-card">
+                        <div class="schedule-header">
                             <h3>График платежей</h3>
-                        <div class="chevron-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
+                            <svg class="chevron-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
                         </div>
-                    </div>
-                    <div class="payment-schedule-content" id="payment-schedule-content" style="display: none;">
-                            <!-- Payment schedule will be generated here -->
-                    </div>
-                    
-
-
-                    <!-- Bonus Banner -->
-                    <div class="bonus-banner" id="bonus-banner" style="display: none;">
-                        <div class="bonus-icon">🎁            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                        <div class="bonus-content">
-                            <h4>Дисциплинарный бонус</h4>
-                            <div class="bonus-details">
-                                <span class="bonus-amount" id="bonus-amount">750 долей</span>
-                                <span class="bonus-percentage" id="bonus-percentage">+5%</span>
-                                <a href="#" class="bonus-link">Подробнее</a>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+                        <div class="schedule-content">
+                            <div class="schedule-item">
+                                <span class="schedule-date">Сегодня</span>
+                                <span class="schedule-amount">$500.00</span>
                             </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+                            <div class="schedule-item">
+                                <span class="schedule-date">Через 30 дней</span>
+                                <span class="schedule-amount">$500.00</span>
+                            </div>
                         </div>
-                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
                     </div>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
+
+                    <!-- Coupon Section -->
+                    <div class="coupon-section">
+                        <h3>Доступные купоны</h3>
+                        <div class="coupons-list" id="coupons-list">
+                            <!-- Coupons will be loaded here -->
+                        </div>
+                    </div>
                 </div>
 
                 <div class="checkout-sidebar">
-                    <div class="checkout-card">
-                        <h3>Оплата пакета</h3>
-                        
-                        <!-- Account Selection -->
-                        <div class="account-selector">
-                            <div class="account-options">
-                                <div class="account-option selected" data-account="main">
-                                    <div class="account-radio">
-                                        <input type="radio" name="account" value="main" checked>
-                                        <span class="radio-custom"></span>
-                                    </div>
-                                    <div class="account-info">
-                                        <div class="account-name">Основной счёт</div>
-                                        <div class="account-balance main-balance-amount">Загрузка...</div>
-                                    </div>
+                    <!-- Account Selection -->
+                    <div class="account-selection-card">
+                        <h3>Выберите счёт</h3>
+                        <div class="account-options">
+                            <div class="account-option" data-account="main">
+                                <div class="account-radio">
+                                    <input type="radio" name="account" value="main" checked>
+                                    <span class="radio-custom"></span>
                                 </div>
-                                
-                                <div class="account-option" data-account="partner">
-                                    <div class="account-radio">
-                                        <input type="radio" name="account" value="partner">
-                                        <span class="radio-custom"></span>
-                                    </div>
-                                    <div class="account-info">
-                                        <div class="account-name">Партнёрский счёт</div>
-                                        <div class="account-balance partner-balance-amount">Загрузка...</div>
-                                    </div>
+                                <div class="account-info">
+                                    <div class="account-name">Основной счёт</div>
+                                    <div class="account-balance main-balance-amount">Загрузка...</div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Double Payment Switch -->
-                        <div class="payment-options">
-                            <div class="double-payment-card">
-                                <span class="double-payment-value">+250</span>
-                                <div class="double-payment-info">
-                                    <div class="double-payment-title">Двойной платёж</div>
+                            
+                            <div class="account-option" data-account="partner">
+                                <div class="account-radio">
+                                    <input type="radio" name="account" value="partner">
+                                    <span class="radio-custom"></span>
+                                </div>
+                                <div class="account-info">
+                                    <div class="account-name">Партнёрский счёт</div>
+                                    <div class="account-balance partner-balance-amount">Загрузка...</div>
+                                </div>
                             </div>
-                                <div class="double-payment-toggle">
-                                    <input type="checkbox" id="double-payment-switch" class="double-payment-switch">
-                                    <label for="double-payment-switch" class="double-payment-switch-label"></label>
-                        </div>
                         </div>
                     </div>
 
-                        <!-- Available Coupons Section -->
-                        <div class="coupons-section">
-                            <h3 class="coupons-section-title">Доступные купоны</h3>
-                            <div class="coupons-list" id="coupons-list">
-                                <!-- Coupons will be loaded here -->
+                    <!-- Order Summary -->
+                    <div class="order-summary-card">
+                        <h3>Итого к оплате</h3>
+                        <div class="summary-line">
+                            <span>Стоимость пакета:</span>
+                            <span id="package-price">$500.00</span>
                         </div>
+                        <div class="summary-line discount" id="discount-line" style="display: none;">
+                            <span>Скидка:</span>
+                            <span id="discount-amount">-$0.00</span>
                         </div>
-
-                        <!-- Coupon Section -->
-                        <div class="coupon-section">
-                            <!-- Coupon Card -->
-                            <div class="coupon-card" id="coupon-card" style="display: none;">
-                                <span class="coupon-value">-25$</span>
-                                <div class="coupon-info">
-                                    <div class="coupon-title">Скидка для новых пользователей</div>
-                                    <div class="coupon-date">до 8 окт.</div>
+                        <div class="summary-line total">
+                            <span>Итого:</span>
+                            <span id="total-amount">$500.00</span>
                         </div>
-                                <div class="coupon-toggle">
-                                    <input type="checkbox" id="coupon-switch" class="coupon-switch">
-                                    <label for="coupon-switch" class="coupon-switch-label"></label>
+                        
+                        <div id="insufficient-funds" class="insufficient-funds-warning" style="display: none;">
+                            <!-- Warning message will be inserted here -->
                         </div>
-                        </div>
-
-                            <!-- Coupon Input -->
-                            <div class="coupon-input-section">
-                                <label for="coupon-input" class="coupon-label">Введите промокод или купон</label>
-                                <div class="coupon-input-container">
-                                    <input type="text" id="coupon-input" class="coupon-input" placeholder="Введите код купона">
-                                    <button class="btn btn--secondary" id="validate-coupon-btn">Проверить</button>
-                        </div>
-                                <div class="coupon-feedback" id="coupon-feedback"></div>
-                        </div>
-                        </div>
-
-                        <!-- Checkout Button -->
-                        <button class="btn btn--primary btn--full" id="checkout-btn">
+                        
+                        <button class="btn btn--primary btn--block" id="checkout-btn">
                             Оформить пакет
                         </button>
                     </div>
                 </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-
-            <!-- Success Notification -->
-            <div class="notification hidden" id="success-notification">
-                <div class="notification-content">
-                    <span id="notification-text">Операция выполнена успешно!</span>
-                    <button class="notification-close">&times;</button>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
             </div>
         </main>
-                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
     </div>
 
-        
+    <!-- Scripts -->
+    <!-- Coupons Data -->
+    <script src="data/coupons-data.js"></script>
     <!-- localStorage API -->
     <script src="localStorage-api.js"></script>
     <script src="api-adapter.js"></script>
-                <script src="components/web-components/header-standalone.js"></script>
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="components/web-components/sidebar-standalone.js"></script>
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="app.js"></script>
     
-    <!-- localStorage API -->
-    <script src="localStorage-api.js"></script>
-    <script src="api-adapter.js"></script>
-        <script src="checkout.js"></script>
-    <script>
-        // CouponPackage Web Component
-        class CouponPackage extends HTMLElement {
-            constructor() {
-                super();
-                this.attachShadow({ mode: 'open' });
-                this.coupon = null;
-                this.isActive = false;
-            }
-
-            static get observedAttributes() {
-                return ['coupon-data', 'active'];
-            }
-
-            attributeChangedCallback(name, oldValue, newValue) {
-                if (name === 'coupon-data') {
-                    this.coupon = JSON.parse(newValue);
-                    this.render();
-                } else if (name === 'active') {
-                    this.isActive = newValue === 'true';
-                    this.render();
-                }
-            }
-
-            setCouponData(coupon) {
-                this.coupon = coupon;
-                this.render();
-            }
-
-            setActive(isActive) {
-                this.isActive = isActive;
-                this.render();
-            }
-
-            connectedCallback() {
-                this.render();
-            }
-
-            render() {
-                if (!this.coupon) {
-                    this.shadowRoot.innerHTML = '';
-                    return;
-                }
-
-                this.shadowRoot.innerHTML = `
-                    <style>
-                        .coupon-package {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            padding: 16px;
-                            background: #f8fafc;
-                            border: 1px solid #e5e7eb;
-                            border-radius: 12px;
-                            transition: all 0.2s ease;
-                            cursor: pointer;
-                        }
-
-                        .coupon-package:hover {
-                            border-color: #3b82f6;
-                            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
-                        }
-
-                        .coupon-package.active {
-                            border-color: #3b82f6;
-                            background: #eff6ff;
-                        }
-
-                        .coupon-text {
-                            font-size: 14px;
-                            font-weight: 500;
-                            color: #374151;
-                            margin: 0;
-                        }
-
-                        .coupon-switch {
-                            position: relative;
-                            display: inline-block;
-                            width: 44px;
-                            height: 24px;
-                            flex-shrink: 0;
-                        }
-
-                        .coupon-switch input {
-                            opacity: 0;
-                            width: 0;
-                            height: 0;
-                        }
-
-                        .coupon-slider {
-                            position: absolute;
-                            cursor: pointer;
-                            top: 0;
-                            left: 0;
-                            right: 0;
-                            bottom: 0;
-                            background-color: #d1d5db;
-                            transition: 0.3s;
-                            border-radius: 24px;
-                        }
-
-                        .coupon-slider:before {
-                            position: absolute;
-                            content: "";
-                            height: 18px;
-                            width: 18px;
-                            left: 3px;
-                            bottom: 3px;
-                            background-color: white;
-                            transition: 0.3s;
-                            border-radius: 50%;
-                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                        }
-
-                        .coupon-switch input:checked + .coupon-slider {
-                            background-color: #3b82f6;
-                        }
-
-                        .coupon-switch input:checked + .coupon-slider:before {
-                            transform: translateX(20px);
-                        }
-
-                        .coupon-switch input:disabled + .coupon-slider {
-                            opacity: 0.5;
-                            cursor: not-allowed;
-                        }
-                    </style>
-                    <div class="coupon-package ${this.isActive ? 'active' : ''}">
-                        <p class="coupon-text">${this.coupon.discount_amount}${this.coupon.discount_amount > 10 ? '$' : '%'} ${this.coupon.name}</p>
-                        <label class="coupon-switch">
-                            <input type="checkbox" ${this.isActive ? 'checked' : ''}>
-                            <span class="coupon-slider"></span>
-                        </label>
-                </div>
-            `;
-
-                // Add event listeners
-                const checkbox = this.shadowRoot.querySelector('input[type="checkbox"]');
-                const container = this.shadowRoot.querySelector('.coupon-package');
-                
-                checkbox.addEventListener('change', (e) => {
-                    e.stopPropagation();
-                    this.isActive = e.target.checked;
-                    this.render();
-                    
-                    // Dispatch custom event
-                    this.dispatchEvent(new CustomEvent('coupon-toggle', {
-                        detail: { 
-                            coupon: this.coupon, 
-                            active: this.isActive 
-                        },
-                        bubbles: true,
-                        composed: true
-                    }));
-                });
-
-                container.addEventListener('click', (e) => {
-                    if (e.target !== checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                        checkbox.dispatchEvent(new Event('change'));
-                    }
-                });
-            }
-        }
-
-        customElements.define('coupon-package', CouponPackage);
-
-        // Checkout Coupons Logic
-        console.log('Checkout coupons script loaded');
-
-        class CheckoutCoupons {
-            constructor() {
-                console.log('CheckoutCoupons constructor called');
-                this.userId = 1; // Demo user ID
-                this.availableCoupons = [];
-                this.appliedCoupons = []; // Changed to array to support multiple coupons
-                this.packageAmount = 0;
-                this.userBalance = 0;
-                
-                this.init();
-            }
-            
-            init() {
-                this.loadAvailableCoupons();
-                this.loadUserBalance();
-                this.loadProjectCoupons();
-                this.bindEvents();
-                this.updatePackageAmount();
-                this.updatePackageSummary();
-            }
-            
-            async loadAvailableCoupons() {
-                try {
-                    const response = await fetch(`/api/coupons/active/${this.userId}`);
-                    const coupons = await response.json();
-                    
-                    this.availableCoupons = coupons;
-                    this.checkForRelevantCoupons();
-                } catch (error) {
-                    console.error('Error loading coupons:', error);
-                }
-            }
-            
-            async loadUserBalance() {
-                try {
-                    console.log('Loading user balance for userId:', this.userId);
-                    const response = await fetch(`/api/wallet/${this.userId}`);
-                    console.log('Balance API response status:', response.status);
-                    
-                    const balanceData = await response.json();
-                    console.log('Balance API response data:', balanceData);
-                    
-                    this.userBalance = balanceData.main_balance || 0;
-                    console.log('User balance set to:', this.userBalance);
-                    
-                    this.updateCheckoutButton();
-            } catch (error) {
-                    console.error('Error loading user balance:', error);
-                    this.userBalance = 0;
-                    console.log('User balance set to 0 due to error');
-                    this.updateCheckoutButton();
-                }
-            }
-
-            async loadProjectCoupons() {
-                try {
-                    const response = await fetch(`/api/coupons/active/${this.userId}`);
-                    const coupons = await response.json();
-                    
-                    console.log('All available coupons:', coupons);
-                    
-                    // Get current project from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const packageId = urlParams.get('package') || 'sov-500';
-            
-                    // Determine project based on package
-                    let currentProject = 'Все проекты';
-                    if (packageId.startsWith('airship')) {
-                        currentProject = 'Дирижабли';
-                    } else if (packageId.startsWith('sov')) {
-                        currentProject = 'Совэлмаш';
-                    }
-                    
-                    console.log('Current project:', currentProject);
-                    
-                    // Filter coupons for current project
-                    const relevantCoupons = coupons.filter(coupon => 
-                        coupon.project_name === 'Все проекты' || 
-                        coupon.project_name === currentProject
-                    );
-                    
-                    console.log('Relevant coupons for project:', relevantCoupons);
-                    
-                    this.renderProjectCoupons(relevantCoupons);
-                } catch (error) {
-                    console.error('Error loading project coupons:', error);
-                    this.showNoCoupons();
-                }
-            }
-
-            renderProjectCoupons(coupons) {
-                const couponsList = document.getElementById('coupons-list');
-                console.log('renderProjectCoupons called with:', coupons);
-                console.log('couponsList element:', couponsList);
-                
-                if (!couponsList) {
-                    console.error('coupons-list element not found!');
-                    return;
-                }
-                
-                if (coupons.length === 0) {
-                    console.log('No coupons to render, showing no coupons message');
-                    this.showNoCoupons();
-                    return;
-                }
-                
-                console.log('Rendering', coupons.length, 'coupons');
-                
-                // Create coupon elements
-                const couponElements = coupons.map(coupon => {
-                    console.log('Creating coupon element for:', coupon);
-                    const couponElement = document.createElement('coupon-package');
-                    couponElement.setCouponData(coupon);
-                    
-                    // Add event listener for toggle
-                    couponElement.addEventListener('coupon-toggle', (e) => {
-                        this.handleCouponToggle(e.detail.coupon, e.detail.active);
-                    });
-                    
-                    return couponElement;
-                });
-                
-                console.log('Created coupon elements:', couponElements);
-                
-                // Clear and populate the list
-                couponsList.innerHTML = '';
-                couponElements.forEach(element => {
-                    couponsList.appendChild(element);
-                });
-                
-                console.log('Coupons rendered successfully');
-            }
-
-            showNoCoupons() {
-                const couponsList = document.getElementById('coupons-list');
-                if (couponsList) {
-                    couponsList.innerHTML = '<p class="no-coupons">Нет доступных купонов для этого проекта</p>';
-                }
-            }
-
-            handleCouponToggle(coupon, isActive) {
-                console.log('Coupon toggle:', coupon, isActive);
-                console.log('Coupon discount_amount:', coupon.discount_amount);
-                console.log('Coupon project_name:', coupon.project_name);
-                
-                if (isActive) {
-                    this.addCoupon(coupon);
-            } else {
-                    this.removeCoupon(coupon);
-                }
-            }
-            
-            checkForRelevantCoupons() {
-                console.log('Checking for relevant coupons...');
-                console.log('Available coupons:', this.availableCoupons);
-                
-                // Check for general coupons (not tied to specific projects)
-                const generalCoupons = this.availableCoupons.filter(coupon => 
-                    !coupon.project_name || coupon.project_name === 'Любой'
-                );
-                
-                console.log('General coupons found:', generalCoupons);
-                
-                if (generalCoupons.length > 0) {
-                    this.showCouponBanner(generalCoupons[0]);
-                } else {
-                    console.log('No general coupons found');
-                }
-            }
-            
-            showCouponBanner(coupon) {
-                console.log('showCouponBanner called with coupon:', coupon);
-                const card = document.getElementById('coupon-card');
-                const percentageElement = card.querySelector('.coupon-value');
-                const titleElement = card.querySelector('.coupon-title');
-                const dateElement = card.querySelector('.coupon-date');
-                
-                console.log('Card element:', card);
-                console.log('Percentage element:', percentageElement);
-                
-                if (card && coupon) {
-                    percentageElement.textContent = `-${coupon.discount_amount}$`;
-                    titleElement.textContent = coupon.description || 'Скидка для новых пользователей';
-                    
-                    // Format expiry date
-                    if (coupon.expiry_date) {
-                        const date = new Date(coupon.expiry_date);
-                        const day = date.getDate();
-                        const month = date.toLocaleString('ru', { month: 'short' });
-                        dateElement.textContent = `до ${day} ${month}`;
-                    } else {
-                        dateElement.textContent = 'до 8 окт.';
-                    }
-                    
-                    card.style.display = 'flex';
-                    console.log('Coupon card shown');
-                } else {
-                    console.error('Card or coupon not found!');
-                }
-            }
-            
-            bindEvents() {
-                console.log('Binding events...');
-                
-                // Coupon switch toggle
-                const couponSwitch = document.getElementById('coupon-switch');
-                console.log('Coupon switch found:', couponSwitch);
-                if (couponSwitch) {
-                    couponSwitch.addEventListener('change', (e) => {
-                        console.log('Coupon switch toggled:', e.target.checked);
-                        if (e.target.checked) {
-                            const generalCoupons = this.availableCoupons.filter(coupon => 
-                                !coupon.project_name || coupon.project_name === 'Любой'
-                            );
-                            if (generalCoupons.length > 0) {
-                                this.applyCoupon(generalCoupons[0]);
-                            }
-                        } else {
-                            this.removeCoupon();
-                        }
-                    });
-                }
-                
-                // Double payment switch
-                const doublePaymentSwitch = document.getElementById('double-payment-switch');
-                if (doublePaymentSwitch) {
-                    console.log('Double payment switch found:', doublePaymentSwitch);
-                    doublePaymentSwitch.addEventListener('change', (e) => {
-                        console.log('Double payment toggled:', e.target.checked);
-                        this.updatePackageSummary();
-                        this.updateCheckoutButton();
-                    });
-                }
-                
-                // Validate coupon input
-                const validateBtn = document.getElementById('validate-coupon-btn');
-                const couponInput = document.getElementById('coupon-input');
-                
-                console.log('Validate button found:', validateBtn);
-                console.log('Coupon input found:', couponInput);
-                
-                if (validateBtn && couponInput) {
-                    validateBtn.addEventListener('click', () => {
-                        console.log('Validate button clicked');
-                        const code = couponInput.value.trim();
-                        console.log('Code to validate:', code);
-                        if (code) {
-                            this.validateCoupon(code);
-                        } else {
-                            console.log('No code entered');
-                        }
-                    });
-                    
-                    couponInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            console.log('Enter pressed in input');
-                            const code = couponInput.value.trim();
-                            if (code) {
-                                this.validateCoupon(code);
-                            }
-                        }
-                    });
-                } else {
-                    console.error('Required elements not found!');
-                }
-                
-                // Double payment switch
-                const doublePaymentSwitch2 = document.getElementById('double-payment-switch');
-                console.log('Double payment switch found:', doublePaymentSwitch2);
-                if (doublePaymentSwitch2) {
-                    doublePaymentSwitch2.addEventListener('change', (e) => {
-                        console.log('Double payment switch changed:', e.target.checked);
-                        this.handleDoublePaymentToggle(e.target.checked);
-                    });
-                }
-                
-                // Payment schedule toggle
-                const toggleScheduleBtn = document.getElementById('toggle-schedule');
-            const scheduleContent = document.getElementById('payment-schedule-content');
-                console.log('Toggle schedule button found:', toggleScheduleBtn);
-                
-                if (toggleScheduleBtn && scheduleContent) {
-                    toggleScheduleBtn.addEventListener('click', () => {
-                        this.togglePaymentSchedule();
-                    });
-                    
-                    // Generate payment schedule data
-                    this.generatePaymentSchedule();
-                }
-                
-                // Checkout button
-                const checkoutBtn = document.getElementById('checkout-btn');
-                if (checkoutBtn) {
-                    console.log('Checkout button found:', checkoutBtn);
-                    checkoutBtn.addEventListener('click', () => {
-                        this.handleCheckout();
-                    });
-                }
-                
-            }
-            
-            handleDoublePaymentToggle(isEnabled) {
-                console.log('Double payment toggled:', isEnabled);
-                // Here you can add logic to handle double payment
-                // For example, update package amount, show additional info, etc.
-                if (isEnabled) {
-                    console.log('Double payment enabled - bonus shares activated');
-                    // Could update package summary to show bonus shares
-                } else {
-                    console.log('Double payment disabled - standard payment');
-                }
-            }
-            
-            async handleCheckout() {
-                console.log('Checkout button clicked');
-                console.log('Applied coupons:', this.appliedCoupons);
-                
-                if (this.appliedCoupons.length > 0) {
-                    // Mark all applied coupons as used
-                    await this.markCouponsAsUsed();
-                }
-                
-                // Proceed with checkout logic
-                this.processCheckout();
-            }
-            
-            async markCouponsAsUsed() {
-                console.log('Marking coupons as used:', this.appliedCoupons);
-                
-                try {
-                    // Send request to mark each coupon as used
-                    const promises = this.appliedCoupons.map(async (coupon) => {
-                        console.log('Sending request for coupon:', coupon.id);
-                        const response = await fetch('/api/coupons/use', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                couponId: coupon.id,
-                                userId: this.userId
-                            })
-                        });
-                        
-                        const result = await response.json();
-                        console.log('Coupon use response:', result);
-                        return result;
-                    });
-                    
-                    const results = await Promise.all(promises);
-                    console.log('All coupons marked as used successfully:', results);
-                    
-                    // Clear applied coupons from UI
-                    this.appliedCoupons = [];
-                    this.updatePackageSummary();
-                    this.showAppliedCoupons();
-                    
-                    // Reload coupons to update the list (remove used ones)
-                    await this.loadProjectCoupons();
-                    
-                    // Show success message
-                    this.showCheckoutSuccess();
-                    
-                } catch (error) {
-                    console.error('Error marking coupons as used:', error);
-                    // Still proceed with checkout even if coupon marking fails
-                    this.processCheckout();
-                }
-            }
-            
-            processCheckout() {
-                console.log('Processing checkout...');
-                // Add your checkout logic here
-                // For example: redirect to payment page, show confirmation, etc.
-                
-                // For demo purposes, show success message
-                alert('Пакет успешно оформлен!');
-            }
-            
-            showCheckoutSuccess() {
-                // Show success message for used coupons
-                const message = `Купоны успешно использованы!`;
-                console.log(message);
-                
-                // You can show this in a toast notification or modal
-                // For now, just log to console
-            }
-            
-            async validateCoupon(code) {
-                console.log('validateCoupon called with code:', code);
-                const feedback = document.getElementById('coupon-feedback');
-                const input = document.getElementById('coupon-input');
-                
-                console.log('Feedback element:', feedback);
-                console.log('Input element:', input);
-                
-                try {
-                    console.log('Making API request...');
-                    const response = await fetch('/api/coupons/activate', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            code: code,
-                            userId: this.userId
-                    })
-                });
-
-                    console.log('Response status:', response.status);
-                const result = await response.json();
-                    console.log('API response:', result);
-                    
-                    if (result.success) {
-                        this.showFeedback('success', `Купон "${code}" найден! Скидка: ${result.coupon.discount_amount}$`);
-                        input.classList.remove('error');
-                        input.classList.add('success');
-                        
-                        // Auto-apply the coupon
-                    setTimeout(() => {
-                            this.applyCoupon(result.coupon);
-                        }, 1000);
-                } else {
-                        this.showFeedback('error', result.message || 'Купон не найден или недействителен');
-                        input.classList.remove('success');
-                        input.classList.add('error');
-                }
-            } catch (error) {
-                    console.error('Error validating coupon:', error);
-                    this.showFeedback('error', 'Ошибка при проверке купона');
-                    input.classList.remove('success');
-                    input.classList.add('error');
-                }
-            }
-            
-            addCoupon(coupon) {
-                // Check if coupon is already applied
-                const existingCoupon = this.appliedCoupons.find(c => c.id === coupon.id);
-                if (!existingCoupon) {
-                    this.appliedCoupons.push(coupon);
-                    console.log('Coupon added:', coupon.name, 'Total applied coupons:', this.appliedCoupons.length);
-                    this.updatePackageSummary();
-                    this.showAppliedCoupons();
-                }
-            }
-            
-            removeCoupon(coupon) {
-                this.appliedCoupons = this.appliedCoupons.filter(c => c.id !== coupon.id);
-                console.log('Coupon removed:', coupon.name, 'Remaining coupons:', this.appliedCoupons.length);
-                this.updatePackageSummary();
-                this.showAppliedCoupons();
-            }
-            
-            // Keep old methods for backward compatibility
-            applyCoupon(coupon) {
-                this.addCoupon(coupon);
-            }
-            
-            removeCoupon() {
-                this.appliedCoupons = [];
-                this.updatePackageSummary();
-                this.hideAppliedCoupon();
-                
-                // Reset the switch to off position
-                const couponSwitch = document.getElementById('coupon-switch');
-                if (couponSwitch) {
-                    couponSwitch.checked = false;
-                }
-            }
-            
-            showAppliedCoupons() {
-                // Remove existing applied coupons display
-                const existingApplied = document.querySelectorAll('.applied-coupon');
-                existingApplied.forEach(el => el.remove());
-                
-                if (this.appliedCoupons.length > 0) {
-                    const packageSummary = document.getElementById('package-summary');
-                    if (packageSummary) {
-                        this.appliedCoupons.forEach(coupon => {
-                            const appliedDiv = document.createElement('div');
-                            appliedDiv.className = 'applied-coupon';
-                            appliedDiv.innerHTML = `
-                                <div class="applied-coupon-info">
-                                    <span class="applied-coupon-code">${coupon.code}</span>
-                                    <span class="applied-coupon-discount">Скидка: -$${coupon.discount_amount}</span>
-                                </div>
-                                <button class="remove-coupon-btn" onclick="checkoutCoupons.removeCoupon(${JSON.stringify(coupon).replace(/"/g, '&quot;')})">Удалить</button>
-                            `;
-                            packageSummary.appendChild(appliedDiv);
-                        });
-                    }
-                }
-            }
-            
-            // Keep old method for backward compatibility
-            showAppliedCoupon() {
-                this.showAppliedCoupons();
-            }
-            
-            removeCoupon() {
-                this.appliedCoupon = null;
-                this.updatePackageSummary();
-                
-                // Remove applied coupon display
-                const appliedCoupon = document.querySelector('.applied-coupon');
-                if (appliedCoupon) {
-                    appliedCoupon.remove();
-                }
-                
-                // Show banner again if there are available coupons
-                this.checkForRelevantCoupons();
-            }
-            
-            updatePackageAmount() {
-                // Get package amount from URL parameter
-                const urlParams = new URLSearchParams(window.location.search);
-                const packageId = urlParams.get('package') || 'sov-500';
-                
-                // Package data mapping
-                const packageData = {
-                    'sov-500': { total: 50.00, name: 'Пакет 500 $' },
-                    'sov-1000': { total: 100.00, name: 'Пакет 1000 $' },
-                    'sov-2000': { total: 200.00, name: 'Пакет 2000 $' },
-                    'airship-250': { total: 25.00, name: 'Пакет 250 $' },
-                    'airship-500': { total: 50.00, name: 'Пакет 500 $' },
-                    'airship-1000': { total: 100.00, name: 'Пакет 1000 $' }
-                };
-                
-                const packageInfo = packageData[packageId] || packageData['sov-500'];
-                this.packageAmount = packageInfo.total;
-                
-                console.log('Package amount updated:', this.packageAmount, 'for package:', packageId);
-            }
-            
-            updateCheckoutButton() {
-                const checkoutBtn = document.getElementById('checkout-btn');
-                if (!checkoutBtn) return;
-                
-                // Calculate total discount from all applied coupons
-                let discountAmount = 0;
-                this.appliedCoupons.forEach(coupon => {
-                    discountAmount += coupon.discount_amount;
-                });
-                
-                // Check if double payment is enabled
-                const doublePaymentSwitch = document.getElementById('double-payment-switch');
-                const isDoublePayment = doublePaymentSwitch ? doublePaymentSwitch.checked : false;
-                
-                // Calculate base amount (package amount * 2 if double payment is enabled)
-                const baseAmount = isDoublePayment ? this.packageAmount * 2 : this.packageAmount;
-                const finalAmount = Math.max(0, baseAmount - discountAmount);
-                
-                console.log('Updating checkout button:');
-                console.log('- User balance:', this.userBalance);
-                console.log('- Package amount:', this.packageAmount);
-                console.log('- Double payment enabled:', isDoublePayment);
-                console.log('- Base amount:', baseAmount);
-                console.log('- Discount amount:', discountAmount);
-                console.log('- Final amount:', finalAmount);
-                console.log('- Has enough balance:', this.userBalance >= finalAmount);
-                
-                if (this.userBalance < finalAmount) {
-                    // Not enough balance - show "Пополнить счёт" button
-                    console.log('Not enough balance - showing deposit button');
-                    checkoutBtn.textContent = 'Пополнить счёт';
-                    checkoutBtn.onclick = () => {
-                        window.location.href = 'deposit.html';
-                    };
-                    checkoutBtn.classList.add('btn--deposit');
-                } else {
-                    // Enough balance - show "Оформить пакет" button
-                    console.log('Enough balance - showing checkout button');
-                    checkoutBtn.textContent = 'Оформить пакет';
-                    checkoutBtn.onclick = () => {
-                        this.processCheckout();
-                    };
-                    checkoutBtn.classList.remove('btn--deposit');
-                }
-            }
-            
-            processCheckout() {
-                console.log('Processing checkout...');
-                // Add checkout logic here
-                alert('Оформление пакета (функция в разработке)');
-            }
-            
-            togglePaymentSchedule() {
-                const scheduleContent = document.getElementById('payment-schedule-content');
-                const toggleBtn = document.getElementById('toggle-schedule');
-                
-                if (scheduleContent && toggleBtn) {
-                    const isVisible = scheduleContent.style.display !== 'none';
-                    
-                    if (isVisible) {
-                        scheduleContent.style.display = 'none';
-                        toggleBtn.classList.remove('expanded');
-                    } else {
-                        scheduleContent.style.display = 'block';
-                        toggleBtn.classList.add('expanded');
-                    }
-                }
-            }
-            
-            generatePaymentSchedule() {
-                const scheduleContent = document.getElementById('payment-schedule-content');
-                if (!scheduleContent) return;
-                
-                // Generate 10 payment entries
-                const payments = [];
-                const startDate = new Date('2025-10-05');
-                
-                for (let i = 0; i < 10; i++) {
-                    const paymentDate = new Date(startDate);
-                    paymentDate.setMonth(paymentDate.getMonth() + i);
-                    
-                    const isBonus = i === 9; // Last payment is bonus
-                    
-                    payments.push({
-                        number: String(i + 1).padStart(2, '0'),
-                        date: paymentDate.toLocaleDateString('ru-RU'),
-                        amount: '50 $',
-                        type: isBonus ? 'Бонусный' : 'Стандартный',
-                        discount: isBonus ? '111' : '21',
-                        shares: isBonus ? '5 550' : '1 050',
-                        nominal: isBonus ? '5 550 $' : '1 050 $',
-                        perShare: isBonus ? '~0,0090 $' : '~0,0476 $',
-                        bonusShares: i === 0 ? '0' : '25'
-                    });
-                }
-                
-                scheduleContent.innerHTML = `
-                    <!-- Desktop Table -->
-                    <div class="payment-schedule-desktop">
-                        <table class="payment-schedule-table">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>Дата</th>
-                                    <th>Сумма</th>
-                                    <th>Вид</th>
-                                    <th>Дисконт</th>
-                                    <th>Долей</th>
-                                    <th>Номинал</th>
-                                    <th>За долю</th>
-                                    <th>Бонусные доли</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${payments.map(payment => `
-                                    <tr>
-                                        <td class="payment-number">${payment.number}</td>
-                                        <td class="payment-date">${payment.date}</td>
-                                        <td class="payment-amount">${payment.amount}</td>
-                                        <td>
-                                            <span class="payment-type ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
-                                                ${payment.type}
-                                            </span>
-                                        </td>
-                                        <td class="payment-discount">${payment.discount}</td>
-                                        <td class="payment-shares">${payment.shares}</td>
-                                        <td class="payment-nominal">${payment.nominal}</td>
-                                        <td class="payment-per-share">${payment.perShare}</td>
-                                        <td>
-                                            <span class="bonus-shares-badge">${payment.bonusShares}</span>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Mobile Cards -->
-                    <div class="payment-schedule-mobile">
-                        ${payments.map(payment => `
-                            <div class="payment-card-mobile">
-                                <div class="payment-card-header">
-                                    <div class="payment-number-mobile">${payment.number}</div>
-                                    <div class="payment-type-mobile ${payment.type === 'Бонусный' ? 'bonus' : 'standard'}">
-                                        ${payment.type}
-                                    </div>
-                                </div>
-                                <div class="payment-card-content">
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Дата:</span>
-                                        <span class="info-value">${payment.date}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Сумма:</span>
-                                        <span class="info-value payment-amount">${payment.amount}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Дисконт:</span>
-                                        <span class="info-value payment-discount">${payment.discount}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Долей:</span>
-                                        <span class="info-value payment-shares">${payment.shares}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Номинал:</span>
-                                        <span class="info-value payment-nominal">${payment.nominal}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">За долю:</span>
-                                        <span class="info-value payment-per-share">${payment.perShare}</span>
-                                    </div>
-                                    <div class="payment-info-row">
-                                        <span class="info-label">Бонусные доли:</span>
-                                        <span class="info-value">
-                                            <span class="bonus-shares-badge">${payment.bonusShares}</span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-            
-            updatePackageSummary() {
-                const summary = document.getElementById('package-summary');
-                const mobileSummary = document.getElementById('mobile-package-summary');
-                
-                // Calculate total discount from all applied coupons
-                let discountAmount = 0;
-                this.appliedCoupons.forEach(coupon => {
-                    discountAmount += coupon.discount_amount;
-                });
-                
-                // Check if double payment is enabled
-                const doublePaymentSwitch = document.getElementById('double-payment-switch');
-                const isDoublePayment = doublePaymentSwitch ? doublePaymentSwitch.checked : false;
-                
-                // Calculate base amount (package amount * 2 if double payment is enabled)
-                const baseAmount = isDoublePayment ? this.packageAmount * 2 : this.packageAmount;
-                const finalAmount = Math.max(0, baseAmount - discountAmount);
-                
-                console.log('updatePackageSummary called:');
-                console.log('- Package amount:', this.packageAmount);
-                console.log('- Double payment enabled:', isDoublePayment);
-                console.log('- Base amount:', baseAmount);
-                console.log('- Discount amount:', discountAmount);
-                console.log('- Final amount:', finalAmount);
-                
-                const summaryHTML = `
-                    <div class="package-summary-item">
-                        <span>Стоимость пакета:</span>
-                        <span>$${this.packageAmount}</span>
-                    </div>
-                    ${isDoublePayment ? `
-                        <div class="package-summary-item">
-                            <span>Двойной платёж:</span>
-                            <span>$${this.packageAmount}</span>
-                        </div>
-                    ` : ''}
-                    ${discountAmount > 0 ? `
-                        <div class="package-summary-item discount">
-                            <span>Скидка по купону:</span>
-                            <span>-$${discountAmount}</span>
-                        </div>
-                    ` : ''}
-                    <div class="package-summary-item total">
-                        <span>Итого к оплате:</span>
-                        <span>$${finalAmount}</span>
-                    </div>
-                `;
-                
-                if (summary) {
-                    summary.innerHTML = summaryHTML;
-                }
-                
-                if (mobileSummary) {
-                    mobileSummary.innerHTML = `
-                        <div class="mobile-summary-item">
-                            <span>Номинал:</span>
-                            <span>15 000 $</span>
-                        </div>
-                        ${discountAmount > 0 ? `
-                            <div class="mobile-summary-item discount">
-                                <span>Скидка:</span>
-                                <span>-$${discountAmount}</span>
-                            </div>
-                        ` : ''}
-                        <div class="mobile-summary-item total">
-                            <span>Итого:</span>
-                            <span>$${finalAmount}</span>
-                        </div>
-                    `;
-                }
-                
-                // Update checkout button based on new amount
-                this.updateCheckoutButton();
-            }
-            
-            showFeedback(type, message) {
-                console.log('showFeedback called:', type, message);
-                const feedback = document.getElementById('coupon-feedback');
-                console.log('Feedback element:', feedback);
-                if (feedback) {
-                    feedback.textContent = message;
-                    feedback.className = `coupon-feedback ${type}`;
-                    console.log('Feedback updated');
-                } else {
-                    console.error('Feedback element not found!');
-                }
-            }
-            
-            hideCouponBanner() {
-                const card = document.getElementById('coupon-card');
-                if (card) {
-                    card.style.display = 'none';
-                }
-            }
-            
-            hideAppliedCoupon() {
-                const existingApplied = document.querySelector('.applied-coupon');
-                if (existingApplied) {
-                    existingApplied.remove();
-                }
-            }
-        }
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, initializing CheckoutCoupons');
-            window.checkoutCoupons = new CheckoutCoupons();
-            console.log('CheckoutCoupons initialized:', window.checkoutCoupons);
-        });
-    </script>
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/coupon-package.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+    <script src="checkout.js"></script>
 </body>
 </html>

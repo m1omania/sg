@@ -57,8 +57,59 @@ class FullCouponCard extends HTMLElement {
         return projectColors[this.coupon.project_name] || projectColors.default;
     }
 
+    formatExpiryDate(expiresAt) {
+        if (!expiresAt) return '';
+        const now = new Date();
+        const expiry = new Date(expiresAt);
+        const diffTime = expiry.getTime() - now.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays < 0) return 'Истёк';
+
+        const day = expiry.getDate();
+        const month = expiry.toLocaleDateString('ru-RU', { month: 'long' });
+        
+        // Правильное склонение месяцев
+        const monthGenitive = {
+            'январь': 'января',
+            'февраль': 'февраля',
+            'март': 'марта',
+            'апрель': 'апреля',
+            'май': 'мая',
+            'июнь': 'июня',
+            'июль': 'июля',
+            'август': 'августа',
+            'сентябрь': 'сентября',
+            'октябрь': 'октября',
+            'ноябрь': 'ноября',
+            'декабрь': 'декабря'
+        };
+        
+        const monthCorrect = monthGenitive[month] || month;
+        return `до ${day} ${monthCorrect}`;
+    }
+
+    getStatusOverlay() {
+        if (!this.isHistory) return '';
+        
+        // Определяем статус купона
+        if (this.coupon.status === 'expired') {
+            return '<div class="coupon-used-overlay">ИСТЁК</div>';
+        } else if (this.coupon.status === 'revoked') {
+            return '<div class="coupon-used-overlay">ОТОЗВАН</div>';
+        } else if (this.coupon.used) {
+            return '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>';
+        }
+        
+        return '';
+    }
+
     connectedCallback() {
         this.render();
+        // Force re-render to ensure responsive styles apply
+        setTimeout(() => this.render(), 100);
+        // Additional re-render after a longer delay
+        setTimeout(() => this.render(), 500);
     }
 
     render() {
@@ -67,13 +118,19 @@ class FullCouponCard extends HTMLElement {
             return;
         }
 
-        const statusClass = this.isHistory ? 'used' : 'active';
-        const statusText = this.isHistory ? 'Использован' : 'Активен';
-        const expiresAt = new Date(this.coupon.expires_at).toLocaleDateString('ru-RU');
-
         this.shadowRoot.innerHTML = `
             <style>
-                /* Base styles for the coupon card */
+                /* Host element styles */
+                :host {
+                    display: block !important;
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    min-width: 0 !important;
+                    flex: 1 1 auto !important;
+                    box-sizing: border-box !important;
+                }
+                
+                /* Base styles for the coupon card - v4.0 with parts */
                 .coupon-card {
                     background: #ffffff;
                     border-radius: 20px;
@@ -84,9 +141,13 @@ class FullCouponCard extends HTMLElement {
                     flex-direction: column;
                     gap: 20px;
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                    width: 350px;
-                    flex-shrink: 0;
-                    margin: 0 auto;
+                    width: 100%;
+                    max-width: 100%;
+                    min-width: 0;
+                    flex: 1 1 auto;
+                    flex-shrink: 1;
+                    margin: 0;
+                    box-sizing: border-box;
                 }
 
                 .coupon-card:hover {
@@ -269,10 +330,21 @@ class FullCouponCard extends HTMLElement {
 
                 /* Responsive adjustments */
                 @media (max-width: 768px) {
+                    :host {
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
+                    }
+                    
                     .coupon-card {
                         padding: 20px;
                         gap: 2px;
-                        margin: 0 16px;
+                        margin: 0;
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
                     }
                     
                     .coupon-title {
@@ -296,6 +368,22 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 @media (max-width: 480px) {
+                    :host {
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
+                    }
+                    
+                    .coupon-card {
+                        padding: 16px;
+                        margin: 0;
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
+                    }
+                    
                     .coupon-used-overlay {
                         font-size: 1.2rem;
                         padding: 3px 6px;
@@ -304,6 +392,22 @@ class FullCouponCard extends HTMLElement {
                 }
 
                 @media (max-width: 360px) {
+                    :host {
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
+                    }
+                    
+                    .coupon-card {
+                        padding: 12px;
+                        margin: 0;
+                        width: 100%;
+                        max-width: 100%;
+                        min-width: 0;
+                        flex: 1 1 auto;
+                    }
+                    
                     .coupon-used-overlay {
                         font-size: 1rem;
                         padding: 2px 4px;
@@ -311,8 +415,8 @@ class FullCouponCard extends HTMLElement {
                     }
                 }
             </style>
-            <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}">
-                ${this.isHistory ? '<div class="coupon-used-overlay">ИСПОЛЬЗОВАН</div>' : ''}
+            <div class="coupon-card ${this.coupon.is_expiring ? 'expiring' : ''} ${this.isHistory ? 'used' : ''}" part="coupon-card">
+                ${this.getStatusOverlay()}
                 
                 <div class="coupon-project-badge" style="background: ${this.getBadgeColor()}">${this.coupon.project_name}</div>
                 
@@ -322,7 +426,7 @@ class FullCouponCard extends HTMLElement {
                 </div>
                 
                 <div class="coupon-progress-section">
-                    <div class="coupon-progress-text">До ${new Date(this.coupon.expires_at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}</div>
+                    <div class="coupon-progress-text">${this.formatExpiryDate(this.coupon.expires_at)}</div>
                     <div class="coupon-progress-bar">
                         <div class="coupon-progress-fill" style="width: ${this.calculateProgress()}%"></div>
                     </div>

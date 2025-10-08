@@ -1,132 +1,237 @@
-// Invest page functionality
+// Investment page functionality
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Invest page loaded, initializing...');
+    console.log('Investment page loaded, initializing...');
     
-    const viewPackagesBtns = document.querySelectorAll('.btn--primary');
-    const investmentModal = document.getElementById('investment-modal');
-    const confirmInvestmentBtn = document.getElementById('confirm-investment-btn');
-    const successNotification = document.getElementById('success-notification');
+    initializeInvestmentPage();
+    setupModalHandlers();
+});
+
+function initializeInvestmentPage() {
+    console.log('Initializing investment page...');
     
-    // Add click handlers for "Смотреть пакеты" buttons
-    viewPackagesBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const projectCard = this.closest('.project-card');
-            const projectName = projectCard.querySelector('h2').textContent; // Changed from h3 to h2
-            
-            console.log('View packages clicked for:', projectName);
-            
-            // Redirect to packages page with project filter
-            const projectMap = {
-                'Дирижабли': 'airships',
-                'Совэлмаш': 'sovelmash'
-            };
-            
-            const projectFilter = projectMap[projectName] || 'all';
-            window.location.href = `packages.html?project=${projectFilter}`;
-        });
-    });
-    
-    // Investment modal functionality
-    if (investmentModal) {
-        // Close modal handlers
-        document.querySelectorAll('.modal-close').forEach(button => {
-            button.addEventListener('click', function() {
-                investmentModal.classList.add('hidden');
-            });
-        });
+    // Load projects data
+    loadProjects();
+}
+
+async function loadProjects() {
+    try {
+        console.log('Loading projects...');
         
-        window.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal')) {
-                investmentModal.classList.add('hidden');
+        // Mock projects data
+        const projects = [
+            {
+                id: 1,
+                name: 'Дирижабли',
+                category: 'Транспорт',
+                description: 'Инвестируйте в инновационные проекты воздушных дирижаблей. Современные технологии и экологичный транспорт будущего.',
+                yield: 12,
+                duration: '3 года',
+                minAmount: 500,
+                status: 'active',
+                image: 'https://picsum.photos/400/200?random=1'
+            },
+            {
+                id: 2,
+                name: 'Совэлмаш',
+                category: 'Машиностроение',
+                description: 'Инвестируйте в развитие современного машиностроительного завода. Перспективный проект с высокой отдачей.',
+                yield: 15,
+                duration: '5 лет',
+                minAmount: 1000,
+                status: 'active',
+                image: 'https://picsum.photos/400/200?random=2'
             }
-        });
+        ];
+        
+        console.log('Projects loaded:', projects);
+        renderProjects(projects);
+        
+    } catch (error) {
+        console.error('Error loading projects:', error);
+        showError('Ошибка загрузки проектов');
     }
+}
+
+function renderProjects(projects) {
+    const container = document.getElementById('projects-container');
+    if (!container) return;
     
-    // Confirm investment button
-    if (confirmInvestmentBtn) {
-        confirmInvestmentBtn.addEventListener('click', async function() {
-            const projectSelect = document.getElementById('project-select');
-            const amountInput = document.getElementById('amount-input');
-            const couponInput = document.getElementById('coupon-input');
-            
-            if (!projectSelect || !amountInput) {
-                console.error('Required form elements not found');
-                return;
-            }
-            
-            const project = projectSelect.value;
-            const amount = parseFloat(amountInput.value);
-            const coupon = couponInput ? couponInput.value.trim() : '';
-            
-            if (!project || !amount || amount <= 0) {
-                alert('Пожалуйста, заполните все поля корректно');
-                return;
-            }
-            
-            console.log('Confirming investment:', { project, amount, coupon });
-            
-            try {
-                // Show loading state
-                const originalText = confirmInvestmentBtn.textContent;
-                confirmInvestmentBtn.textContent = 'Обработка...';
-                confirmInvestmentBtn.disabled = true;
-                
-                // Simulate investment processing
-                const response = await fetch('/api/transactions/invest', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userId: 1,
-                        packageId: project,
-                        amount: amount,
-                        account: 'main', // Default to main account
-                        paymentType: 'single'
-                    })
-                });
-                
-                const result = await response.json();
-                console.log('Investment result:', result);
-                
-                if (response.ok) {
-                    showSuccess('Инвестиция успешно оформлена!');
-                    investmentModal.classList.add('hidden');
-                    
-                    // Redirect to my investments page
-                    setTimeout(() => {
-                        window.location.href = 'my-investments.html';
-                    }, 2000);
-                } else {
-                    alert(result.error || 'Ошибка оформления инвестиции');
-                }
-            } catch (error) {
-                console.error('Investment error:', error);
-                alert('Ошибка сети. Попробуйте позже.');
-            } finally {
-                // Restore button state
-                confirmInvestmentBtn.textContent = originalText;
-                confirmInvestmentBtn.disabled = false;
-            }
-        });
-    }
+    container.innerHTML = projects.map(project => `
+        <project-card project-data='${JSON.stringify(project)}'></project-card>
+    `).join('');
     
-    // Notification close handlers
-    document.querySelectorAll('.notification-close').forEach(button => {
-        button.addEventListener('click', function() {
-            this.closest('.notification').classList.add('hidden');
-        });
+    // Add event listeners for project cards
+    container.addEventListener('project-view-packages', (e) => {
+        console.log('Project view packages clicked:', e.detail.project);
+        // Redirect to packages page with project filter
+        const projectId = e.detail.project.id;
+        window.location.href = `packages.html?project=${projectId}`;
     });
+}
+
+function setupModalHandlers() {
+    const modal = document.getElementById('investmentModal');
+    const modalClose = document.getElementById('modalClose');
+    const cancelBtn = document.getElementById('cancelInvestment');
+    const confirmBtn = document.getElementById('confirmInvestment');
+    const form = document.getElementById('investmentForm');
     
-    function showSuccess(message) {
-        if (successNotification) {
-            const notificationText = successNotification.querySelector('#notification-text');
-            if (notificationText) notificationText.textContent = message;
-            successNotification.classList.remove('hidden');
-            
-            setTimeout(() => {
-                successNotification.classList.add('hidden');
-            }, 5000);
+    // Close modal handlers
+    if (modalClose) {
+        modalClose.addEventListener('click', () => closeModal());
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => closeModal());
+    }
+    
+    // Confirm investment
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleInvestment();
+        });
+    }
+    
+    // Close modal when clicking outside
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    }
+}
+
+function openModal(project) {
+    const modal = document.getElementById('investmentModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Update form with project data
+        const amountInput = document.getElementById('investmentAmount');
+        if (amountInput && project) {
+            amountInput.min = project.minAmount;
+            amountInput.value = project.minAmount;
         }
     }
-});
+}
+
+function closeModal() {
+    const modal = document.getElementById('investmentModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        const form = document.getElementById('investmentForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+async function handleInvestment() {
+    const form = document.getElementById('investmentForm');
+    if (!form) return;
+    
+    const formData = new FormData(form);
+    const investmentData = {
+        amount: parseFloat(formData.get('amount')),
+        period: parseInt(formData.get('period')),
+        paymentMethod: formData.get('paymentMethod')
+    };
+    
+    console.log('Investment data:', investmentData);
+    
+    // Validate investment
+    if (investmentData.amount < 500) {
+        showError('Минимальная сумма инвестиции: $500');
+        return;
+    }
+    
+    try {
+        // Simulate investment processing
+        console.log('Processing investment...');
+        
+        // Show success message
+        showSuccess('Инвестиция успешно оформлена!');
+        
+        // Close modal
+        closeModal();
+        
+        // Redirect to my investments page
+        setTimeout(() => {
+            window.location.href = 'my-investments.html';
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Investment error:', error);
+        showError('Ошибка при оформлении инвестиции');
+    }
+}
+
+function showError(message) {
+    // Create or update error notification
+    let notification = document.getElementById('error-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'error-notification';
+        notification.className = 'notification notification--error';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">❌</span>
+                <span class="notification-text">${message}</span>
+                <button class="notification-close">&times;</button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Add close handler
+        notification.querySelector('.notification-close').addEventListener('click', function() {
+            notification.classList.add('hidden');
+        });
+    }
+    
+    const notificationText = notification.querySelector('.notification-text');
+    if (notificationText) {
+        notificationText.textContent = message;
+    }
+    notification.classList.remove('hidden');
+    setTimeout(() => {
+        notification.classList.add('hidden');
+    }, 5000);
+}
+
+function showSuccess(message) {
+    // Create or update success notification
+    let notification = document.getElementById('success-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'success-notification';
+        notification.className = 'notification notification--success';
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">✅</span>
+                <span class="notification-text">${message}</span>
+                <button class="notification-close">&times;</button>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Add close handler
+        notification.querySelector('.notification-close').addEventListener('click', function() {
+            notification.classList.add('hidden');
+        });
+    }
+    
+    const notificationText = notification.querySelector('.notification-text');
+    if (notificationText) {
+        notificationText.textContent = message;
+    }
+    notification.classList.remove('hidden');
+    setTimeout(() => {
+        notification.classList.add('hidden');
+    }, 5000);
+}

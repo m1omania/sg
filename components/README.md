@@ -61,7 +61,6 @@ loadComponent('components/new-component.html', '#new-component-placeholder');
 - ✅ `deposit.html`
 - ✅ `checkout.html`
 - ✅ `packages.html`
-- ✅ `projects.html`
 - ✅ `landing.html`
 - ✅ `register.html`
 - ✅ `coupons.html`

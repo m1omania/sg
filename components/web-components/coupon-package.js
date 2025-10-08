@@ -30,6 +30,46 @@ class CouponPackage extends HTMLElement {
         this.render();
     }
 
+    formatExpiryDate(expiresAt) {
+        if (!expiresAt) return '';
+        const now = new Date();
+        const expiry = new Date(expiresAt);
+        const diffTime = expiry.getTime() - now.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        console.log('🔍 formatExpiryDate:', {
+            expiresAt,
+            now: now.toISOString(),
+            expiry: expiry.toISOString(),
+            diffDays,
+            isExpired: diffDays < 0
+        });
+
+        if (diffDays < 0) return 'Истёк';
+
+        const day = expiry.getDate();
+        const month = expiry.toLocaleDateString('ru-RU', { month: 'long' });
+        
+        // Правильное склонение месяцев
+        const monthGenitive = {
+            'январь': 'января',
+            'февраль': 'февраля',
+            'март': 'марта',
+            'апрель': 'апреля',
+            'май': 'мая',
+            'июнь': 'июня',
+            'июль': 'июля',
+            'август': 'августа',
+            'сентябрь': 'сентября',
+            'октябрь': 'октября',
+            'ноябрь': 'ноября',
+            'декабрь': 'декабря'
+        };
+        
+        const monthCorrect = monthGenitive[month] || month;
+        return `до ${day} ${monthCorrect}`;
+    }
+
     connectedCallback() {
         this.render();
     }
@@ -68,6 +108,12 @@ class CouponPackage extends HTMLElement {
                     font-size: 14px;
                     font-weight: 500;
                     color: #374151;
+                    margin: 0 0 4px 0;
+                }
+                
+                .coupon-expiry {
+                    font-size: 12px;
+                    color: #6b7280;
                     margin: 0;
                 }
 
@@ -124,7 +170,10 @@ class CouponPackage extends HTMLElement {
                 }
             </style>
             <div class="coupon-package ${this.isActive ? 'active' : ''}">
-                <p class="coupon-text">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</p>
+                <div class="coupon-info">
+                    <p class="coupon-text">${this.coupon.discount_amount}${this.coupon.discount_type === 'percentage' ? '%' : '$'} ${this.coupon.name}</p>
+                    <p class="coupon-expiry">${this.formatExpiryDate(this.coupon.expires_at)}</p>
+                </div>
                 <label class="coupon-switch">
                     <input type="checkbox" ${this.isActive ? 'checked' : ''}>
                     <span class="coupon-slider"></span>

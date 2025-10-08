@@ -588,7 +588,7 @@ app.get('/api/coupons/active/:userId', (req, res) => {
       discount: 50,
       discount_amount: 50,
       project_name: 'Дирижабли',
-      expires_at: '2025-06-30T23:59:59.000Z',
+      expires_at: '2026-06-30T23:59:59.000Z',
       conditions: 'Только для проекта Дирижабли',
       used: false,
       created_at: '2025-01-15T00:00:00.000Z'
@@ -601,15 +601,17 @@ app.get('/api/coupons/active/:userId', (req, res) => {
       discount: 20,
       discount_amount: 20,
       project_name: 'Совэлмаш',
-      expires_at: '2025-01-31T23:59:59.000Z',
+      expires_at: '2026-01-31T23:59:59.000Z',
       conditions: 'Только для проекта Совэлмаш',
       used: false,
       created_at: '2024-12-01T00:00:00.000Z'
     }
   ];
   
-  // Filter out used coupons
-  const activeCoupons = demoCoupons.filter(coupon => !DEMO_USED_COUPONS.has(coupon.id));
+  // Filter out used coupons and sort by expiry date
+  const activeCoupons = demoCoupons
+    .filter(coupon => !DEMO_USED_COUPONS.has(coupon.id))
+    .sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
   console.log('Active coupons for user', userId, ':', activeCoupons.length);
   console.log('Used coupons:', Array.from(DEMO_USED_COUPONS));
   
@@ -636,7 +638,7 @@ app.post('/api/coupons/activate', (req, res) => {
       discount: code === 'WELCOME25' ? 25 : (code === 'INVEST50' ? 50 : 20),
       discount_amount: code === 'WELCOME25' ? 25 : (code === 'INVEST50' ? 50 : 20),
       project_name: code === 'WELCOME25' ? 'Все проекты' : (code === 'INVEST50' ? 'Дирижабли' : 'Совэлмаш'),
-      expires_at: code === 'WELCOME25' ? '2025-12-31T23:59:59.000Z' : (code === 'INVEST50' ? '2025-06-30T23:59:59.000Z' : '2025-01-31T23:59:59.000Z'),
+      expires_at: code === 'WELCOME25' ? '2025-12-31T23:59:59.000Z' : (code === 'INVEST50' ? '2026-06-30T23:59:59.000Z' : '2026-01-31T23:59:59.000Z'),
       conditions: code === 'WELCOME25' ? 'Минимальная сумма $250' : (code === 'INVEST50' ? 'Только для проекта Дирижабли' : 'Только для проекта Совэлмаш'),
       used: false,
       created_at: '2025-01-01T00:00:00.000Z'
@@ -788,9 +790,6 @@ app.get('/register.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../register.html'));
 });
 
-app.get('/projects.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../projects.html'));
-});
 
 app.get('/invest.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../invest.html'));

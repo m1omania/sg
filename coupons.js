@@ -127,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
         card.setCouponData(coupon);
         card.setHistory(isHistory);
         
+        // Force responsive styles
+        setTimeout(() => {
+            card.style.width = '100%';
+            card.style.maxWidth = '100%';
+            card.style.minWidth = '0';
+            card.style.flex = '1 1 auto';
+        }, 100);
+        
         // Add event listeners for the Web Component
         card.addEventListener('coupon-use', (e) => {
             useCoupon(e.detail.coupon.id);
@@ -344,16 +352,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return url;
     }
     
-    // Setup refresh button
-    function setupRefreshButton() {
-        const refreshBtn = document.getElementById('refresh-coupons-btn');
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                console.log('Refresh button clicked');
-                refreshAllCoupons();
-            });
-        }
-    }
     
     // Setup auto refresh
     function setupAutoRefresh() {
@@ -376,23 +374,12 @@ document.addEventListener('DOMContentLoaded', function() {
     async function refreshAllCoupons() {
         console.log('Refreshing all coupons...');
         
-        // Add loading state to refresh button
-        const refreshBtn = document.getElementById('refresh-coupons-btn');
-        if (refreshBtn) {
-            refreshBtn.classList.add('loading');
-            refreshBtn.disabled = true;
-        }
-        
         try {
             await loadActiveCoupons();
             await loadHistoryCoupons();
             console.log('All coupons refreshed');
-        } finally {
-            // Remove loading state
-            if (refreshBtn) {
-                refreshBtn.classList.remove('loading');
-                refreshBtn.disabled = false;
-            }
+        } catch (error) {
+            console.error('Error refreshing coupons:', error);
         }
     }
     
@@ -400,6 +387,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Starting to load active coupons...');
     loadActiveCoupons();
     loadHistoryCoupons();
-    setupRefreshButton();
     setupAutoRefresh();
 });

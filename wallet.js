@@ -70,9 +70,114 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    // Load coupons
+    async function loadMyCoupons() {
+        try {
+            console.log('Loading my coupons...');
+            const response = await fetch('/api/coupons/active/1');
+            const result = await response.json();
+            const coupons = Array.isArray(result) ? result : (result.data || []);
+            console.log('Active coupons from API:', coupons);
+            
+            const couponsList = document.getElementById('my-coupons-list');
+            if (!couponsList) {
+                console.error('Coupons list container not found');
+                return;
+            }
+            
+            if (coupons.length === 0) {
+                couponsList.innerHTML = '';
+                return;
+            }
+            
+            // Show only first 3 coupons in wallet
+            const displayCoupons = coupons.slice(0, 3);
+            
+            couponsList.innerHTML = displayCoupons.map(coupon => `
+                <mini-coupon coupon-data='${JSON.stringify(coupon)}'></mini-coupon>
+            `).join('');
+            
+            console.log('My coupons loaded:', displayCoupons.length);
+        } catch (e) {
+            console.error('Error loading my coupons:', e);
+        }
+    }
+
+    // Setup coupon event listeners
+    function setupCouponEventListeners() {
+        document.addEventListener('coupon-use', function(e) {
+            e.stopPropagation(); // Prevent event bubbling
+            const coupon = e.detail.coupon;
+            console.log('Coupon use clicked from wallet:', coupon);
+            
+            // Use the same logic as other pages
+            useCoupon(coupon.id);
+        });
+    }
+
+    // Global function for coupon usage (same as other pages)
+    window.useCoupon = async function(couponId) {
+        console.log('Use coupon from wallet:', couponId);
+        
+        try {
+            // First, get the coupon data before using it
+            const couponResponse = await fetch('/api/coupons/active/1');
+            const couponResult = await couponResponse.json();
+            const activeCoupons = Array.isArray(couponResult) ? couponResult : (couponResult.data || []);
+            
+            const coupon = activeCoupons.find(c => c.id === couponId);
+            if (!coupon) {
+                alert('Купон не найден');
+                return;
+            }
+            
+            console.log('Coupon found:', coupon.name);
+            
+            // Store coupon in sessionStorage for checkout page
+            sessionStorage.setItem('selectedCoupon', JSON.stringify(coupon));
+            console.log('Coupon stored in sessionStorage for checkout');
+            
+            // Navigate based on coupon type using original coupon data
+            if (coupon.project_name === 'Любой' || coupon.project_name === 'Все проекты') {
+                // General coupon - go to invest page
+                window.location.href = '/invest.html';
+            } else {
+                // Specific project coupon - go to packages page
+                const projectUrl = getProjectUrl(coupon.project_name);
+                console.log('Redirecting to:', projectUrl);
+                window.location.href = projectUrl;
+            }
+        } catch (error) {
+            console.error('Error using coupon:', error);
+            alert('Ошибка при использовании купона');
+        }
+    };
+    
+    // Helper function to get project URL
+    function getProjectUrl(projectName) {
+        const projectUrls = {
+            'Дирижабли': '/packages.html?project=airships',
+            'Совэлмаш': '/packages.html?project=sovelmash'
+        };
+        return projectUrls[projectName] || '/packages.html';
+    }
+
+    // Refresh coupons when page becomes visible (user returns from other pages)
+    function setupPageVisibilityListener() {
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log('Page became visible, refreshing coupons...');
+                loadMyCoupons();
+            }
+        });
+    }
+
     // Initialize page
     loadWalletBalances();
     loadTransactions();
+    loadMyCoupons();
+    setupCouponEventListeners();
+    setupPageVisibilityListener();
 
 
 

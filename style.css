@@ -1514,9 +1514,6 @@ select.form-control {
 }
 
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: var(--space-32);
 }
 
@@ -1526,33 +1523,21 @@ select.form-control {
   margin: 0;
 }
 
-.page-header .btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
+/* Insufficient Funds Warning */
+.insufficient-funds-warning {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  color: #dc2626;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.page-header .btn svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.2s ease;
-}
-
-.page-header .btn:hover svg {
-  transform: rotate(180deg);
-}
-
-.page-header .btn:active svg {
-  transform: rotate(360deg);
-}
-
-.page-header .btn.loading svg {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.insufficient-funds-warning strong {
+  font-weight: 600;
+  color: #b91c1c;
 }
 
 /* Loading and Empty States */
@@ -3391,9 +3376,13 @@ input:checked + .slider:before {
 }
   
   .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-16);
+    margin-bottom: var(--space-24);
+  }
+  
+  .insufficient-funds-warning {
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 13px;
   }
   
   .search-filter {
@@ -5094,6 +5083,41 @@ body:not(.landing-page) sg-header-landing {
   gap: var(--space-12);
 }
 
+/* My Coupons Section */
+.my-coupons-section {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  padding: var(--space-24);
+  margin-bottom: var(--space-24);
+}
+
+.my-coupons__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-20);
+}
+
+.my-coupons__header h2 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.my-coupons__content #my-coupons-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-16);
+}
+
+@media (max-width: 768px) {
+  .my-coupons__content #my-coupons-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 .no-coupons {
   text-align: center;
   color: var(--color-text-secondary);
@@ -5103,12 +5127,18 @@ body:not(.landing-page) sg-header-landing {
 
 /* Coupons Page Styles */
 .coupons-grid {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: var(--space-24);
   margin-top: var(--space-24);
-  align-items: flex-start;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .coupons-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-16);
+  }
 }
 
 .coupon-card {
@@ -5117,8 +5147,8 @@ body:not(.landing-page) sg-header-landing {
   border-radius: var(--radius-lg);
   padding: var(--space-24);
   transition: all 0.2s ease;
-  width: 350px;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .coupon-card:hover {

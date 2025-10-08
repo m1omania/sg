@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Демо мини-купонов - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .demo-section {
+            margin-bottom: 3rem;
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .demo-description {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+        
+        .coupons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Web Component Header -->
+    <sg-header></sg-header>
+
+    <div class="app-layout">
+        <!-- Web Component Sidebar -->
+        <sg-sidebar></sg-sidebar>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="demo-container">
+                <h1>Демонстрация мини-купонов</h1>
+                
+                <!-- Active Coupons -->
+                <div class="demo-section">
+                    <h2 class="demo-title">Активные купоны</h2>
+                    <p class="demo-description">Доступные для использования купоны</p>
+                    <div class="coupons-list" id="active-coupons">
+                        <!-- Active coupons will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Grid Layout -->
+                <div class="demo-section">
+                    <h2 class="demo-title">Сетка купонов</h2>
+                    <p class="demo-description">Отображение в виде сетки для компактного просмотра</p>
+                    <div class="coupons-grid" id="grid-coupons">
+                        <!-- Grid coupons will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Coupons Data -->
+    <script src="data/coupons-data.js"></script>
+    
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/mini-coupon.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+    <script>
+        // Use unified coupons data
+        const demoCoupons = window.CouponsData.getActiveCoupons();
+
+        // Load demo coupons
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDemoCoupons();
+            setupEventListeners();
+        });
+
+        function loadDemoCoupons() {
+            // All coupons are active
+            renderCoupons(demoCoupons, 'active-coupons');
+
+            // Grid coupons (all 3 active coupons)
+            renderCoupons(demoCoupons, 'grid-coupons');
+        }
+
+        function renderCoupons(coupons, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            container.innerHTML = coupons.map(coupon => `
+                <mini-coupon coupon-data='${JSON.stringify(coupon)}'></mini-coupon>
+            `).join('');
+        }
+
+        function setupEventListeners() {
+            // Listen for coupon-use events
+            document.addEventListener('coupon-use', function(e) {
+                const coupon = e.detail.coupon;
+                console.log('Coupon use clicked:', coupon);
+                
+                // Use the same logic as full-coupon-card
+                useCoupon(coupon.id);
+            });
+        }
+
+        // Global function for coupon usage (same as coupons.js)
+        window.useCoupon = function(couponId) {
+            console.log('Use coupon:', couponId);
+            
+            // Find coupon data using unified data source
+            let coupon = window.CouponsData.getCouponById(couponId);
+            
+            if (coupon) {
+                console.log('Using coupon:', coupon);
+                
+                // Navigate based on coupon type (same logic as coupons.js)
+                if (coupon.project_name === 'Любой' || coupon.project_name === 'Все проекты') {
+                    // General coupon - go to invest page
+                    window.location.href = '/invest.html';
+                } else {
+                    // Specific project coupon - go to packages page
+                    const projectUrl = window.CouponsData.getProjectUrl(coupon.project_name);
+                    console.log('Redirecting to:', projectUrl);
+                    window.location.href = projectUrl;
+                }
+            } else {
+                alert('Купон не найден');
+            }
+        };
+    </script>
+</body>
+</html>

@@ -57,6 +57,10 @@ class APIAdapter {
                     result = await this.localStorageAPI.processDeposit(body);
                     break;
                 
+                case '/transactions/invest':
+                    result = await this.localStorageAPI.processInvestment(body);
+                    break;
+                
                 case '/investments/1':
                     result = await this.localStorageAPI.getInvestments(1);
                     break;
@@ -71,6 +75,18 @@ class APIAdapter {
                 
                 case '/projects/2':
                     result = await this.localStorageAPI.getProject(2);
+                    break;
+                
+                case '/auth/send-verification':
+                    result = await this.localStorageAPI.sendVerificationCode(body.email);
+                    break;
+                
+                case '/auth/register':
+                    result = await this.localStorageAPI.registerUser(body.email, body.code);
+                    break;
+                
+                case '/auth/login':
+                    result = await this.localStorageAPI.loginUser(body.email, body.password);
                     break;
                 
                 default:

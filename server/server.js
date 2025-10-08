@@ -157,10 +157,6 @@ app.get('/deposit', (req, res) => {
   res.sendFile(path.join(__dirname, '../deposit.html'));
 });
 
-// Новая страница проектов
-app.get('/projects', (req, res) => {
-  res.sendFile(path.join(__dirname, '../projects.html'));
-});
 
 // Новая страница моих инвестиций
 app.get('/my-investments', (req, res) => {

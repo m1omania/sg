@@ -344,6 +344,10 @@ class SGHeader extends HTMLElement {
                                 <span class="dropdown-menu-item-icon">⚙️</span>
                                 Настройки
                             </a>
+                            <a href="components.html" class="dropdown-menu-item">
+                                <span class="dropdown-menu-item-icon">🧩</span>
+                                Компоненты
+                            </a>
                             <a href="#" class="dropdown-menu-item">
                                 <span class="dropdown-menu-item-icon">📄</span>
                                 Документы

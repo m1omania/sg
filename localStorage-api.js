@@ -69,7 +69,7 @@ class LocalStorageAPI {
                     discount: 50,
                     discount_amount: 50,
                     project_name: 'Дирижабли',
-                    expires_at: '2025-06-30T23:59:59.000Z',
+                    expires_at: '2026-06-30T23:59:59.000Z',
                     conditions: 'Только для проекта Дирижабли',
                     used: false,
                     created_at: '2025-01-15T00:00:00.000Z',
@@ -83,7 +83,7 @@ class LocalStorageAPI {
                     discount: 20,
                     discount_amount: 20,
                     project_name: 'Совэлмаш',
-                    expires_at: '2025-01-31T23:59:59.000Z',
+                    expires_at: '2026-01-31T23:59:59.000Z',
                     conditions: 'Только для проекта Совэлмаш',
                     used: false,
                     created_at: '2024-12-01T00:00:00.000Z',
@@ -92,9 +92,51 @@ class LocalStorageAPI {
             ];
         }
         
+        // Принудительно добавляем купоны в историю, если их там нет
         if (!this.data.used_coupons) {
             this.data.used_coupons = [];
         }
+        
+        // Проверяем, есть ли уже наши специальные купоны
+        const hasExpiredCoupon = this.data.used_coupons.some(c => c.id === 4);
+        const hasRevokedCoupon = this.data.used_coupons.some(c => c.id === 5);
+        
+        if (!hasExpiredCoupon) {
+            this.data.used_coupons.push({
+                id: 4,
+                code: 'EXPIRED30',
+                name: 'Истекший купон',
+                description: 'Купон с истекшей датой применения',
+                discount: 30,
+                discount_amount: 30,
+                project_name: 'Все проекты',
+                expires_at: '2024-12-31T23:59:59.000Z', // Истекшая дата
+                conditions: 'Минимальная сумма $100',
+                used: false, // Не использован, но истек
+                status: 'expired', // Специальный статус для истекших
+                created_at: '2024-01-01T00:00:00.000Z',
+                updated_at: '2024-12-31T23:59:59.000Z'
+            });
+        }
+        
+        if (!hasRevokedCoupon) {
+            this.data.used_coupons.push({
+                id: 5,
+                code: 'REVOKED15',
+                name: 'Отозванный купон',
+                description: 'Купон, который был отозван администрацией',
+                discount: 15,
+                discount_amount: 15,
+                project_name: 'Все проекты',
+                expires_at: '2025-06-30T23:59:59.000Z',
+                conditions: 'Минимальная сумма $200',
+                used: false, // Не использован, но отозван
+                status: 'revoked', // Специальный статус для отозванных
+                created_at: '2024-06-01T00:00:00.000Z',
+                updated_at: '2025-01-01T00:00:00.000Z'
+            });
+        }
+        
         
         if (!this.data.investments) {
             this.data.investments = [];
@@ -182,8 +224,11 @@ class LocalStorageAPI {
         try {
             console.log('🔍 localStorage API: getActiveCoupons called for user', userId);
             console.log('🔍 localStorage API: data.coupons', this.data.coupons);
-            const coupons = this.data.coupons.filter(c => !c.used);
-            console.log('🔍 localStorage API: filtered coupons', coupons);
+            const now = new Date();
+            const coupons = this.data.coupons
+                .filter(c => !c.used && new Date(c.expires_at) > now) // Добавлена проверка на дату истечения
+                .sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
+            console.log('🔍 localStorage API: filtered and sorted coupons', coupons);
             return { status: 200, data: coupons };
         } catch (error) {
             console.error('❌ localStorage API: getActiveCoupons error', error);
@@ -193,7 +238,8 @@ class LocalStorageAPI {
 
     async getUsedCoupons(userId) {
         try {
-            const usedCoupons = this.data.used_coupons.filter(c => c.user_id === userId);
+            // Возвращаем все купоны из used_coupons (включая истекшие и отозванные)
+            const usedCoupons = this.data.used_coupons;
             return { status: 200, data: usedCoupons };
         } catch (error) {
             return { status: 500, data: { error: error.message } };
@@ -216,18 +262,13 @@ class LocalStorageAPI {
             coupon.used = true;
             coupon.updated_at = new Date().toISOString();
             
-            // Add to used coupons
+            // Add to used coupons - copy the original coupon with used flag
             const usedCoupon = {
-                id: Date.now(),
-                coupon_id: couponId,
-                code: coupon.code,
-                name: coupon.name,
-                description: coupon.description,
-                discount_amount: coupon.discount_amount,
-                project_name: coupon.project_name,
+                ...coupon, // Copy all original properties
+                used: true,
                 used_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
                 status: 'used',
-                type: 'bonus',
                 user_id: userId
             };
             
@@ -270,6 +311,62 @@ class LocalStorageAPI {
             
             return { status: 200, data: investment };
         } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    async processInvestment(investmentData) {
+        try {
+            console.log('🔍 localStorage API: processInvestment called with:', investmentData);
+            
+            // Create investment record
+            const investmentId = Date.now();
+            const transactionId = Date.now() + 1;
+            
+            const investment = {
+                id: investmentId,
+                user_id: investmentData.userId,
+                package_name: investmentData.packageId,
+                project_name: investmentData.packageId, // For display purposes
+                amount: investmentData.amount,
+                account: investmentData.account,
+                payment_type: investmentData.paymentType || 'single',
+                status: 'active',
+                transaction_id: transactionId,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            };
+            
+            this.data.investments.push(investment);
+            
+            // Update user balance (deduct amount)
+            const user = this.data.users.find(u => u.id === investmentData.userId);
+            if (user) {
+                if (investmentData.account === 'main') {
+                    user.main_balance = Math.max(0, user.main_balance - investmentData.amount);
+                } else if (investmentData.account === 'partner') {
+                    user.partner_balance = Math.max(0, user.partner_balance - investmentData.amount);
+                }
+            }
+            
+            // Create transaction record
+            const transaction = {
+                id: transactionId,
+                user_id: investmentData.userId,
+                type: 'investment',
+                amount: -investmentData.amount, // Negative because it's an expense
+                account: investmentData.account,
+                description: `Инвестиция в пакет ${investmentData.packageId}`,
+                created_at: new Date().toISOString()
+            };
+            
+            this.data.transactions.push(transaction);
+            this.saveData();
+            
+            console.log('✅ localStorage API: Investment processed successfully');
+            return { status: 200, data: { investment, transaction } };
+        } catch (error) {
+            console.error('❌ localStorage API: processInvestment error', error);
             return { status: 500, data: { error: error.message } };
         }
     }
@@ -382,6 +479,108 @@ class LocalStorageAPI {
                 }
             };
         } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    clearAllData() {
+        localStorage.removeItem(this.storageKey);
+        this.data = this.loadData(); // Reload initial data
+        this.initDefaultData();
+        this.saveData();
+    }
+
+    async sendVerificationCode(email) {
+        try {
+            console.log('📧 localStorage API: sendVerificationCode called for', email);
+            
+            if (!email) {
+                return { status: 400, data: { error: 'Email is required' } };
+            }
+
+            // For demo purposes, always return success
+            return {
+                status: 200,
+                data: {
+                    message: 'Verification code sent successfully',
+                    demoCode: '123456' // Demo code for testing
+                }
+            };
+        } catch (error) {
+            console.error('❌ localStorage API: sendVerificationCode error', error);
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    async registerUser(email, code) {
+        try {
+            console.log('👤 localStorage API: registerUser called for', email, 'with code', code);
+            
+            if (!email || !code) {
+                return { status: 400, data: { error: 'Email and code are required' } };
+            }
+
+            // For demo purposes, accept code 123456
+            if (code === '123456') {
+                const newUser = {
+                    id: Date.now(),
+                    email: email,
+                    username: 'user_' + Date.now(),
+                    emailVerified: true,
+                    main_balance: 0.00,
+                    partner_balance: 0.00,
+                    created_at: new Date().toISOString()
+                };
+
+                // Add user to data (for demo purposes)
+                if (!this.data.users) {
+                    this.data.users = [];
+                }
+                this.data.users.push(newUser);
+                this.saveData();
+
+                return {
+                    status: 200,
+                    data: {
+                        message: 'User registered successfully',
+                        user: newUser,
+                        token: 'demo-token-' + Date.now()
+                    }
+                };
+            } else {
+                return { status: 400, data: { error: 'Invalid verification code' } };
+            }
+        } catch (error) {
+            console.error('❌ localStorage API: registerUser error', error);
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    async loginUser(email, password) {
+        try {
+            console.log('🔐 localStorage API: loginUser called for', email);
+            
+            if (!email) {
+                return { status: 400, data: { error: 'Email is required' } };
+            }
+
+            // For demo purposes, find user by email
+            const user = this.data.users.find(u => u.email === email);
+            
+            if (user) {
+                return {
+                    status: 200,
+                    data: {
+                        message: 'Login successful',
+                        user: user,
+                        token: 'demo-token-' + Date.now()
+                    }
+                };
+            } else {
+                return { status: 401, data: { error: 'User not found' } };
+            }
+        } catch (error) {
+            console.error('❌ localStorage API: loginUser error', error);
             return { status: 500, data: { error: error.message } };
         }
     }

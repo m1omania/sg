@@ -3,529 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная - SOLARGROUP</title>
+    <title>SolarGroup - Инвестиционная платформа</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Дополнительные стили для новой структуры, чтобы она не выглядела поломанной */
-        body {
-            background-color: #ffffff;
-            color: #333;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-        }
-        .slider-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        .slider-track {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-        .banner-slide {
-            min-width: 100%;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .banner-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            text-align: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .banner-content .timer {
-            font-weight: bold;
-            color: #ffeb3b;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        .banner-content .banner-text {
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .banner-content .banner-link {
-            color: #ffeb3b;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-        .banner-content .banner-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-        .slider-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        .slider-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .slider-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-        .slider-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .slider-dots {
-            display: flex;
-            gap: 8px;
-        }
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .dot.active {
-            background: #ffeb3b;
-            transform: scale(1.2);
-        }
-        .dot:hover {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        .registration-status .progress-bar {
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-            height: 8px;
-            margin: 8px 0;
-        }
-        .registration-status .progress {
-            width: 50%; /* 2/4 шага */
-            height: 100%;
-            background-color: #27ae60;
-        }
-
-        .accounts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-        }
-        .account-card .balance { font-size: 28px; font-weight: 500; margin: 8px 0; }
-        .currency-switcher button { margin-right: 5px; }
-
-        .investment-summary, .partner-stats {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin: 16px 0;
-        }
-
-        .video-presenter {
-            background-color: #000;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .faq-list ul { list-style: none; padding: 0; }
-        .faq-list li { margin-bottom: 10px; }
-
-        .partner-table, .news-feed { margin-top: 16px; }
-        .partner-table table { width: 100%; border-collapse: collapse; }
-        .partner-table th, .partner-table td { padding: 8px; border: 1px solid #ddd; text-align: left; }
-
-        .footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .chat-support-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #27ae60;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 50px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
-            <!-- Web Component Header -->
+    <!-- Web Component Header -->
     <sg-header></sg-header>
+
     <div class="app-layout">
-                        <!-- Web Component Sidebar -->
+        <!-- Web Component Sidebar -->
         <sg-sidebar></sg-sidebar>
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="dashboard-container">
-        <!-- 1. Приветствие и мотивационные баннеры -->
-        <section class="dashboard-card welcome-banners">
-            <div class="welcome-header">
-                <h1>Добро пожаловать, Константин!</h1>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-            <div class="banner-slider">
-                <div class="slider-container">
-                    <div class="slider-track" id="slider-track">
-                        <div class="banner-slide active">
-                            <div class="banner-content">
-                                <span class="timer" id="timer-hunting">0ч 0м 0с</span>
-                                <span class="banner-text">— Хантинг — это охота на звёзд!</span>
-                                <a href="#" class="banner-link">Подробнее</a>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                        <div class="banner-slide">
-                            <div class="banner-content">
-                                <span class="timer" id="timer-race">33д 11ч 34м</span>
-                                <span class="banner-text">— Большая гонка 2.0</span>
-                                <a href="#" class="banner-link">Подробнее</a>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                        <div class="banner-slide">
-                            <div class="banner-content">
-                                <span class="banner-text">Инвестируйте в Дирижабли нового поколения</span>
-                                <a href="#" class="banner-link">Подробнее</a>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                        <div class="banner-slide">
-                            <div class="banner-content">
-                                <span class="banner-text">Книга инвесторов — впишите своё имя на особую страницу истории проекта</span>
-                                <a href="#" class="banner-link">Подробнее</a>
-                                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                    <div class="slider-controls">
-                        <button class="slider-btn prev" id="prev-btn">‹</button>
-                        <div class="slider-dots" id="slider-dots">
-                            <span class="dot active" data-slide="0"></span>
-                            <span class="dot" data-slide="1"></span>
-                            <span class="dot" data-slide="2"></span>
-                            <span class="dot" data-slide="3"></span>
-                                    <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                        <button class="slider-btn next" id="next-btn">›</button>
-                                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-        </section>
-
-        <!-- 2. Статус регистрации и шаги -->
-        <section class="dashboard-card registration-status">
-            <h2>2/4 шагов. Аккаунт создан.</h2>
-            <div class="progress-bar"><div class="progress">            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-        </div>
-            <p>Завершите регистрацию. Пополните основной счёт. Начинайте инвестировать. <a href="#">Перейти к шагам</a></p>
-        </section>
-
-        <!-- 3. Счета пользователя -->
-        <section class="dashboard-card user-accounts">
-            <div class="accounts-grid">
-                <account-card 
-                    type="main" 
-                    balance="Загрузка..." 
-                    currency="USD" 
-                    badge="USD">
-                </account-card>
-
-                <account-card 
-                    type="partner" 
-                    balance="Загрузка..." 
-                    currency="USD" 
-                    badge="+5%">
-                </account-card>
-            </div>
-        </section>
-
-        <!-- 4. Инвестиционный блок -->
-        <section class="dashboard-card investment-block">
-            <h2>Ваши инвестиции в цифрах</h2>
-            <div class="investment-summary">
-                <div>
-                    <h4>$5,250</h4>
-                    <p>в проекте «Совэлмаш»</p>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                <div>
-                    <h4>$1,000</h4>
-                    <p>в проекте «Дирижабли»</p>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-            <a href="invest.html" class="btn btn--primary">Сделайте первую инвестицию</a>
-            <a href="invest.html" class="btn btn--secondary" style="margin-left: 8px;">Смотреть проекты</a>
-            <div class="video-presenter" style="margin-top: 24px;">
-                <h3>Презентация проекта «Двигатели Дуюнова»</h3>
-                <button onclick="alert('Воспроизведение видео...')">Смотреть</button>
-                <p><a href="#" download>Скачать презентацию PDF</a></p>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-        </section>
-
-        <!-- 5. Блок “Для новичков” -->
-        <section class="dashboard-card faq-list">
-            <h2>Для новичков</h2>
-            <ul>
-                <li><a href="#">Что такое проект «Двигатели Дуюнова»</a></li>
-                <li><a href="#">Преимущества технологии «Славянка»</a></li>
-                <li><a href="#">Что сделано в проекте на поступившие инвестиции</a></li>
-                <li><a href="#">Как будет зарабатывать «Совэлмаш»</a></li>
-                <li><a href="#">Что приобретают инвесторы проекта</a></li>
-                <li><a href="#">Как будут зарабатывать инвесторы проекта</a></li>
-            </ul>
-        </section>
-
-        <!-- 6. Блок “Партнёрам” -->
-        <section class="dashboard-card partner-block">
-            <h2>Партнёрам</h2>
-            <div class="partner-stats">
-                <div>
-                    <p>Статус: <strong>Партнёр</strong></p>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                <div>
-                    <p>Новых регистраций за сегодня: <strong>3 (уровень 1) / 15 (всего)</strong></p>
-                            <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-                </div>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-            <div class="partner-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Дата</th>
-                            <th>Линия</th>
-                            <th>Платеж</th>
-                            <th>%</th>
-                            <th>Начислено</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>01.10.2025</td>
-                            <td>1</td>
-                            <td>$100</td>
-                            <td>15%</td>
-                            <td>$15.00</td>
-                        </tr>
-                        <tr>
-                            <td>01.10.2025</td>
-                            <td>2</td>
-                            <td>$50</td>
-                            <td>4%</td>
-                            <td>$2.00</td>
-                        </tr>
-                        <!-- <tr><td colspan="5">Пока здесь пусто</td></tr> -->
-                    </tbody>
-                </table>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-        </section>
-
-        <!-- 7. Лента новостей и актуальных событий -->
-        <section class="dashboard-card news-feed">
-            <h2>Новости и события</h2>
-            <div class="banner-item">
-                <p><strong>ПРЯМОЙ ЭФИР | <span id="timer-stream"></span></strong> — Дирижабли нового поколения: новости, планы, ответы на вопросы</p>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-            <div class="news-item">
-                <p><strong>Главное за сентябрь:</strong> итоги месяца в проекте «Двигатели Дуюнова» <a href="#">Читать</a></p>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-            <div class="news-item">
-                <p><strong>Промо для партнёров</strong> — привлекай лидеров и получай бонусы <a href="#">Узнать условия</a></p>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-            <a href="#" class="btn btn--secondary" style="margin-top: 16px; display: inline-block;">Присоединяйтесь к команде SOLARGROUP</a>
-        </section>
-
-        <!-- 8. Документы, политики и поддержка -->
-        <footer class="dashboard-card site-footer">
-            <div class="footer-links">
-                <a href="#">Предупреждение о рисках</a>
-                <a href="#">Политика конфиденциальности</a>
-                <a href="#">Персональные данные (ФЗ-152/242)</a>
-                <a href="#">Правила пользования</a>
-                <a href="#">Оферта</a>
-                <a href="#">AML политика</a>
-                <a href="#">Контакты</a>
-                        <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-            </div>
-        </footer>
-                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-    </div>
-        </main>
-                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-    </div>
-
-    <div class="chat-support-btn" onclick="alert('Чат поддержки открыт')">
-        Здравствуйте, мы онлайн.
-                <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
-    </div>
-
-        
-            <script src="components/web-components/header-standalone.js"></script>
-    <script src="components/web-components/sidebar-standalone.js"></script>
-    <script>
-        // Account Card Component
-        class AccountCard extends HTMLElement {
-            constructor() {
-                super();
-            }
-
-            static get observedAttributes() {
-                return ['type', 'balance', 'currency', 'badge', 'badge-text'];
-            }
-
-            connectedCallback() {
-                this.render();
-                this.bindEvents();
-            }
-
-            attributeChangedCallback(name, oldValue, newValue) {
-                if (oldValue !== newValue) {
-                    this.render();
-                }
-            }
-
-            render() {
-                const type = this.getAttribute('type') || 'main';
-                const balance = this.getAttribute('balance') || '0.00';
-                const currency = this.getAttribute('currency') || 'USD';
-                const badge = this.getAttribute('badge') || '';
-                const badgeText = this.getAttribute('badge-text') || '';
-
-                const isPartner = type === 'partner';
-                const icon = isPartner ? '🤝' : '💼';
-                const title = isPartner ? 'Партнёрский счёт' : 'Основной счёт';
-                const subtitle = isPartner ? 'Начисления партнёрской программы' : 'Доступные средства';
-                const badgeClass = isPartner ? 'account-summary__badge--success' : '';
-
-                this.innerHTML = `
-                    <style>
-                        @media (max-width: 768px) {
-                            .account-summary__header {
-                                display: flex !important;
-                                align-items: flex-start !important;
-                                justify-content: space-between !important;
-                            }
-                        }
-                    </style>
-                    <div class="account-card account-summary ${isPartner ? 'account-summary--partner' : ''}">
-                        <div class="account-summary__header">
-                            <div class="account-summary__title-wrap">
-                                <div class="account-summary__icon">${icon}</div>
-                                <div>
-                                    <h3 class="account-summary__title">${title}</h3>
-                                    <div class="account-summary__subtitle">${subtitle}</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="account-summary__amount" id="${type}-balance-amount">${balance} $</div>
-                        
-                        <div class="account-summary__controls">
-                            <div></div>
-                            <div class="account-summary__actions">
-                                ${!isPartner ? '<a class="btn btn--primary" href="deposit.html">Пополнить</a>' : ''}
-                                <button class="btn btn--secondary" id="withdraw-${type}-btn" disabled>Вывести</button>
-                                ${isPartner ? '<button class="btn btn--secondary" id="transfer-${type}-btn" disabled>Перевести</button>' : ''}
-                            </div>
-                        </div>
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="welcome-content">
+                    <h1>Добро пожаловать в SolarGroup!</h1>
+                    <p>Инвестируйте в будущее с нашими экологичными проектами</p>
+                    <div class="welcome-timer">
+                        <span class="timer-label">До окончания регистрации:</span>
+                        <div class="timer-display" id="registration-timer">23:59:59</div>
                     </div>
-                `;
-            }
+                </div>
+            </section>
 
-            bindEvents() {
-                const type = this.getAttribute('type');
-                const withdrawBtn = this.querySelector(`#withdraw-${type}-btn`);
-                const transferBtn = this.querySelector(`#transfer-${type}-btn`);
-                
-                if (withdrawBtn) {
-                    withdrawBtn.addEventListener('click', () => {
-                        this.dispatchEvent(new CustomEvent('withdraw', {
-                            detail: {
-                                type: type,
-                                balance: this.getAttribute('balance')
-                            },
-                            bubbles: true
-                        }));
-                    });
-                }
-                
-                if (transferBtn) {
-                    transferBtn.addEventListener('click', () => {
-                        this.dispatchEvent(new CustomEvent('transfer', {
-                            detail: {
-                                type: type,
-                                balance: this.getAttribute('balance')
-                            },
-                            bubbles: true
-                        }));
-                    });
-                }
-            }
+            <!-- Registration Progress -->
+            <section class="registration-progress">
+                <div class="progress-content">
+                    <h2>Завершите регистрацию</h2>
+                    <p>Пополните счёт на любую сумму для активации всех возможностей платформы</p>
+                    <a href="deposit.html" class="btn btn--primary">Пополнить счёт</a>
+                </div>
+            </section>
 
-            updateBalance(newBalance) {
-                this.setAttribute('balance', newBalance);
-                const amountElement = this.querySelector(`#${this.getAttribute('type')}-balance-amount`);
-                if (amountElement) {
-                    amountElement.textContent = `${newBalance} $`;
-                }
-            }
-        }
+            <!-- User Accounts -->
+            <section class="dashboard-card user-accounts">
+                <div class="accounts-grid">
+                    <account-card 
+                        type="main" 
+                        balance="Загрузка..." 
+                        currency="USD" 
+                        badge="USD">
+                    </account-card>
 
-        customElements.define('account-card', AccountCard);
-    </script>
+                    <account-card 
+                        type="partner" 
+                        balance="Загрузка..." 
+                        currency="USD" 
+                        badge="+5%">
+                    </account-card>
+                </div>
+            </section>
+
+            <!-- Investment Block -->
+            <section class="dashboard-card investment-block">
+                <h2>Инвестиционные проекты</h2>
+                <div class="projects-preview">
+                    <div class="project-card">
+                        <h3>Дирижабли</h3>
+                        <p>Инновационные транспортные решения</p>
+                        <a href="invest.html" class="btn btn--secondary">Инвестировать</a>
+                    </div>
+                    <div class="project-card">
+                        <h3>Совэлмаш</h3>
+                        <p>Солнечная энергетика</p>
+                        <a href="invest.html" class="btn btn--secondary">Инвестировать</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Partner Stats -->
+            <section class="dashboard-card partner-stats">
+                <h2>Партнёрская программа</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">+5%</span>
+                        <span class="stat-label">К каждому пополнению</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Приглашённых друзей</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
     <!-- localStorage API -->
     <script src="localStorage-api.js"></script>
     <script src="api-adapter.js"></script>
     
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/account-card.js"></script>
+    
+    <!-- App Scripts -->
     <script src="app.js"></script>
     <script src="dashboard.js"></script>
 </body>
