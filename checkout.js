@@ -249,7 +249,7 @@ function updateCheckoutButton(package) {
         if (insufficientFundsWarning) {
             const shortage = requiredAmount - mainBalance;
             insufficientFundsWarning.style.display = 'block';
-            insufficientFundsWarning.textContent = `Недостаточно средств. Не хватает: $${shortage.toFixed(2)} (требуется: $${requiredAmount.toFixed(2)}, доступно: $${mainBalance.toFixed(2)})`;
+            insufficientFundsWarning.textContent = `Недостаточно средств. Не хватает: $${shortage.toFixed(2)}`;
         }
     } else {
         // Sufficient funds - show "Оформить пакет" button
