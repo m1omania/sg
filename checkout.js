@@ -620,7 +620,36 @@ document.addEventListener('visibilitychange', function() {
         console.log('Page became visible, refreshing coupons...');
         // Small delay to ensure any pending operations complete
         setTimeout(() => {
-            loadCoupons();
+            const urlParams = new URLSearchParams(window.location.search);
+            const packageId = urlParams.get('package') || 'sov-500';
+            const packages = {
+                'sov-500': {
+                    name: 'Пакет 500 $',
+                    stage: 20,
+                    shares: 15000,
+                    project: 'Совэлмаш',
+                    total: 50.00,
+                    description: '20 этап'
+                },
+                'sov-1000': {
+                    name: 'Пакет 1000 $',
+                    stage: 40,
+                    shares: 30000,
+                    project: 'Совэлмаш',
+                    total: 100.00,
+                    description: '40 этап'
+                },
+                'airship-250': {
+                    name: 'Пакет 250 $',
+                    stage: 10,
+                    shares: 7500,
+                    project: 'Дирижабли',
+                    total: 25.00,
+                    description: '10 этап'
+                }
+            };
+            const package = packages[packageId] || packages['sov-500'];
+            initializeCouponPackage(package);
         }, 100);
     }
 });
@@ -629,6 +658,35 @@ document.addEventListener('visibilitychange', function() {
 window.addEventListener('focus', function() {
     console.log('Window focused, refreshing coupons...');
     setTimeout(() => {
-        loadCoupons();
+        const urlParams = new URLSearchParams(window.location.search);
+        const packageId = urlParams.get('package') || 'sov-500';
+        const packages = {
+            'sov-500': {
+                name: 'Пакет 500 $',
+                stage: 20,
+                shares: 15000,
+                project: 'Совэлмаш',
+                total: 50.00,
+                description: '20 этап'
+            },
+            'sov-1000': {
+                name: 'Пакет 1000 $',
+                stage: 40,
+                shares: 30000,
+                project: 'Совэлмаш',
+                total: 100.00,
+                description: '40 этап'
+            },
+            'airship-250': {
+                name: 'Пакет 250 $',
+                stage: 10,
+                shares: 7500,
+                project: 'Дирижабли',
+                total: 25.00,
+                description: '10 этап'
+            }
+        };
+        const package = packages[packageId] || packages['sov-500'];
+        initializeCouponPackage(package);
     }, 100);
 });
