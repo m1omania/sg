@@ -4456,11 +4456,12 @@ body:not(.landing-page) sg-header-landing {
 /* Remove shadow and border for specific bonus sections */
 .dashboard-card.bonus-how-it-works,
 .dashboard-card.bonus-calculator,
-.dashboard-card.bonus-terms {
+.dashboard-card.bonus-terms,
+.dashboard-card.bonus-cta {
   box-shadow: none;
   border: none;
   background: transparent;
-  margin-bottom: var(--space-40); /* Отступ между блоками 40px */
+  margin-bottom: 0;
 }
 
 /* Welcome header styles */
@@ -6734,7 +6735,7 @@ body:not(.landing-page) sg-header-landing {
   color: white;
   padding: var(--space-40) var(--space-32);
   border-radius: 8px;
-  margin-bottom: var(--space-32);
+  margin-bottom: 0;
   text-align: center;
   box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
 }
