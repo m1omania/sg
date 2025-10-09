@@ -7049,15 +7049,69 @@ body:not(.landing-page) sg-header-landing {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .bonus-hero-banner {
+    padding: 30px;
+  }
+  
+  .bonus-hero-content h1 {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .bonus-features {
+    gap: var(--space-16);
+  }
+  
+  .bonus-feature {
+    font-size: var(--font-size-sm);
+  }
+  
+  .bonus-actions {
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+  
+  .bonus-actions .btn {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
+  .bonus-hero-banner {
+    padding: 24px;
+  }
+  
+  .bonus-hero-content h1 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-16);
+  }
+  
+  .bonus-hero-content p {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-20);
+  }
+  
   .bonus-features {
     flex-direction: column;
     align-items: center;
+    gap: var(--space-12);
+    margin-bottom: var(--space-20);
+  }
+  
+  .bonus-feature {
+    font-size: var(--font-size-xs);
   }
   
   .bonus-actions {
     flex-direction: column;
     align-items: center;
+    gap: var(--space-8);
+  }
+  
+  .bonus-actions .btn {
+    width: 100%;
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-size-sm);
   }
   
   .how-it-works-steps {
@@ -7076,6 +7130,36 @@ body:not(.landing-page) sg-header-landing {
   .terms-item {
     flex-direction: column;
     text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .bonus-hero-banner {
+    padding: 16px;
+  }
+  
+  .bonus-hero-content h1 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-12);
+  }
+  
+  .bonus-hero-content p {
+    font-size: var(--font-size-xs);
+    margin-bottom: var(--space-16);
+  }
+  
+  .bonus-features {
+    gap: var(--space-8);
+    margin-bottom: var(--space-16);
+  }
+  
+  .bonus-feature {
+    font-size: 12px;
+  }
+  
+  .bonus-actions .btn {
+    padding: var(--space-10) var(--space-12);
+    font-size: var(--font-size-xs);
   }
 }
 
