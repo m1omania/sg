@@ -139,6 +139,11 @@ document.addEventListener('DOMContentLoaded', function() {
         card.addEventListener('coupon-use', (e) => {
             useCoupon(e.detail.coupon.id);
         });
+
+        // Handle all-projects coupon clicks
+        card.addEventListener('coupon-use-all-projects', (e) => {
+            showProjectSelectionModal(e.detail.coupon);
+        });
         
         return card;
     }
@@ -350,6 +355,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Generated URL:', url);
         
         return url;
+    }
+
+    // Show project selection modal
+    function showProjectSelectionModal(coupon) {
+        // Create modal element if it doesn't exist
+        let modal = document.querySelector('project-selection-modal');
+        if (!modal) {
+            modal = document.createElement('project-selection-modal');
+            document.body.appendChild(modal);
+        }
+        
+        // Set coupon data and show modal
+        modal.setCouponData(coupon);
+        modal.setVisible(true);
+        
+        // Listen for modal close
+        modal.addEventListener('modal-close', function() {
+            modal.setVisible(false);
+        });
     }
     
     

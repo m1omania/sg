@@ -239,11 +239,21 @@ class MiniCoupon extends HTMLElement {
         if (button && !this.coupon.used) {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.dispatchEvent(new CustomEvent('coupon-use', {
-                    detail: { coupon: this.coupon },
-                    bubbles: true,
-                    composed: true
-                }));
+                
+                // Check if coupon is for all projects
+                if (this.coupon.project_name === 'Все проекты') {
+                    this.dispatchEvent(new CustomEvent('coupon-use-all-projects', {
+                        detail: { coupon: this.coupon },
+                        bubbles: true,
+                        composed: true
+                    }));
+                } else {
+                    this.dispatchEvent(new CustomEvent('coupon-use', {
+                        detail: { coupon: this.coupon },
+                        bubbles: true,
+                        composed: true
+                    }));
+                }
             });
         }
     }

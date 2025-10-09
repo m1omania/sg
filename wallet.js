@@ -113,6 +113,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Use the same logic as other pages
             useCoupon(coupon.id);
         });
+
+        // Handle all-projects coupon clicks
+        document.addEventListener('coupon-use-all-projects', function(e) {
+            e.stopPropagation();
+            const coupon = e.detail.coupon;
+            console.log('All-projects coupon clicked from wallet:', coupon);
+            
+            // Show project selection modal
+            showProjectSelectionModal(coupon);
+        });
     }
 
     // Global function for coupon usage (same as other pages)
@@ -160,6 +170,25 @@ document.addEventListener('DOMContentLoaded', function() {
             'Совэлмаш': '/packages.html?project=sovelmash'
         };
         return projectUrls[projectName] || '/packages.html';
+    }
+
+    // Show project selection modal
+    function showProjectSelectionModal(coupon) {
+        // Create modal element if it doesn't exist
+        let modal = document.querySelector('project-selection-modal');
+        if (!modal) {
+            modal = document.createElement('project-selection-modal');
+            document.body.appendChild(modal);
+        }
+        
+        // Set coupon data and show modal
+        modal.setCouponData(coupon);
+        modal.setVisible(true);
+        
+        // Listen for modal close
+        modal.addEventListener('modal-close', function() {
+            modal.setVisible(false);
+        });
     }
 
     // Refresh coupons when page becomes visible (user returns from other pages)
