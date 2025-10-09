@@ -4456,8 +4456,7 @@ body:not(.landing-page) sg-header-landing {
 /* Remove shadow and border for specific bonus sections */
 .dashboard-card.bonus-how-it-works,
 .dashboard-card.bonus-calculator,
-.dashboard-card.bonus-terms,
-.dashboard-card.bonus-cta {
+.dashboard-card.bonus-terms {
   box-shadow: none;
   border: none;
   background: transparent;
@@ -6617,49 +6616,6 @@ body:not(.landing-page) sg-header-landing {
   font-weight: var(--font-weight-semibold);
 }
 
-/* CTA Section */
-.bonus-cta {
-  padding: var(--space-80) 0;
-  background: linear-gradient(135deg, var(--color-teal-500), var(--color-teal-600));
-  color: white;
-}
-
-.bonus-cta__content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.bonus-cta__title {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-24);
-}
-
-.bonus-cta__subtitle {
-  font-size: var(--font-size-xl);
-  opacity: 0.9;
-  margin-bottom: var(--space-40);
-  line-height: 1.6;
-}
-
-.bonus-cta__actions {
-  display: flex;
-  gap: var(--space-16);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.bonus-cta .btn--secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.bonus-cta .btn--secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-}
 
 /* Responsive Design */
 @media (max-width: 1024px) {
@@ -6707,11 +6663,6 @@ body:not(.landing-page) sg-header-landing {
   
   .bonus-calculator__content {
     padding: var(--space-24);
-  }
-  
-  .bonus-cta__actions {
-    flex-direction: column;
-    align-items: center;
   }
   
   .bonus-terms__item {
@@ -7010,12 +6961,6 @@ body:not(.landing-page) sg-header-landing {
   font-weight: var(--font-weight-semibold);
 }
 
-/* CTA */
-.bonus-cta {
-  background: linear-gradient(135deg, var(--color-teal-500), var(--color-teal-600));
-  color: white;
-  text-align: center;
-}
 
 .cta-content h2 {
   font-size: var(--font-size-3xl);
