@@ -67,8 +67,6 @@ function initializeCheckoutPage(packageId) {
     // Initialize coupon package component
     initializeCouponPackage(package);
     
-    // Setup form handlers
-    setupCheckoutForm(package);
     
     // Setup checkout button
     setupCheckoutButton(package);
@@ -135,7 +133,6 @@ function setupCheckoutButton(package) {
         }
         
         const selectedAccount = document.querySelector('input[name="account"]:checked');
-        const paymentType = document.querySelector('input[name="payment-type"]:checked')?.value;
         
         if (!selectedAccount) {
             showError('Выберите счет для оплаты');
@@ -144,7 +141,6 @@ function setupCheckoutButton(package) {
         
         console.log('Checkout button clicked:', {
             account: selectedAccount.value,
-            paymentType: paymentType,
             package: package
         });
         
@@ -179,8 +175,7 @@ function setupCheckoutButton(package) {
                     userId: 1,
                     packageId: package.name,
                     amount: requiredAmount, // Use calculated amount with coupons
-                    account: selectedAccount.value,
-                    paymentType: paymentType || 'single'
+                    account: selectedAccount.value
                 })
             });
             
@@ -264,59 +259,6 @@ function updateCheckoutButton(package) {
     }
 }
 
-function setupCheckoutForm(package) {
-    const form = document.getElementById('checkout-form');
-    if (!form) return;
-    
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const selectedAccount = document.querySelector('input[name="account"]:checked');
-        const couponCode = document.getElementById('coupon-code').value.trim();
-        
-        if (!selectedAccount) {
-            alert('Выберите счет для оплаты');
-            return;
-        }
-        
-        console.log('Checkout form submitted:', {
-            account: selectedAccount.value,
-            couponCode: couponCode,
-            package: package
-        });
-        
-        // Simulate payment processing
-        try {
-            const response = await fetch('/api/transactions/invest', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userId: 1,
-                    packageId: package.name,
-                    amount: package.total,
-                    account: selectedAccount.value,
-                    couponCode: couponCode || null
-                })
-            });
-            
-            const result = await response.json();
-            console.log('Investment result:', result);
-            
-            if (response.ok) {
-                showSuccess('Инвестиция успешно оформлена!');
-                // Reload balances
-                await loadCheckoutBalances();
-            } else {
-                showError(result.error || 'Ошибка оформления инвестиции');
-            }
-        } catch (error) {
-            console.error('Investment error:', error);
-            showError('Ошибка сети. Попробуйте позже.');
-        }
-    });
-}
 
 function showSuccess(message) {
     const notification = document.getElementById('success-notification');
