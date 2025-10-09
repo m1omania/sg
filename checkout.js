@@ -456,6 +456,16 @@ function renderCouponsList(coupons) {
             const isActive = e.detail.active;
             console.log('Coupon toggle changed:', couponId, isActive);
             
+            // If this coupon is being activated, deactivate all others
+            if (isActive) {
+                couponsList.querySelectorAll('coupon-package').forEach(otherComponent => {
+                    if (otherComponent !== this) {
+                        otherComponent.setActive(false);
+                        otherComponent.setAttribute('data-active', 'false');
+                    }
+                });
+            }
+            
             // Update component's active state
             this.setAttribute('data-active', isActive);
             
@@ -486,6 +496,34 @@ async function updateCouponsList() {
                     .sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
                 
                 renderCouponsList(relevantCoupons);
+                
+                // Ensure only one coupon can be active at a time
+                const couponsList = document.getElementById('coupons-list');
+                if (couponsList) {
+                    couponsList.querySelectorAll('coupon-package').forEach(component => {
+                        component.addEventListener('coupon-toggle', function(e) {
+                            const couponId = e.detail.coupon.id;
+                            const isActive = e.detail.active;
+                            console.log('Coupon toggle changed:', couponId, isActive);
+                            
+                            // If this coupon is being activated, deactivate all others
+                            if (isActive) {
+                                couponsList.querySelectorAll('coupon-package').forEach(otherComponent => {
+                                    if (otherComponent !== this) {
+                                        otherComponent.setActive(false);
+                                        otherComponent.setAttribute('data-active', 'false');
+                                    }
+                                });
+                            }
+                            
+                            // Update component's active state
+                            this.setAttribute('data-active', isActive);
+                            
+                            // Update total calculation
+                            updateTotalWithCoupons();
+                        });
+                    });
+                }
             }
         }
     } catch (error) {
