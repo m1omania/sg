@@ -4462,7 +4462,7 @@ body:not(.landing-page) sg-header-landing {
   border: none;
   background: transparent;
   margin-bottom: 0;
-  padding: 20px;
+  padding: 40px;
 }
 
 /* Welcome header styles */
@@ -6734,7 +6734,7 @@ body:not(.landing-page) sg-header-landing {
 .bonus-hero-banner {
   background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 50%, #42a5f5 100%);
   color: white;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
   margin-bottom: 0;
   text-align: center;
