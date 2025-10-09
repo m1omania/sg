@@ -17,6 +17,26 @@ document.addEventListener('DOMContentLoaded', function() {
         tabContents: tabContents.length
     });
     
+    // Показ уведомления о купоне за регистрацию
+    function showRegistrationCouponNotification() {
+        // Проверяем, показывали ли уже уведомление
+        if (localStorage.getItem('registrationCouponShown') === 'true') {
+            return;
+        }
+        
+        const notificationSystem = document.querySelector('notification-system');
+        if (notificationSystem) {
+            notificationSystem.addNotification({
+                title: 'У вас есть новый купон!',
+                message: 'Вам доступен купон на $25 за регистрацию',
+                action_url: '/coupons.html'
+            });
+            
+            // Помечаем, что уведомление показано
+            localStorage.setItem('registrationCouponShown', 'true');
+        }
+    }
+
     // Load active coupons
     async function loadActiveCoupons() {
         try {
@@ -412,4 +432,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadActiveCoupons();
     loadHistoryCoupons();
     setupAutoRefresh();
+    setTimeout(showRegistrationCouponNotification, 1000);
 });

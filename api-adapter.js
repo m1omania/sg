@@ -89,6 +89,19 @@ class APIAdapter {
                     result = await this.localStorageAPI.loginUser(body.email, body.password);
                     break;
                 
+                case '/coupons/create-deposit':
+                    result = await this.localStorageAPI.createDepositCoupon(body.userId, body.depositAmount);
+                    break;
+                
+                case '/notifications':
+                    result = await this.localStorageAPI.addNotification(body.userId, body.notification);
+                    break;
+                
+                case '/notifications/:userId':
+                    const userId = pathname.split('/')[2];
+                    result = await this.localStorageAPI.getNotifications(parseInt(userId));
+                    break;
+                
                 default:
                     console.log('❌ API Adapter: endpoint not found', cleanEndpoint);
                     return {

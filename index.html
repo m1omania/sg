@@ -9,6 +9,9 @@
 <body>
     <!-- Web Component Header -->
     <sg-header></sg-header>
+    
+    <!-- Notification System -->
+    <notification-system></notification-system>
 
     <div class="app-layout">
         <!-- Web Component Sidebar -->
@@ -21,21 +24,90 @@
                 <div class="welcome-content">
                     <h1>Добро пожаловать в SolarGroup!</h1>
                     <p>Инвестируйте в будущее с нашими экологичными проектами</p>
-                    <div class="welcome-timer">
-                        <span class="timer-label">До окончания регистрации:</span>
-                        <div class="timer-display" id="registration-timer">23:59:59</div>
-                    </div>
                 </div>
             </section>
 
-            <!-- Registration Progress -->
-            <section class="registration-progress">
-                <div class="progress-content">
-                    <h2>Завершите регистрацию</h2>
-                    <p>Пополните счёт на любую сумму для активации всех возможностей платформы</p>
-                    <a href="deposit.html" class="btn btn--primary">Пополнить счёт</a>
+            <!-- Promo Cards Grid -->
+            <section class="promo-cards-container">
+                <div class="promo-cards-scroll-indicator">
+                    <div class="scroll-indicator-left" id="scroll-left">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"></polyline>
+                        </svg>
+                    </div>
+                    <div class="scroll-indicator-right" id="scroll-right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9,18 15,12 9,6"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div class="promo-cards-grid">
+                    <!-- Card 1: New Year Bonus (FIRST) -->
+                    <a href="newyear-bonus.html" class="promo-card promo-card--newyear">
+                        <div class="promo-card-content">
+                            <div class="promo-card-header">
+                                <div class="promo-timer" id="promo-timer-0">23:59:59</div>
+                            </div>
+                            <div class="promo-card-body">
+                                <h3>100% бонус за пополнение!</h3>
+                                <p>Удвойте свои инвестиции до конца года</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 2: Black Friday -->
+                    <a href="invest.html" class="promo-card promo-card--blackfriday">
+                        <div class="promo-card-content">
+                            <div class="promo-card-header">
+                                <div class="promo-timer" id="promo-timer-1">23:59:59</div>
+                            </div>
+                            <div class="promo-card-body">
+                                <h3>Скидки до 50%!</h3>
+                                <p>Ограниченное предложение</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 3: New Project -->
+                    <a href="invest.html" class="promo-card promo-card--newproject">
+                        <div class="promo-card-content">
+                            <div class="promo-card-header">
+                            </div>
+                            <div class="promo-card-body">
+                                <h3>Дирижабли будущего</h3>
+                                <p>Революционная технология</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 4: Live Stream -->
+                    <a href="#" class="promo-card promo-card--livestream">
+                        <div class="promo-card-content">
+                            <div class="promo-card-header">
+                                <div class="promo-timer" id="promo-timer-2">23:59:59</div>
+                            </div>
+                            <div class="promo-card-body">
+                                <h3>Презентация проекта</h3>
+                                <p>Смотрите онлайн в 19:00</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 5: Investment Race -->
+                    <a href="invest.html" class="promo-card promo-card--race">
+                        <div class="promo-card-content">
+                            <div class="promo-card-header">
+                                <div class="promo-timer" id="promo-timer-3">33д 11:34:00</div>
+                            </div>
+                            <div class="promo-card-body">
+                                <h3>Соревнуйтесь с другими</h3>
+                                <p>Победитель получит бонус 10%</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </section>
+
 
             <!-- User Accounts -->
             <section class="dashboard-card user-accounts">
@@ -100,6 +172,7 @@
     <script src="components/web-components/header-standalone.js"></script>
     <script src="components/web-components/sidebar-standalone.js"></script>
     <script src="components/web-components/account-card.js"></script>
+    <script src="components/web-components/notification-system.js"></script>
     
     <!-- App Scripts -->
     <script src="app.js"></script>

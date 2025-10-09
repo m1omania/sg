@@ -17,34 +17,6 @@ window.CouponsData = {
             used: false,
             created_at: '2025-01-01T00:00:00.000Z',
             updated_at: '2025-01-01T00:00:00.000Z'
-        },
-        {
-            id: 2,
-            code: 'INVEST50',
-            name: 'Инвестиционный бонус',
-            description: 'Бонус за первую инвестицию',
-            discount: 50,
-            discount_amount: 50,
-            project_name: 'Дирижабли',
-            expires_at: '2026-06-30T23:59:59.000Z',
-            conditions: 'Только для проекта Дирижабли',
-            used: false,
-            created_at: '2025-01-15T00:00:00.000Z',
-            updated_at: '2025-01-15T00:00:00.000Z'
-        },
-        {
-            id: 3,
-            code: 'SOVELMASH20',
-            name: 'Совэлмаш бонус',
-            description: 'Эксклюзивное предложение для проекта Совэлмаш',
-            discount: 20,
-            discount_amount: 20,
-            project_name: 'Совэлмаш',
-            expires_at: '2026-01-31T23:59:59.000Z',
-            conditions: 'Только для проекта Совэлмаш',
-            used: false,
-            created_at: '2024-12-01T00:00:00.000Z',
-            updated_at: '2024-12-01T00:00:00.000Z'
         }
     ],
 

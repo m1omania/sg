@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новогодний бонус - SolarGroup</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="SGLogosmall.svg">
+</head>
+<body>
+    <!-- Web Component Header -->
+    <sg-header></sg-header>
+    
+    <!-- Notification System -->
+    <notification-system></notification-system>
+
+    <div class="app-layout">
+        <!-- Web Component Sidebar -->
+        <sg-sidebar></sg-sidebar>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Banner -->
+            <section class="bonus-hero-banner">
+                <div class="bonus-hero-content">
+                    <div class="bonus-badge">
+                        <span class="bonus-badge-icon">🎉</span>
+                        <span class="bonus-badge-text">Акция до 31 декабря</span>
+                    </div>
+                    <h1>Новогодний бонус <span class="bonus-highlight">100%</span></h1>
+                    <p>Пополните баланс на любую сумму и получите бонус 100% от суммы пополнения</p>
+                    <div class="bonus-features">
+                        <div class="bonus-feature">
+                            <span class="bonus-feature-icon">💰</span>
+                            <span class="bonus-feature-text">100% бонус от суммы</span>
+                        </div>
+                        <div class="bonus-feature">
+                            <span class="bonus-feature-icon">⏰</span>
+                            <span class="bonus-feature-text">30 дней на использование</span>
+                        </div>
+                        <div class="bonus-feature">
+                            <span class="bonus-feature-icon">🎯</span>
+                            <span class="bonus-feature-text">Все проекты</span>
+                        </div>
+                    </div>
+                    <div class="bonus-actions">
+                        <a href="deposit.html" class="btn btn--primary btn--large">Пополнить баланс</a>
+                        <a href="invest.html" class="btn btn--secondary btn--large">Посмотреть проекты</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How it works -->
+            <section class="dashboard-card bonus-how-it-works">
+                <h2>Как это работает</h2>
+                <div class="how-it-works-steps">
+                    <div class="how-it-works-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Пополните баланс</h3>
+                            <p>Внесите любую сумму на ваш счет через банковскую карту или криптовалюту</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Получите бонус</h3>
+                            <p>Автоматически получите купон на 100% от суммы пополнения</p>
+                        </div>
+                    </div>
+                    <div class="how-it-works-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Инвестируйте</h3>
+                            <p>Используйте бонус для инвестирования в проекты Дирижабли или Совэлмаш</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calculator -->
+            <section class="dashboard-card bonus-calculator">
+                <h2>Калькулятор бонуса</h2>
+                <div class="calculator-content">
+                    <div class="calculator-input-group">
+                        <label for="deposit-amount" class="calculator-label">Сумма пополнения</label>
+                        <div class="calculator-input-wrapper">
+                            <span class="calculator-currency">$</span>
+                            <input 
+                                type="number" 
+                                id="deposit-amount" 
+                                class="calculator-input"
+                                placeholder="1000"
+                                min="1"
+                                max="100000"
+                                value="1000"
+                            >
+                        </div>
+                    </div>
+                    <div class="calculator-result">
+                        <div class="calculator-result-item calculator-result-item--bonus">
+                            <span class="result-label">Ваш депозит + Бонус 100%:</span>
+                            <span class="result-value" id="bonus-result">$1,000</span>
+                        </div>
+                        <button class="btn btn--primary btn--large calculator-deposit-btn" id="deposit-calculator-btn">
+                            Пополнить
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Terms -->
+            <section class="dashboard-card bonus-terms">
+                <h2>Условия акции</h2>
+                <div class="terms-content">
+                    <div class="terms-item">
+                        <span class="terms-icon">📅</span>
+                        <div class="terms-text">
+                            <strong>Срок действия:</strong> с 21 ноября по 31 декабря 2024 года
+                        </div>
+                    </div>
+                    <div class="terms-item">
+                        <span class="terms-icon">💰</span>
+                        <div class="terms-text">
+                            <strong>Размер бонуса:</strong> 100% от суммы пополнения
+                        </div>
+                    </div>
+                    <div class="terms-item">
+                        <span class="terms-icon">⏰</span>
+                        <div class="terms-text">
+                            <strong>Срок использования:</strong> 30 дней с момента получения
+                        </div>
+                    </div>
+                    <div class="terms-item">
+                        <span class="terms-icon">🎯</span>
+                        <div class="terms-text">
+                            <strong>Проекты:</strong> Дирижабли и Совэлмаш
+                        </div>
+                    </div>
+                    <div class="terms-item">
+                        <span class="terms-icon">⚠️</span>
+                        <div class="terms-text">
+                            <strong>Важно:</strong> При неоплате до конца декабря бонус аннулируется
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA -->
+            <section class="dashboard-card bonus-cta">
+                <div class="cta-content">
+                    <h2>Готовы удвоить свои инвестиции?</h2>
+                    <p>Пополните баланс прямо сейчас и получите бонус 100% от суммы пополнения</p>
+                    <div class="cta-actions">
+                        <a href="deposit.html" class="btn btn--primary btn--large">Пополнить баланс</a>
+                        <a href="invest.html" class="btn btn--secondary btn--large">Посмотреть проекты</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="localStorage-api.js"></script>
+    <script src="api-adapter.js"></script>
+    
+    <!-- Web Components -->
+    <script src="components/web-components/header-standalone.js"></script>
+    <script src="components/web-components/sidebar-standalone.js"></script>
+    <script src="components/web-components/notification-system.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="app.js"></script>
+    <script src="newyear-bonus.js"></script>
+</body>
+</html>

@@ -54,40 +54,23 @@ class LocalStorageAPI {
                     description: 'Скидка для новых пользователей',
                     discount: 25,
                     discount_amount: 25,
+                    discount_type: 'fixed',
+                    discount_value: 25,
+                    min_amount: 0,
+                    max_amount: 25,
                     project_name: 'Все проекты',
                     expires_at: '2025-12-31T23:59:59.000Z',
                     conditions: 'Минимальная сумма $250',
                     used: false,
                     created_at: '2025-01-01T00:00:00.000Z',
-                    updated_at: '2025-01-01T00:00:00.000Z'
-                },
-                {
-                    id: 2,
-                    code: 'INVEST50',
-                    name: 'Инвестиционный бонус',
-                    description: 'Бонус за первую инвестицию',
-                    discount: 50,
-                    discount_amount: 50,
-                    project_name: 'Дирижабли',
-                    expires_at: '2026-06-30T23:59:59.000Z',
-                    conditions: 'Только для проекта Дирижабли',
-                    used: false,
-                    created_at: '2025-01-15T00:00:00.000Z',
-                    updated_at: '2025-01-15T00:00:00.000Z'
-                },
-                {
-                    id: 3,
-                    code: 'SOVELMASH20',
-                    name: 'Совэлмаш бонус',
-                    description: 'Эксклюзивное предложение для проекта Совэлмаш',
-                    discount: 20,
-                    discount_amount: 20,
-                    project_name: 'Совэлмаш',
-                    expires_at: '2026-01-31T23:59:59.000Z',
-                    conditions: 'Только для проекта Совэлмаш',
-                    used: false,
-                    created_at: '2024-12-01T00:00:00.000Z',
-                    updated_at: '2024-12-01T00:00:00.000Z'
+                    updated_at: '2025-01-01T00:00:00.000Z',
+                    // Новые поля для купона за регистрацию
+                    coupon_type: 'registration',
+                    auto_enabled: false,
+                    created_reason: 'registration',
+                    deposit_amount: 0,
+                    bonus_amount: 25,
+                    total_amount: 25
                 }
             ];
         }
@@ -136,6 +119,8 @@ class LocalStorageAPI {
                 updated_at: '2025-01-01T00:00:00.000Z'
             });
         }
+        
+        // Удалены купоны INVEST50 и SOVELMASH20 по запросу пользователя
         
         
         if (!this.data.investments) {
@@ -367,6 +352,91 @@ class LocalStorageAPI {
             return { status: 200, data: { investment, transaction } };
         } catch (error) {
             console.error('❌ localStorage API: processInvestment error', error);
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    // Создание купона за пополнение
+    async createDepositCoupon(userId, depositAmount) {
+        try {
+            const couponId = Date.now();
+            const bonusAmount = depositAmount; // 100% бонус
+            const totalAmount = depositAmount + bonusAmount;
+            
+            const coupon = {
+                id: couponId,
+                user_id: userId,
+                code: `DEPOSIT${depositAmount}`,
+                name: `Бонус за пополнение`,
+                description: `Получите бонус 100% от суммы пополнения`,
+                discount: bonusAmount,
+                discount_amount: bonusAmount,
+                discount_type: 'fixed',
+                discount_value: bonusAmount,
+                min_amount: 0,
+                max_amount: totalAmount,
+                project_name: 'Все проекты',
+                expires_at: new Date(new Date().getFullYear(), 11, 31, 23, 59, 59).toISOString(), // 31 декабря текущего года
+                used: false,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+                // Новые поля для купонов за пополнение
+                coupon_type: 'deposit',
+                auto_enabled: true,
+                created_reason: 'deposit',
+                deposit_amount: depositAmount,
+                bonus_amount: bonusAmount,
+                total_amount: totalAmount
+            };
+            
+            this.data.coupons.push(coupon);
+            this.saveData();
+            
+            return { status: 200, data: { coupon } };
+        } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    // Добавление уведомления
+    async addNotification(userId, notification) {
+        try {
+            const notificationId = Date.now();
+            const newNotification = {
+                id: notificationId,
+                user_id: userId,
+                ...notification,
+                created_at: new Date().toISOString(),
+                read: false
+            };
+            
+            // Инициализируем массив уведомлений если его нет
+            if (!this.data.notifications) {
+                this.data.notifications = [];
+            }
+            
+            this.data.notifications.push(newNotification);
+            this.saveData();
+            
+            return { status: 200, data: { notification: newNotification } };
+        } catch (error) {
+            return { status: 500, data: { error: error.message } };
+        }
+    }
+
+    // Получение уведомлений пользователя
+    async getNotifications(userId) {
+        try {
+            if (!this.data.notifications) {
+                this.data.notifications = [];
+            }
+            
+            const userNotifications = this.data.notifications
+                .filter(n => n.user_id === userId)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            return { status: 200, data: userNotifications };
+        } catch (error) {
             return { status: 500, data: { error: error.message } };
         }
     }

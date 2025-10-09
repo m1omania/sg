@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     streamEndDate2.setHours(streamEndDate2.getHours() + 2);
     startCountdown('timer-stream', streamEndDate2.getTime());
 
-    // --- Слайдер баннеров ---
-    initBannerSlider();
+    // --- Промо карточки ---
+    initPromoCards();
 
     // --- Переключатель языка ---
     initLanguageSwitcher();
@@ -69,6 +69,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     loadDashboardBalances();
+
+    // --- Показ уведомления о купоне за регистрацию ---
+    function showRegistrationCouponNotification() {
+        // Проверяем, показывали ли уже уведомление
+        if (localStorage.getItem('registrationCouponShown') === 'true') {
+            return;
+        }
+        
+        const notificationSystem = document.querySelector('notification-system');
+        if (notificationSystem) {
+            notificationSystem.addNotification({
+                title: 'У вас есть новый купон!',
+                message: 'Вам доступен купон на $25 за регистрацию',
+                action_url: '/coupons.html'
+            });
+            
+            // Помечаем, что уведомление показано
+            localStorage.setItem('registrationCouponShown', 'true');
+        }
+    }
+    
+    // Показываем уведомление при загрузке
+    setTimeout(showRegistrationCouponNotification, 1000);
 
     // --- Переключение валют ---
     const currencyButtons = document.querySelectorAll('.currency-switcher button');
@@ -135,78 +158,130 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(updateCountdown, 1000);
     }
 
-    // --- Функция инициализации слайдера баннеров ---
-    function initBannerSlider() {
-        const sliderTrack = document.getElementById('slider-track');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const dots = document.querySelectorAll('.dot');
-        
-        if (!sliderTrack || !prevBtn || !nextBtn) {
-            console.log('Slider elements not found, skipping slider initialization');
-            return;
-        }
+    // --- Функция инициализации промо карточек ---
+    function initPromoCards() {
+        // Инициализируем таймеры для карточек
+        const promoTimers = [
+            'promo-timer-0', // Новогодний бонус
+            'promo-timer-1', // Чёрная пятница
+            'promo-timer-2', // Прямой эфир
+            'promo-timer-3'  // Гонка инвестиций
+        ];
 
-        let currentSlide = 0;
-        const totalSlides = document.querySelectorAll('.banner-slide').length;
+        // Устанавливаем разные даты окончания для разных таймеров
+        const timerDates = [
+            new Date(Date.now() + 2 * 60 * 60 * 1000), // +2 часа
+            new Date(Date.now() + 24 * 60 * 60 * 1000), // +24 часа
+            new Date(Date.now() + 3 * 60 * 60 * 1000), // +3 часа
+            new Date(Date.now() + 33 * 24 * 60 * 60 * 1000) // +33 дня
+        ];
 
-        function updateSlider() {
-            const translateX = -currentSlide * 100;
-            sliderTrack.style.transform = `translateX(${translateX}%)`;
-            
-            // Обновляем активные точки
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-            
-            // Обновляем состояние кнопок
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === totalSlides - 1;
-        }
-
-        function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                currentSlide++;
-                updateSlider();
+        promoTimers.forEach((timerId, index) => {
+            const timerElement = document.getElementById(timerId);
+            if (timerElement && timerDates[index]) {
+                startCountdown(timerId, timerDates[index].getTime());
             }
-        }
-
-        function prevSlide() {
-            if (currentSlide > 0) {
-                currentSlide--;
-                updateSlider();
-            }
-        }
-
-        function goToSlide(slideIndex) {
-            if (slideIndex >= 0 && slideIndex < totalSlides) {
-                currentSlide = slideIndex;
-                updateSlider();
-            }
-        }
-
-        // Обработчики событий
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
-        
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => goToSlide(index));
         });
 
-        // Автоматическое переключение каждые 5 секунд
-        setInterval(() => {
-            nextSlide();
-            if (currentSlide === 0) {
-                // Если дошли до конца, возвращаемся к началу
-                currentSlide = totalSlides - 1;
-                updateSlider();
-            }
-        }, 5000);
+        // Инициализируем горизонтальный скролл с поддержкой свайпов
+        initHorizontalScroll();
 
-        // Инициализация
-        updateSlider();
+        console.log('Promo cards initialized with', promoTimers.length, 'timers');
+    }
+
+    // --- Функция инициализации горизонтального скролла ---
+    function initHorizontalScroll() {
+        const scrollContainer = document.querySelector('.promo-cards-grid');
+        const scrollLeft = document.getElementById('scroll-left');
+        const scrollRight = document.getElementById('scroll-right');
         
-        console.log('Banner slider initialized with', totalSlides, 'slides');
+        if (!scrollContainer) return;
+
+        // Переменные для drag & drop удалены
+
+        // Функция обновления индикаторов скролла
+        function updateScrollIndicators() {
+            const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+            const currentScroll = scrollContainer.scrollLeft;
+            
+            if (scrollLeft) {
+                scrollLeft.classList.toggle('show', currentScroll > 0);
+            }
+            if (scrollRight) {
+                scrollRight.classList.toggle('show', currentScroll < maxScroll - 1);
+            }
+        }
+
+        // Обработчики для кнопок скролла
+        if (scrollLeft) {
+            scrollLeft.addEventListener('click', () => {
+                const cardWidth = scrollContainer.querySelector('.promo-card')?.offsetWidth || 320;
+                const scrollAmount = cardWidth + 20; // + gap
+                scrollContainer.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        if (scrollRight) {
+            scrollRight.addEventListener('click', () => {
+                const cardWidth = scrollContainer.querySelector('.promo-card')?.offsetWidth || 320;
+                const scrollAmount = cardWidth + 20; // + gap
+                scrollContainer.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Убираем drag & drop для мыши - оставляем только кнопки навигации
+
+        // Обработчики для тач-событий (свайпы)
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isTouchScrolling = false;
+
+        scrollContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isTouchScrolling = true;
+        });
+
+        scrollContainer.addEventListener('touchmove', (e) => {
+            if (!isTouchScrolling) return;
+            
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+            const diffX = touchStartX - touchX;
+            const diffY = touchStartY - touchY;
+            
+            // Проверяем, что это горизонтальный свайп
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                e.preventDefault();
+                scrollContainer.scrollLeft += diffX;
+                touchStartX = touchX;
+            }
+        });
+
+        scrollContainer.addEventListener('touchend', () => {
+            isTouchScrolling = false;
+        });
+
+        // Обновление индикаторов при скролле
+        scrollContainer.addEventListener('scroll', updateScrollIndicators);
+
+        // Плавный скролл при клике на карточки убран - карточки теперь ссылки
+
+        // Курсор grab убран - drag & drop отключен
+        
+        // Показываем индикаторы при наведении
+        scrollContainer.addEventListener('mouseenter', () => {
+            updateScrollIndicators();
+        });
+
+        // Инициализируем индикаторы
+        updateScrollIndicators();
     }
 
     function initLanguageSwitcher() {

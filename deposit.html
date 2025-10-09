@@ -9,6 +9,9 @@
 <body>
             <!-- Web Component Header -->
     <sg-header></sg-header>
+    
+    <!-- Notification System -->
+    <notification-system></notification-system>
 
     <div class="app-layout">
                         <!-- Web Component Sidebar -->
@@ -20,6 +23,18 @@
                 <h1>Пополнить счет</h1>
                         <span class="logo logo-fallback" style="display: none;">SolarGroup</span>
         </div>
+
+            <!-- New Year Bonus Banner -->
+            <div class="deposit-banner">
+                <div class="deposit-banner-content">
+                    <div class="deposit-banner-icon">🎄</div>
+                    <div class="deposit-banner-text">
+                        <h3>Новогодний бонус!</h3>
+                        <p>Пополните баланс на любую сумму и получите 100% бонус от суммы пополнения</p>
+                    </div>
+                    <div class="deposit-banner-timer" id="deposit-banner-timer">23:59:59</div>
+                </div>
+            </div>
 
             <div class="deposit-container">
                 <div class="balance-card">
@@ -120,6 +135,10 @@
     <!-- localStorage API -->
     <script src="localStorage-api.js"></script>
     <script src="api-adapter.js"></script>
-        <script src="deposit.js"></script>
+    
+    <!-- Web Components -->
+    <script src="components/web-components/notification-system.js"></script>
+    
+    <script src="deposit.js"></script>
 </body>
 </html>

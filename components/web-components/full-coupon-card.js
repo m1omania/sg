@@ -229,34 +229,7 @@ class FullCouponCard extends HTMLElement {
                     margin-top: 20px;
                 }
 
-                .coupon-code-block {
-                    background: white;
-                    border: 1px solid #C0D0F0;
-                    border-radius: 8px;
-                    padding: 12px 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 12px;
-                }
 
-                .coupon-code-text {
-                    font-size: 0.9rem;
-                    color: #333333;
-                    font-weight: 500;
-                }
-
-                .coupon-copy-icon {
-                    width: 16px;
-                    height: 16px;
-                    color: #666666;
-                    cursor: pointer;
-                    transition: color 0.2s ease;
-                }
-
-                .coupon-copy-icon:hover {
-                    color: #333333;
-                }
 
                 .coupon-use-btn {
                     background: #3b82f6;
@@ -313,20 +286,7 @@ class FullCouponCard extends HTMLElement {
                     transform: none;
                 }
 
-                .coupon-card.used .coupon-code-block {
-                    background: #f9fafb;
-                    border-color: #e5e7eb;
-                    opacity: 0.7;
-                }
 
-                .coupon-card.used .coupon-code-text {
-                    color: #9ca3af;
-                }
-
-                .coupon-card.used .coupon-copy-icon {
-                    color: #9ca3af;
-                    cursor: not-allowed;
-                }
 
                 /* Responsive adjustments */
                 @media (max-width: 768px) {
@@ -433,13 +393,6 @@ class FullCouponCard extends HTMLElement {
                 </div>
                 
                 <div class="coupon-actions-container">
-                    <div class="coupon-code-block">
-                        <span class="coupon-code-text">Код: ${this.coupon.code}</span>
-                        <svg class="coupon-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                        </svg>
-                    </div>
                     
                     ${!this.isHistory ? `<button class="coupon-use-btn" id="use-btn">
                         Использовать
@@ -470,26 +423,6 @@ class FullCouponCard extends HTMLElement {
             });
         }
 
-        // Copy code functionality (only for active coupons)
-        if (!this.isHistory) {
-            this.shadowRoot.querySelector('.coupon-copy-icon').addEventListener('click', (e) => {
-                e.stopPropagation();
-                navigator.clipboard.writeText(this.coupon.code).then(() => {
-                    // Change text to "Скопировано"
-                    const codeText = this.shadowRoot.querySelector('.coupon-code-text');
-                    const originalText = codeText.textContent;
-                    
-                    codeText.textContent = 'Скопировано';
-                    codeText.style.color = '#10b981';
-                    
-                    // Change back to original text after 2 seconds
-                    setTimeout(() => {
-                        codeText.textContent = originalText;
-                        codeText.style.color = '#333333';
-                    }, 2000);
-                });
-            });
-        }
 
     }
 }

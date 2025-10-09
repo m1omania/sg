@@ -36,6 +36,20 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     await loadBalances();
     
+    // Initialize deposit banner timer
+    initDepositBannerTimer();
+    
+    // Check for preset amount from calculator
+    const presetAmount = sessionStorage.getItem('presetAmount');
+    if (presetAmount) {
+        const amountInput = document.getElementById('amount');
+        if (amountInput) {
+            amountInput.value = presetAmount;
+            // Clear the preset amount after setting it
+            sessionStorage.removeItem('presetAmount');
+        }
+    }
+    
     depositForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -82,7 +96,22 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             if (response.ok) {
                 console.log('Deposit successful, updating balances...');
-                showSuccess(`Счет успешно пополнен на ${amount} через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
+                
+                // Показываем уведомление об успешном пополнении
+                showSuccess(`Счет успешно пополнен на ${amount}$ через ${paymentMethod === 'card' ? 'банковскую карту' : 'криптовалюту'}!`);
+                
+                // Показываем уведомление через систему уведомлений
+                const notificationSystem = document.querySelector('notification-system');
+                if (notificationSystem) {
+                    notificationSystem.addNotification({
+                        title: 'Пополнение успешно!',
+                        message: `Ваш счет пополнен на ${amount}$`,
+                        action_url: '/wallet.html'
+                    });
+                }
+                
+                // Создаем купон за пополнение
+                await createDepositCoupon(amount);
                 
                 // Обновляем отображение баланса из API
                 await loadBalances();
@@ -124,4 +153,93 @@ document.addEventListener('DOMContentLoaded', async function() {
             errorNotification.classList.add('hidden');
         }, 5000);
     }
+
+    // Создание купона за пополнение
+    async function createDepositCoupon(amount) {
+        try {
+            console.log('Creating deposit coupon for amount:', amount);
+            
+            // Создаем купон
+            const couponResponse = await fetch('/api/coupons/create-deposit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: 1,
+                    depositAmount: amount
+                })
+            });
+            
+            if (couponResponse.ok) {
+                const couponData = await couponResponse.json();
+                console.log('Coupon created:', couponData);
+                
+                // Добавляем уведомление
+                const notificationResponse = await fetch('/api/notifications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: 1,
+                        notification: {
+                            title: 'Получен купон!',
+                            message: `Вам начислен купон на $${amount} за пополнение`,
+                            action_url: '/coupons.html'
+                        }
+                    })
+                });
+                
+                if (notificationResponse.ok) {
+                    console.log('Notification added successfully');
+                    
+                    // Показываем уведомление в UI
+                    const notificationSystem = document.querySelector('notification-system');
+                    if (notificationSystem) {
+                        notificationSystem.addNotification({
+                            title: 'Получен купон!',
+                            message: `Вам начислен купон на $${amount} за пополнение`,
+                            action_url: '/coupons.html'
+                        });
+                    }
+                } else {
+                    console.error('Failed to add notification');
+                }
+            } else {
+                console.error('Failed to create coupon');
+            }
+        } catch (error) {
+        console.error('Error creating deposit coupon:', error);
+    }
+}
+
+// Initialize deposit banner timer
+function initDepositBannerTimer() {
+    const timerElement = document.getElementById('deposit-banner-timer');
+    if (!timerElement) return;
+    
+    // Set timer to 2 hours from now
+    const endTime = new Date(Date.now() + 2 * 60 * 60 * 1000);
+    
+    function updateTimer() {
+        const now = new Date();
+        const timeLeft = endTime - now;
+        
+        if (timeLeft <= 0) {
+            timerElement.textContent = '00:00:00';
+            return;
+        }
+        
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        
+        timerElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    // Update immediately and then every second
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}
 });

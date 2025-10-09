@@ -403,13 +403,16 @@ async function initializeCouponPackage(package) {
         const coupons = Array.isArray(result) ? result : (result.data || []);
         
         console.log('Available coupons:', coupons);
+        console.log('Current package project:', package.project);
         
         // Filter coupons for this project or general coupons and sort by expiry date
         const relevantCoupons = coupons
-            .filter(coupon => 
-                coupon.project_name === package.project || 
-                coupon.project_name === 'Все проекты'
-            )
+            .filter(coupon => {
+                const isRelevant = coupon.project_name === package.project || 
+                                 coupon.project_name === 'Все проекты';
+                console.log(`Coupon ${coupon.name} (${coupon.project_name}) is relevant:`, isRelevant);
+                return isRelevant;
+            })
             .sort((a, b) => new Date(a.expires_at) - new Date(b.expires_at));
         
         console.log('Relevant coupons for', package.project, ':', relevantCoupons);
@@ -448,6 +451,19 @@ function renderCouponsList(coupons) {
             data-coupon-id="${coupon.id}">
         </coupon-package>
     `).join('');
+    
+    // Auto-enable coupons with auto_enabled: true
+    couponsList.querySelectorAll('coupon-package').forEach((component, index) => {
+        const coupon = coupons[index];
+        if (coupon.auto_enabled) {
+            console.log('Auto-enabling coupon:', coupon.name);
+            component.setActive(true);
+            component.setAttribute('data-active', 'true');
+        }
+    });
+    
+    // Update total after auto-enabling coupons
+    updateTotalWithCoupons();
     
     // Add event listeners for coupon package components
     couponsList.querySelectorAll('coupon-package').forEach(component => {
@@ -597,3 +613,22 @@ function updateTotalWithCoupons() {
         updateCheckoutButton(currentPackage);
     }
 }
+
+// Add page visibility listener to refresh coupons when user returns to the page
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        console.log('Page became visible, refreshing coupons...');
+        // Small delay to ensure any pending operations complete
+        setTimeout(() => {
+            loadCoupons();
+        }, 100);
+    }
+});
+
+// Also listen for window focus to catch cases where visibilitychange might not fire
+window.addEventListener('focus', function() {
+    console.log('Window focused, refreshing coupons...');
+    setTimeout(() => {
+        loadCoupons();
+    }, 100);
+});
