@@ -6734,31 +6734,6 @@ body:not(.landing-page) sg-header-landing {
   opacity: 0.9;
 }
 
-.bonus-features {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-24);
-  margin-bottom: var(--space-32);
-  flex-wrap: wrap;
-}
-
-.bonus-feature {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-  background: rgba(255, 255, 255, 0.1);
-  padding: var(--space-12) var(--space-16);
-  border-radius: var(--radius-lg);
-}
-
-.bonus-feature-icon {
-  font-size: var(--font-size-lg);
-}
-
-.bonus-feature-text {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-}
 
 .bonus-actions {
   display: flex;
@@ -7003,14 +6978,6 @@ body:not(.landing-page) sg-header-landing {
     font-size: var(--font-size-3xl);
   }
   
-  .bonus-features {
-    gap: var(--space-16);
-  }
-  
-  .bonus-feature {
-    font-size: var(--font-size-sm);
-  }
-  
   .bonus-actions {
     flex-direction: column;
     gap: var(--space-12);
@@ -7034,17 +7001,6 @@ body:not(.landing-page) sg-header-landing {
   .bonus-hero-content p {
     font-size: var(--font-size-sm);
     margin-bottom: var(--space-20);
-  }
-  
-  .bonus-features {
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-12);
-    margin-bottom: var(--space-20);
-  }
-  
-  .bonus-feature {
-    font-size: var(--font-size-xs);
   }
   
   .bonus-actions {
@@ -7091,15 +7047,6 @@ body:not(.landing-page) sg-header-landing {
   .bonus-hero-content p {
     font-size: var(--font-size-xs);
     margin-bottom: var(--space-16);
-  }
-  
-  .bonus-features {
-    gap: var(--space-8);
-    margin-bottom: var(--space-16);
-  }
-  
-  .bonus-feature {
-    font-size: 12px;
   }
   
   .bonus-actions .btn {
